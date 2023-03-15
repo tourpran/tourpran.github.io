@@ -61,7 +61,7 @@ main function:
 
 #### Global Offset Table:
 
-This challenge requires you to know the basics of GOT and PLT. In short GOT is a set of address that points to the function in the glibc (shared library). To know more about [Global offset table go ahead to my old blog](https://tourpran.me/blogs/2020/09/13/got-plt.html). 
+This challenge requires you to know the basics of GOT and PLT. In short GOT is a set of address that points to the function in the glibc (shared library). To know more about [Global offset table go ahead to my old blog](https://pranavkrish04.github.io/blogs/2020/09/13/got-plt.html). 
 
 #### Exploit Idea:
 
@@ -171,7 +171,7 @@ Lets do the drill of checking the mitigations.
 There is only a main function.
 ![](/assets/images/pwntraining3/pwntrain6.png)
 
-We can see that, here we are getting an input and printing it in an unsafe way. Here we can take advantage of this to leak data in the binary. [Not sure about format string ? Go Here](https://tourpran.me/pwn-training/2021/05/20/format-string-exploitation-training2.html). In the next section we can use the gets function to input more data than the buffer can store.
+We can see that, here we are getting an input and printing it in an unsafe way. Here we can take advantage of this to leak data in the binary. [Not sure about format string ? Go Here](https://pranavkrish04.github.io/pwn-training/2021/05/20/format-string-exploitation-training2.html). In the next section we can use the gets function to input more data than the buffer can store.
 
 #### Canary:
 Set of characters that is placed in between the return address and the buffer. When a buffer overflow occurs the canary checks itself with a memory copy. If the values has been modified then we know a overflow happened and the program will abort. 

@@ -1,1 +1,1 @@
-Sitemap: http://tourpran.me/sitemap.xml
+Sitemap: http://pranavkrish04.github.io/sitemap.xml

@@ -59,7 +59,7 @@
 
 <h4 id="global-offset-table">Global Offset Table:</h4>
 
-<p>This challenge requires you to know the basics of GOT and PLT. In short GOT is a set of address that points to the function in the glibc (shared library). To know more about <a href="https://tourpran.me/blogs/2020/09/13/got-plt.html">Global offset table go ahead to my old blog</a>.</p>
+<p>This challenge requires you to know the basics of GOT and PLT. In short GOT is a set of address that points to the function in the glibc (shared library). To know more about <a href="https://pranavkrish04.github.io/blogs/2020/09/13/got-plt.html">Global offset table go ahead to my old blog</a>.</p>
 
 <h4 id="exploit-idea">Exploit Idea:</h4>
 
@@ -176,7 +176,7 @@ b* 0x00000000004011c7
 <p>There is only a main function.
 <img src="/assets/images/pwntraining3/pwntrain6.png" alt="" /></p>
 
-<p>We can see that, here we are getting an input and printing it in an unsafe way. Here we can take advantage of this to leak data in the binary. <a href="https://tourpran.me/pwn-training/2021/05/20/format-string-exploitation-training2.html">Not sure about format string ? Go Here</a>. In the next section we can use the gets function to input more data than the buffer can store.</p>
+<p>We can see that, here we are getting an input and printing it in an unsafe way. Here we can take advantage of this to leak data in the binary. <a href="https://pranavkrish04.github.io/pwn-training/2021/05/20/format-string-exploitation-training2.html">Not sure about format string ? Go Here</a>. In the next section we can use the gets function to input more data than the buffer can store.</p>
 
 <h4 id="canary">Canary:</h4>
 <p>Set of characters that is placed in between the return address and the buffer. When a buffer overflow occurs the canary checks itself with a memory copy. If the values has been modified then we know a overflow happened and the program will abort.</p>
