@@ -12,8 +12,12 @@ li{
 }
 
 a{
+  color: rgb(47, 10, 93);
   text-decoration: none;
-  color: black;
+}
+
+a.bios {
+  color: blue;
 }
 
 .nav-bar{
