@@ -1,7 +1,7 @@
 ---
 layout: post
 author: tourpran
-title: Checkpoint
+title: "[check] Checkpoint"
 categories: pwn-training
 tags: ["pwn", "format string"]
 ---
@@ -20,7 +20,7 @@ Download below challenge file.
 
 #### Mitigations:
 ![](/images/checkpointaresx/ss2.png)
-No need to explain mitigations right ?
+No need to explain mitigations right ? These are different protections created to rule out certain types of attacks, make hackers life a little harder.
 
 #### Code Walkthrough:
 

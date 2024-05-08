@@ -1,7 +1,7 @@
 ---
 layout: post
 author: tourpran
-title: Return to libc
+title: "[pwn 3] Return to libc"
 categories: pwn-training
 tags: ["libc leak", "ret2libc"]
 ---

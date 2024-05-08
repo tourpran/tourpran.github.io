@@ -1,7 +1,7 @@
 ---
 layout: post
 author: tourpran
-title: My First CTF
+title: "[Random] My First CTF"
 categories: Blogs
 tags: ["pwnable.tw"]
 ---

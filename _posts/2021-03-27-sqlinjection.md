@@ -1,7 +1,7 @@
 ---
 layout: post
 author: tourpran
-title: SQL Injection
+title: "[side quest] SQL Injection"
 categories: Blogs
 tags: [sql, Injection, SQLI]
 ---

