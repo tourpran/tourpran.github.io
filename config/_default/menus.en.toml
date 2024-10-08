@@ -1,0 +1,26 @@
+[[main]]
+none = "writeups"
+
+[[main]]
+name = "writeups"
+pre = "hackernews"
+pageRef = "writeups"
+identifier = "1WujZQqWPC"
+weight = 999
+
+[[main]]
+name = "blogs"
+pre = "blogger"
+pageRef = "posts"
+identifier = "1vdXBZIl0P"
+weight = 80
+
+[[main]]
+name = "training"
+pre = "fire"
+pageRef = "training"
+identifier = "jk2h4NXf2R"
+weight = 20
+
+[[footer]]
+none = "none"

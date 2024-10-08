@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pwn on tourpran</title>
+    <link>//localhost:1313/categories/pwn/</link>
+    <description>Recent content in Pwn on tourpran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2024 Pranav Krishna M</copyright>
+    <lastBuildDate>Mon, 26 Feb 2024 21:48:13 +0000</lastBuildDate><atom:link href="//localhost:1313/categories/pwn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tallocator - bi0sCTF 2024</title>
+      <link>//localhost:1313/writeups/1728230875066-tallocator-bi0sctf/</link>
+      <pubDate>Mon, 26 Feb 2024 21:48:13 +0000</pubDate>
+      
+      <guid>//localhost:1313/writeups/1728230875066-tallocator-bi0sctf/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;native.c:
+&lt;ul&gt;
+&lt;li&gt;Reverse engineering matrix operations performed.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;tallocator.c:
+&lt;ul&gt;
+&lt;li&gt;Exploiting an arbitrary free to corrupt heap metadata.&lt;/li&gt;
+&lt;li&gt;Reverse shellcode to execute an ORW.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="//localhost:1313/writeups/1728230875066-tallocator-bi0sctf/featured.png" />
+    </item>
+    
+  </channel>
+</rss>

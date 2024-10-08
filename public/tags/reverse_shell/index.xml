@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reverse_Shell on tourpran</title>
+    <link>http://localhost:1313/tags/reverse_shell/</link>
+    <description>Recent content in Reverse_Shell on tourpran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2024 Pranav Krishna</copyright>
+    <lastBuildDate>Thu, 01 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/reverse_shell/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tallocator [bi0sCTF 2024]</title>
+      <link>http://localhost:1313/writeups/1728230875066-tallocator-bi0sctf/</link>
+      <pubDate>Thu, 01 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/writeups/1728230875066-tallocator-bi0sctf/</guid>
+      <description>&lt;p&gt;I created an Android based pwn challenge that involes exploiting a dynamic memory allocator using the webview interface.&lt;/p&gt;</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/writeups/1728230875066-tallocator-bi0sctf/featured.png" />
+    </item>
+    
+  </channel>
+</rss>

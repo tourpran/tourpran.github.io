@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Zh3r0 on tourpran</title>
+    <link>http://localhost:1313/tags/zh3r0/</link>
+    <description>Recent content in Zh3r0 on tourpran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2024 Pranav Krishna</copyright>
+    <lastBuildDate>Fri, 06 Mar 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/zh3r0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>c4n4ry [zh3r0 CTF]</title>
+      <link>http://localhost:1313/writeups/1728230734805-c4n4ry-zh3r0-ctf/</link>
+      <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/writeups/1728230734805-c4n4ry-zh3r0-ctf/</guid>
+      <description>I am proud to say that my team zh3r0 hosted its first CTF.</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/writeups/1728230734805-c4n4ry-zh3r0-ctf/featured.png" />
+    </item>
+    
+  </channel>
+</rss>
