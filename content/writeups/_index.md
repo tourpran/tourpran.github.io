@@ -3,6 +3,7 @@ title: "Writeups"
 description: "Various writeups from different CTFs I play, This mainly contains pwn challenges."
 cascade:
   showDate: true
+  groupByYear: true
   showAuthor: false
   invertPagination: false
 ---

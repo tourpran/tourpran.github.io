@@ -37,7 +37,7 @@ layoutBackgroundBlur = true
 [article]
 layout = "background"
 articleImage = "img/bob.svg"
-showDate = false
+showDate = true
 showViews = false
 showLikes = false
 showDateOnlyInArticle = false
@@ -51,7 +51,7 @@ showBreadcrumbs = false
 showDraftLabel = true
 showEdit = false
 editAppendPath = true
-seriesOpened = false
+seriesOpened = true
 showHeadingAnchors = true
 showPagination = true
 invertPagination = false

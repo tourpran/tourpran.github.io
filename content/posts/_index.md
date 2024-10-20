@@ -3,9 +3,7 @@ title: "Blog Posts"
 description: "This series contains the basic pre-requisite challenges, you need to hop ontu binary exploiation challenges in CTFs."
 layout: layouts/_default/list.html
 cascade:
-  showDate: false
-  showAuthor: false
-  invertPagination: true
+  groupByYear: true
 ---
 
 {{< lead >}}

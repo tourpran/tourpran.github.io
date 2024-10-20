@@ -4,11 +4,11 @@ weight = 1
 title = "tourpran"
 
 [params]
-    displayName = "EN"
-    isoCode = "en"
-    rtl = false
-    description = "Exploit one Exploit all"
-    dateFormat = "2006-01-02"
-    author = { name = "Pranav Krishna", image = "myself.png", headline = "Aspiring Exploit Developer", bio = "A Passionate Exploit Developer, actively playing CTFs with team bi0s", links = [ { youtube = "https://youtube.com/tourpran" }, { github = "https://github.com/tourpran" }, { linkedin = "https://linkedin.com/in/tourpran" } ] }
-    logo = "log-removebg-preview.png"
-    defaultBackgroundImage = "bob.svg"
+displayName = "EN"
+isoCode = "en"
+rtl = false
+description = "Exploit one Exploit all"
+dateFormat = "2006-01-02"
+author = { name = "Pranav Krishna", image = "myself.png", headline = "Aspiring Exploit Developer", bio = "A Passionate Exploit Developer, actively playing CTFs with team bi0s", links = [ { youtube = "https://youtube.com/tourpran" }, { github = "https://github.com/tourpran" }, { linkedin = "https://linkedin.com/in/tourpran" }, { email = "mailto:thepranavkrish04@gmail.com"}, { download = "images/my_resume/pranav_resume.pdf"} ] }
+logo = "log-removebg-preview.png"
+defaultBackgroundImage = "bob.svg"
