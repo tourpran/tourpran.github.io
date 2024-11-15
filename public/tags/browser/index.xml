@@ -14,7 +14,7 @@
       <pubDate>Sun, 09 Jun 2024 00:00:00 +0000</pubDate>
       
       <guid>http://localhost:1313/posts/1728447510508-v8---arrayshift-race-condition./</guid>
-      <description>&lt;p&gt;Getting a double reference from the main thread and the turbofan thread to create a confusion. Thereby giving us a dangling pointer and UAF.&lt;/p&gt;</description>
+      <description>&lt;p&gt;In this post, we’ll explore how to exploit a race condition in the V8 JavaScript engine, leading to a dangling pointer and a Use-After-Free (UAF) vulnerability.&lt;/p&gt;</description>
       <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/1728447510508-v8---arrayshift-race-condition./featured.png" />
     </item>
     
@@ -24,7 +24,7 @@
       <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
       
       <guid>http://localhost:1313/posts/1728446785503-cve-2024-0517-quick-blog/</guid>
-      <description>&lt;p&gt;This is a bug in the maglev optimizing compiler, specifically in a function that optimizes classes with parent class.&lt;/p&gt;</description>
+      <description>&lt;p&gt;This post explores a vulnerability found in the Maglev optimizing compiler of V8, specifically within a function responsible for optimizing classes that inherit from a parent class.&lt;/p&gt;</description>
       <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/1728446785503-cve-2024-0517-quick-blog/featured.png" />
     </item>
     

@@ -96,7 +96,7 @@ TurboFan’s pipeline consists of multiple phases that optimize and lower JavaSc
 - This phase focuses on extensive optimizations, including refining operations and simplifying nodes for better performance in the backend stages of Turbofan.
 ![Type Lowering Phase](/images/math_expm_bug/image-7.png)
 
-## Ecape analysis:
+## Escape analysis:
 ```js
 function f() {
   let o = {a: 5};

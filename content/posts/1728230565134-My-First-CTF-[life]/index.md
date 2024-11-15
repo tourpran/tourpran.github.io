@@ -27,18 +27,18 @@ I took part in the annual INCTFJ competition, in which I got selected for the gr
 
 I along with my new friends went to the registration site to enroll our names for the finals and we got ourselves a badge that was priceless for me. I kept it with myself for the whole time.
 
-![](/assets/images/myfirstctf/ctf3.jpeg)
+![](/images/myfirstctf/ctf3.png)
 
 Enjoyed a bit too much with friends and never left the mentors free. The mentors were soo encouraging and enthusiastic. They also loved to help the participants.
 
 
-![](/assets/images/myfirstctf/ctf2.jpeg)
+![](/images/myfirstctf/ctf2.png)
 
 ## FOOD :
 
 We were greeted like guests and were given delicious food — super hot and was mouth-watering.￼ We were given lunch and dinner at the place where the college students were given food.
 
-![](/assets/images/myfirstctf/ctf4.jpeg)
+![](/images/myfirstctf/ctf4.png)
 
 ## STUDY TIME:
 
@@ -48,12 +48,11 @@ They (mentors from Amrita) taught us much stuff that included things like:
 * reverse engineering
 * some cool stuff
 
-![](/assets/images/myfirstctf/ctf5.png)
+![](/images/myfirstctf/ctf5.png)
 
 ## GRAND FINALE:
 
 It was finally time. This was the moment we were all waiting for, the “ INCTFJ finals”. To be honost we were both nervous and happy the contest started. I could hardly solve six to seven challenges. It was a bit tough as I expected, still I was happy because my friend said he was in the top 5. After the finals were over, we were sent to our rooms.
-![](/assets/images/myfirstctf/ctf7.jpeg)
 meanwhile,
 
 ## PARTY! PARTY! :
@@ -61,7 +60,7 @@ We were sent to the party hall and “surprise surprise” they had a party whic
 When we arrived at the campus the view itself blew me away and I was stunned for some seconds … I was disappointed when the results came but were motivated to do more of CTFs and to learn more things. I knew, *sometimes falling down today, gives us a chance to rise tomorrow*.
 
   
-![](/assets/images/myfirstctf/ctf6.jpeg)
+![](/images/myfirstctf/ctf6.png)
 
 
 ## THINGS I LEARNED:
