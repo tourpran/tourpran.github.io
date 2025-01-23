@@ -4,7 +4,7 @@ date: 2024-06-09
 draft: false
 tags: ["browser", "v8"]
 ---
-
+BOB
 In this post, we’ll explore how to exploit a race condition in the V8 JavaScript engine, leading to a dangling pointer and a Use-After-Free (UAF) vulnerability. 
 <!--more-->
 This occurs when we create double references from both the main thread and the Turbofan thread, which can confuse the memory management system.

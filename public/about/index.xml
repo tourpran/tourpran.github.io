@@ -4,9 +4,8 @@
     <title>About on tourpran</title>
     <link>http://localhost:1313/about/</link>
     <description>Recent content in About on tourpran</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en</language>
-    <copyright>© 2024 Pranav Krishna</copyright>
     <atom:link href="http://localhost:1313/about/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

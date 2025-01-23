@@ -8,7 +8,6 @@ cascade:
   showAuthor: false
   invertPagination: true
 ---
-
-{{< lead >}}
+<!-- 
 Try solving these challenge on your own, and use this guide only when needed. If you want more challenges you can search in [(pwn-hub) basic attacks](https://github.com/tourpran/pwn-hub/tree/main/basic_attacks)
-{{< /lead >}}
+ -->

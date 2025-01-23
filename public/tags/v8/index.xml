@@ -4,29 +4,23 @@
     <title>V8 on tourpran</title>
     <link>http://localhost:1313/tags/v8/</link>
     <description>Recent content in V8 on tourpran</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en</language>
-    <copyright>© 2024 Pranav Krishna</copyright>
-    <lastBuildDate>Sun, 09 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/v8/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 09 Jun 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/v8/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>v8 - ArrayShift Race Condition</title>
       <link>http://localhost:1313/posts/1728447510508-v8---arrayshift-race-condition./</link>
       <pubDate>Sun, 09 Jun 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/posts/1728447510508-v8---arrayshift-race-condition./</guid>
-      <description>&lt;p&gt;In this post, we’ll explore how to exploit a race condition in the V8 JavaScript engine, leading to a dangling pointer and a Use-After-Free (UAF) vulnerability.&lt;/p&gt;</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/1728447510508-v8---arrayshift-race-condition./featured.png" />
+      <description>&lt;p&gt;BOB&#xA;In this post, we’ll explore how to exploit a race condition in the V8 JavaScript engine, leading to a dangling pointer and a Use-After-Free (UAF) vulnerability.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>CVE-2024-0517 Quick Blog</title>
       <link>http://localhost:1313/posts/1728446785503-cve-2024-0517-quick-blog/</link>
       <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/posts/1728446785503-cve-2024-0517-quick-blog/</guid>
       <description>&lt;p&gt;This post explores a vulnerability found in the Maglev optimizing compiler of V8, specifically within a function responsible for optimizing classes that inherit from a parent class.&lt;/p&gt;</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/1728446785503-cve-2024-0517-quick-blog/featured.png" />
     </item>
-    
   </channel>
 </rss>

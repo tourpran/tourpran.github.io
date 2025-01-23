@@ -4,29 +4,23 @@
     <title>Pwnable.tw on tourpran</title>
     <link>http://localhost:1313/tags/pwnable.tw/</link>
     <description>Recent content in Pwnable.tw on tourpran</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en</language>
-    <copyright>© 2024 Pranav Krishna</copyright>
-    <lastBuildDate>Fri, 17 Jul 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/pwnable.tw/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 17 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/pwnable.tw/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>start [pwnable.tw]</title>
       <link>http://localhost:1313/writeups/1728230780562-start-pwnable.tw/</link>
       <pubDate>Fri, 17 Jul 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/writeups/1728230780562-start-pwnable.tw/</guid>
       <description>&lt;p&gt;Here our main objective is to get a shell. The bug is plain and simple, it is an overflow to control the return address.&lt;/p&gt;</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/writeups/1728230780562-start-pwnable.tw/featured.png" />
     </item>
-    
     <item>
       <title>ORW [pwnable.tw]</title>
       <link>http://localhost:1313/writeups/1728230795518-orw-pwnable.tw/</link>
       <pubDate>Thu, 16 Jul 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/writeups/1728230795518-orw-pwnable.tw/</guid>
       <description>&lt;p&gt;This is a pretty awesome challenge! Here we will be writing assembly code in x86 to read the flag file from the server. This is one of the easier challenge in pwnable.tw which is stack based.&lt;/p&gt;</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/writeups/1728230795518-orw-pwnable.tw/featured.png" />
     </item>
-    
   </channel>
 </rss>

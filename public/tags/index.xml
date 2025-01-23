@@ -4,319 +4,226 @@
     <title>Tags on tourpran</title>
     <link>http://localhost:1313/tags/</link>
     <description>Recent content in Tags on tourpran</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en</language>
-    <copyright>© 2024 Pranav Krishna</copyright>
-    <lastBuildDate>Sun, 09 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 09 Jun 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Browser</title>
       <link>http://localhost:1313/tags/browser/</link>
       <pubDate>Sun, 09 Jun 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/browser/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>V8</title>
       <link>http://localhost:1313/tags/v8/</link>
       <pubDate>Sun, 09 Jun 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/v8/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Math.expm1</title>
       <link>http://localhost:1313/tags/math.expm1/</link>
       <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/math.expm1/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>OOB</title>
       <link>http://localhost:1313/tags/oob/</link>
       <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/oob/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Typer</title>
       <link>http://localhost:1313/tags/typer/</link>
       <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/typer/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Android</title>
       <link>http://localhost:1313/tags/android/</link>
       <pubDate>Thu, 01 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/android/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Bi0sctf</title>
       <link>http://localhost:1313/tags/bi0sctf/</link>
       <pubDate>Thu, 01 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/bi0sctf/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Reverse_Shell</title>
       <link>http://localhost:1313/tags/reverse_shell/</link>
       <pubDate>Thu, 01 Feb 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/reverse_shell/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Pwn</title>
       <link>http://localhost:1313/tags/pwn/</link>
       <pubDate>Thu, 18 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/pwn/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Youtube</title>
       <link>http://localhost:1313/tags/youtube/</link>
       <pubDate>Thu, 18 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/youtube/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Training</title>
       <link>http://localhost:1313/tags/training/</link>
       <pubDate>Sun, 07 Jan 2024 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/training/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Ptr-Yudai</title>
       <link>http://localhost:1313/tags/ptr-yudai/</link>
       <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/ptr-yudai/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Pyjail</title>
       <link>http://localhost:1313/tags/pyjail/</link>
       <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/pyjail/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Csu</title>
       <link>http://localhost:1313/tags/csu/</link>
       <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/csu/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Dicegang</title>
       <link>http://localhost:1313/tags/dicegang/</link>
       <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/dicegang/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Ret2csu</title>
       <link>http://localhost:1313/tags/ret2csu/</link>
       <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/ret2csu/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Format String</title>
       <link>http://localhost:1313/tags/format-string/</link>
       <pubDate>Mon, 06 Sep 2021 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/format-string/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>ELF</title>
       <link>http://localhost:1313/tags/elf/</link>
       <pubDate>Thu, 10 Sep 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/elf/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Sections</title>
       <link>http://localhost:1313/tags/sections/</link>
       <pubDate>Thu, 10 Sep 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/sections/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Segments</title>
       <link>http://localhost:1313/tags/segments/</link>
       <pubDate>Thu, 10 Sep 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/segments/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Dynamic and Static Linking</title>
       <link>http://localhost:1313/tags/dynamic-and-static-linking/</link>
       <pubDate>Sun, 06 Sep 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/dynamic-and-static-linking/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>GOT</title>
       <link>http://localhost:1313/tags/got/</link>
       <pubDate>Sun, 06 Sep 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/got/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Short-Blog</title>
       <link>http://localhost:1313/tags/short-blog/</link>
       <pubDate>Sun, 06 Sep 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/short-blog/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Fun</title>
       <link>http://localhost:1313/tags/fun/</link>
       <pubDate>Thu, 06 Aug 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/fun/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Injection</title>
       <link>http://localhost:1313/tags/injection/</link>
       <pubDate>Thu, 06 Aug 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/injection/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Sql</title>
       <link>http://localhost:1313/tags/sql/</link>
       <pubDate>Thu, 06 Aug 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/sql/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Pwnable.tw</title>
       <link>http://localhost:1313/tags/pwnable.tw/</link>
       <pubDate>Fri, 17 Jul 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/pwnable.tw/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Canary</title>
       <link>http://localhost:1313/tags/canary/</link>
       <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/canary/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Zh3r0</title>
       <link>http://localhost:1313/tags/zh3r0/</link>
       <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/zh3r0/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Experience</title>
       <link>http://localhost:1313/tags/experience/</link>
       <pubDate>Sun, 29 Sep 2019 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/experience/</guid>
       <description></description>
-      
     </item>
-    
     <item>
       <title>Life</title>
       <link>http://localhost:1313/tags/life/</link>
       <pubDate>Sun, 29 Sep 2019 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/tags/life/</guid>
       <description></description>
-      
     </item>
-    
   </channel>
 </rss>

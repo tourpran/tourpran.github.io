@@ -4,19 +4,16 @@
     <title>ELF on tourpran</title>
     <link>http://localhost:1313/tags/elf/</link>
     <description>Recent content in ELF on tourpran</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en</language>
-    <copyright>© 2024 Pranav Krishna</copyright>
-    <lastBuildDate>Thu, 10 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/elf/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/elf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Executable and Linkable Format - Sections and Segments</title>
       <link>http://localhost:1313/posts/1728230608669-executable-and-linkable-format---sections-and-segments/</link>
       <pubDate>Thu, 10 Sep 2020 00:00:00 +0000</pubDate>
-      
       <guid>http://localhost:1313/posts/1728230608669-executable-and-linkable-format---sections-and-segments/</guid>
       <description>&lt;p&gt;So the ELF or Excecutable and Linkable format are programs or binaries that are used in linux systems. ELFs contain 3 components namely:&lt;/p&gt;</description>
-      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/1728230608669-executable-and-linkable-format---sections-and-segments/featured.png" />
     </item>
-    
   </channel>
 </rss>
