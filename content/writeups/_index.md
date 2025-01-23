@@ -7,5 +7,9 @@ cascade:
   showAuthor: false
   invertPagination: false
 ---
-<!-- 
-Various writeups from different CTFs I play, This mainly contains pwn challenges. For more challenges you can skim through my [ctfs archive](https://github.com/tourpran/pwn-hub/tree/main/ctf) or go through some structured content [stack](https://github.com/tourpran/pwn-hub/tree/main/basic_attacks), [heap](https://github.com/tourpran/pwn-hub/tree/main/Heap), [browser](https://github.com/tourpran/pwn-hub/tree/main/v8-exp). -->
+
+<div style="font-size: 20px">
+
+Various writeups from different CTFs I play, This mainly contains pwn challenges. For more challenges you can skim through my [ctfs archive](https://github.com/tourpran/pwn-hub/tree/main/ctf) or go through some structured content [stack](https://github.com/tourpran/pwn-hub/tree/main/basic_attacks), [heap](https://github.com/tourpran/pwn-hub/tree/main/Heap), [browser](https://github.com/tourpran/pwn-hub/tree/main/v8-exp).
+
+</div>

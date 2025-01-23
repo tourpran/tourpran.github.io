@@ -4,16 +4,19 @@
     <title>Canary on tourpran</title>
     <link>http://localhost:1313/tags/canary/</link>
     <description>Recent content in Canary on tourpran</description>
-    <generator>Hugo</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 06 Mar 2020 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/canary/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>© 2025 Pranav Krishna</copyright>
+    <lastBuildDate>Fri, 06 Mar 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/canary/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>c4n4ry [zh3r0 CTF]</title>
       <link>http://localhost:1313/writeups/1728230734805-c4n4ry-zh3r0-ctf/</link>
       <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/writeups/1728230734805-c4n4ry-zh3r0-ctf/</guid>
       <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/writeups/1728230734805-c4n4ry-zh3r0-ctf/featured.png" />
     </item>
+    
   </channel>
 </rss>

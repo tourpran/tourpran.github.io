@@ -9,7 +9,7 @@ In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engi
 <!--more-->
 We'll break down how this edge case is misoptimized by V8's Turbofan compiler, explore the root cause of the issue, and demonstrate how this leads to unexpected behavior.
 
-For context, we’ll focus on the technical aspects surrounding the typer phase and its consequences for browser exploitation.
+For context, we’ll focus on the technical aspects surrounding the typer phase and its consequences for browser exploitation. PS: This is more or less my notes, So if there is any errors/false observations please bear with it and ping me on discord (tourpran). 
 
 ## Background on Math.expm1
 The `Math.expm1(x)` function calculates `e^x - 1` with improved precision for small values of `x`. For example:
@@ -318,9 +318,11 @@ shell_write(rwx, shellcode);
 func(); 
 ```
 
+To get the follow files, you can visit [here](https://github.com/tourpran/pwn-hub/tree/main/v8-exp/expm1-35C3).
+
 ## Debugging Tools:
 - The helper code for GDB can be found in `src/objects-printer.cc`.
-- The node structure comprises a variety of nodes, including:
+- The node structure comprises a variety of methods, including:
   - **Methods:**
     - `new`, `clone`, `isDead`, `kill`, etc.
   - **Variables:**

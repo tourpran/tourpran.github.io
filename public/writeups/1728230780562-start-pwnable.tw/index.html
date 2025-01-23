@@ -48,8 +48,8 @@
   
   
   
-  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.f4b852b7fe17efc5256f7460023fd354d09f8d3ad724ea2626f1799ea9b7ea714bca12f2ffbb996ebe1ee52b24f14a7026acb03d06ba8ebbcc20cbb8d8510ec2.js"
-    integrity="sha512-9LhSt/4X78Ulb3RgAj/TVNCfjTrXJOomJvF5nqm36nFLyhLy/7uZbr4e5Ssk8UpwJqywPQa6jrvMIMu42FEOwg==" data-copy="" data-copied=""></script>
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.3906f6d29011fcdd5fe8f7f43233a22367e3f9145ecd59e31c4e588568d8254645db6eb7bd00b8f33d8c4440660cc712bc310803a393182666f5296ec00e68e4.js"
+    integrity="sha512-OQb20pAR/N1f6Pf0MjOiI2fj&#43;RRezVnjHE5YhWjYJUZF2263vQC48z2MREBmDMcSvDEIA6OTGCZm9SluwA5o5A==" data-copy="" data-copied=""></script>
   
   
   
@@ -68,18 +68,23 @@
   
   
   
-  <meta property="og:title" content="start [pwnable.tw]" />
-<meta property="og:description" content="Here our main objective is to get a shell. The bug is plain and simple, it is an overflow to control the return address." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:1313/writeups/1728230780562-start-pwnable.tw/" /><meta property="og:image" content="http://localhost:1313/writeups/1728230780562-start-pwnable.tw/featured.png" /><meta property="article:section" content="writeups" />
-<meta property="article:published_time" content="2020-07-17T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-07-17T00:00:00+00:00" />
+  <meta property="og:url" content="http://localhost:1313/writeups/1728230780562-start-pwnable.tw/">
+  <meta property="og:site_name" content="tourpran">
+  <meta property="og:title" content="start [pwnable.tw]">
+  <meta property="og:description" content="Here our main objective is to get a shell. The bug is plain and simple, it is an overflow to control the return address.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="writeups">
+    <meta property="article:published_time" content="2020-07-17T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-07-17T00:00:00+00:00">
+    <meta property="article:tag" content="Pwnable.tw">
+    <meta property="og:image" content="http://localhost:1313/writeups/1728230780562-start-pwnable.tw/featured.png">
 
-
-
-  <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="http://localhost:1313/writeups/1728230780562-start-pwnable.tw/featured.png" /><meta name="twitter:title" content="start [pwnable.tw]"/>
-<meta name="twitter:description" content="Here our main objective is to get a shell. The bug is plain and simple, it is an overflow to control the return address."/>
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/writeups/1728230780562-start-pwnable.tw/featured.png">
+  <meta name="twitter:title" content="start [pwnable.tw]">
+  <meta name="twitter:description" content="Here our main objective is to get a shell. The bug is plain and simple, it is an overflow to control the return address.">
 
   
   <script type="application/ld+json">
@@ -225,7 +230,7 @@
 
     </span>
     
-    <p class="text-base font-medium" title="">
+    <p class="text-base font-medium" title="Pwn Training">
         training
     </p>
 </a>
@@ -247,7 +252,7 @@
 
     </span>
     
-    <p class="text-base font-medium" title="">
+    <p class="text-base font-medium" title="Blog Posts">
         blogs
     </p>
 </a>
@@ -269,7 +274,7 @@
 
     </span>
     
-    <p class="text-base font-medium" title="">
+    <p class="text-base font-medium" title="Writeups">
         writeups
     </p>
 </a>
@@ -435,7 +440,7 @@
 
         </div>
         
-        <p class="text-bg font-bg" title="">
+        <p class="text-bg font-bg" title="Pwn Training">
             training
         </p>
     </a>
@@ -461,7 +466,7 @@
 
         </div>
         
-        <p class="text-bg font-bg" title="">
+        <p class="text-bg font-bg" title="Blog Posts">
             blogs
         </p>
     </a>
@@ -487,7 +492,7 @@
 
         </div>
         
-        <p class="text-bg font-bg" title="">
+        <p class="text-bg font-bg" title="Writeups">
             writeups
         </p>
     </a>
@@ -560,7 +565,7 @@
   
   
         
-            <div class="w-full h-36 md:h-56 lg:h-72 single_hero_basic nozoom" style="background-image:url(/writeups/1728230780562-start-pwnable.tw/featured_hu143c7c21d8cbd8faa23d9ef39f800145_24699_1200x0_resize_box_3.png);"></div>
+            <div class="w-full h-36 md:h-56 lg:h-72 single_hero_basic nozoom" style="background-image:url(/writeups/1728230780562-start-pwnable.tw/featured_hu1947411188556959500.png);"></div>
         
     
   
@@ -1015,7 +1020,7 @@ Also <code>INT 0x80</code> is equivalent to syscall. We can observe 2 syscalls b
     
     <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
         
-        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/writeups/1728230795518-orw-pwnable.tw/featured_hu143c7c21d8cbd8faa23d9ef39f800145_24699_600x0_resize_box_3.png);"></div>
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/writeups/1728230795518-orw-pwnable.tw/featured_hu15353705883904348958.png);"></div>
         
       
 
@@ -1147,7 +1152,7 @@ Also <code>INT 0x80</code> is equivalent to syscall. We can observe 2 syscalls b
     
     <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
         
-        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/writeups/1728230734805-c4n4ry-zh3r0-ctf/featured_huaeda2604ff92b03f2fa2e45b050ec1c8_34765_600x0_resize_box_3.png);"></div>
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/writeups/1728230734805-c4n4ry-zh3r0-ctf/featured_hu9314750215491994041.png);"></div>
         
       
 
@@ -1270,7 +1275,7 @@ Also <code>INT 0x80</code> is equivalent to syscall. We can observe 2 syscalls b
 
         
         <div class="py-1 prose dark:prose-invert">
-          I am proud to say that my team zh3r0 hosted its first CTF.
+          
         </div>
         
       </div>
@@ -1299,7 +1304,7 @@ Also <code>INT 0x80</code> is equivalent to syscall. We can observe 2 syscalls b
       </script>
       
       
-      <script type="text/javascript" src="/js/page.min.b06a29d42a4ed16787978e2eee1e8c797b7698db2bc14ccee78f5c80ac566fc996190a73ad80a5e987558474b20b96fa38f7d85b405f165ff72b7b163c5ad11b.js" integrity="sha512-sGop1CpO0WeHl44u7h6MeXt2mNsrwUzO549cgKxWb8mWGQpzrYCl6YdVhHSyC5b6OPfYW0BfFl/3K3sWPFrRGw=="></script>
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
       
   
     </section>
@@ -1404,7 +1409,7 @@ Also <code>INT 0x80</code> is equivalent to syscall. We can observe 2 syscalls b
     
     <p class="text-sm text-neutral-500 dark:text-neutral-400">
       &copy;
-      2024
+      2025
       Pranav Krishna
     </p>
     
@@ -1424,7 +1429,7 @@ Also <code>INT 0x80</code> is equivalent to syscall. We can observe 2 syscalls b
   </script>
   
   
-  <script type="text/javascript" src="/js/process.min.62060bb247f4de2b6dde45903668fefb68d792f365587605177b1227c0cf43588701edaca0cb40e2c8e2789bd5ce67c1d2a215b9fb258c3496a7cd25e7cb5fdf.js" integrity="sha512-YgYLskf03itt3kWQNmj&#43;&#43;2jXkvNlWHYFF3sSJ8DPQ1iHAe2soMtA4sjieJvVzmfB0qIVufsljDSWp80l58tf3w=="></script>
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
   
   
 </footer>

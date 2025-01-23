@@ -48,8 +48,8 @@
   
   
   
-  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.f4b852b7fe17efc5256f7460023fd354d09f8d3ad724ea2626f1799ea9b7ea714bca12f2ffbb996ebe1ee52b24f14a7026acb03d06ba8ebbcc20cbb8d8510ec2.js"
-    integrity="sha512-9LhSt/4X78Ulb3RgAj/TVNCfjTrXJOomJvF5nqm36nFLyhLy/7uZbr4e5Ssk8UpwJqywPQa6jrvMIMu42FEOwg==" data-copy="" data-copied=""></script>
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.3906f6d29011fcdd5fe8f7f43233a22367e3f9145ecd59e31c4e588568d8254645db6eb7bd00b8f33d8c4440660cc712bc310803a393182666f5296ec00e68e4.js"
+    integrity="sha512-OQb20pAR/N1f6Pf0MjOiI2fj&#43;RRezVnjHE5YhWjYJUZF2263vQC48z2MREBmDMcSvDEIA6OTGCZm9SluwA5o5A==" data-copy="" data-copied=""></script>
   
   
   
@@ -68,18 +68,25 @@
   
   
   
-  <meta property="og:title" content="expm1-35C3 - Bug/ Optimizations Analysis" />
-<meta property="og:description" content="In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:1313/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/" /><meta property="og:image" content="http://localhost:1313/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/featured.png" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-02-19T00:00:00+00:00" />
-<meta property="article:modified_time" content="2024-02-19T00:00:00+00:00" />
+  <meta property="og:url" content="http://localhost:1313/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/">
+  <meta property="og:site_name" content="tourpran">
+  <meta property="og:title" content="expm1-35C3 - Bug/ Optimizations Analysis">
+  <meta property="og:description" content="In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-02-19T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-02-19T00:00:00+00:00">
+    <meta property="article:tag" content="Math.expm1">
+    <meta property="article:tag" content="Typer">
+    <meta property="article:tag" content="OOB">
+    <meta property="og:image" content="http://localhost:1313/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/featured.png">
 
-
-
-  <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="http://localhost:1313/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/featured.png" /><meta name="twitter:title" content="expm1-35C3 - Bug/ Optimizations Analysis"/>
-<meta name="twitter:description" content="In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process."/>
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/featured.png">
+  <meta name="twitter:title" content="expm1-35C3 - Bug/ Optimizations Analysis">
+  <meta name="twitter:description" content="In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process.">
 
   
   <script type="application/ld+json">
@@ -106,7 +113,7 @@
     "keywords": ["math.expm1","typer","OOB"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "1700"
+    "wordCount": "1734"
   }]
   </script>
 
@@ -225,7 +232,7 @@
 
     </span>
     
-    <p class="text-base font-medium" title="">
+    <p class="text-base font-medium" title="Pwn Training">
         training
     </p>
 </a>
@@ -247,7 +254,7 @@
 
     </span>
     
-    <p class="text-base font-medium" title="">
+    <p class="text-base font-medium" title="Blog Posts">
         blogs
     </p>
 </a>
@@ -269,7 +276,7 @@
 
     </span>
     
-    <p class="text-base font-medium" title="">
+    <p class="text-base font-medium" title="Writeups">
         writeups
     </p>
 </a>
@@ -435,7 +442,7 @@
 
         </div>
         
-        <p class="text-bg font-bg" title="">
+        <p class="text-bg font-bg" title="Pwn Training">
             training
         </p>
     </a>
@@ -461,7 +468,7 @@
 
         </div>
         
-        <p class="text-bg font-bg" title="">
+        <p class="text-bg font-bg" title="Blog Posts">
             blogs
         </p>
     </a>
@@ -487,7 +494,7 @@
 
         </div>
         
-        <p class="text-bg font-bg" title="">
+        <p class="text-bg font-bg" title="Writeups">
             writeups
         </p>
     </a>
@@ -560,7 +567,7 @@
   
   
         
-            <div class="w-full h-36 md:h-56 lg:h-72 single_hero_basic nozoom" style="background-image:url(/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/featured_hu58b6fdf1036cd3ee483920099859de71_120084_1200x0_resize_box_3.png);"></div>
+            <div class="w-full h-36 md:h-56 lg:h-72 single_hero_basic nozoom" style="background-image:url(/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/featured_hu14994188525139438015.png);"></div>
         
     
   
@@ -616,7 +623,7 @@
 <div class="flex flex-row flex-wrap items-center">
   
   
-  <time datetime="2024-02-19T00:00:00&#43;00:00">2024-02-19</time><span class="px-2 text-primary-500">&middot;</span><span>1700 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">8 mins</span><span class="px-2 text-primary-500">&middot;</span>
+  <time datetime="2024-02-19T00:00:00&#43;00:00">2024-02-19</time><span class="px-2 text-primary-500">&middot;</span><span>1734 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">9 mins</span><span class="px-2 text-primary-500">&middot;</span>
 
 
 <script type="text/javascript" src="/js/zen-mode.min.ccc8b2a0c4505216444ca25530c7328aa0bef94f43dabaf3e598e1b4271de9eec76c1cb35917471a4f7ccb8d84051b3acef42baa30724ac3a667fcf1fec4432a.js" integrity="sha512-zMiyoMRQUhZETKJVMMcyiqC&#43;&#43;U9D2rrz5ZjhtCcd6e7HbByzWRdHGk98y42EBRs6zvQrqjBySsOmZ/zx/sRDKg=="></script>
@@ -739,7 +746,7 @@
         
       
       <img class="!mt-0 !mb-0 h-24 w-24 rounded-full ltr:mr-4 rtl:ml-4" width="96" height="96"
-      alt="Pranav Krishna" src="/myself_hua595f2ec0ad7d41ef3dc0a36e6ec981a_27792_192x192_fill_box_center_3.png" />
+      alt="Pranav Krishna" src="/myself_hu11999344461293788174.png" />
     
   
   <div class="place-self-center">
@@ -1039,7 +1046,7 @@
         <div class="article-content max-w-prose mb-20">
           <p>In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process.</p>
 <p>We&rsquo;ll break down how this edge case is misoptimized by V8&rsquo;s Turbofan compiler, explore the root cause of the issue, and demonstrate how this leads to unexpected behavior.</p>
-<p>For context, we’ll focus on the technical aspects surrounding the typer phase and its consequences for browser exploitation.</p>
+<p>For context, we’ll focus on the technical aspects surrounding the typer phase and its consequences for browser exploitation. PS: This is more or less my notes, So if there is any errors/false observations please bear with it and ping me on discord (tourpran).</p>
 
 
 <h2 class="relative group">Background on Math.expm1 
@@ -1576,7 +1583,8 @@ In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0
 </span></span><span class="line"><span class="cl"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;[+] Got the Address of RWX segment: &#34;</span> <span class="o">+</span> <span class="nx">rwx</span><span class="p">.</span><span class="nx">hex</span><span class="p">());</span>
 </span></span><span class="line"><span class="cl"><span class="nx">shell_write</span><span class="p">(</span><span class="nx">rwx</span><span class="p">,</span> <span class="nx">shellcode</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="nx">func</span><span class="p">();</span> 
-</span></span></code></pre></div>
+</span></span></code></pre></div><p>To get the follow files, you can visit <a href="https://github.com/tourpran/pwn-hub/tree/main/v8-exp/expm1-35C3" target="_blank">here</a>.</p>
+
 
 <h2 class="relative group">Debugging Tools: 
     <div id="debugging-tools" class="anchor"></div>
@@ -1593,7 +1601,7 @@ In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0
 <p>The helper code for GDB can be found in <code>src/objects-printer.cc</code>.</p>
 </li>
 <li>
-<p>The node structure comprises a variety of nodes, including:</p>
+<p>The node structure comprises a variety of methods, including:</p>
 <ul>
 <li><strong>Methods:</strong>
 <ul>
@@ -1653,7 +1661,7 @@ In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0
     
     <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
         
-        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/training/1728229152748-format-string-exploitation-train-2/featured_hu5328591abe8ff7836fef59f762a392f0_77083_600x0_resize_box_3.png);"></div>
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/training/1728229152748-format-string-exploitation-train-2/featured_hu15301273474678785608.png);"></div>
         
       
 
@@ -1791,7 +1799,7 @@ In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0
     
     <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
         
-        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/writeups/1728230875066-tallocator-bi0sctf/featured_huc4ca26df2aa1b26ba28c982917bb0a1d_174505_600x0_resize_box_3.png);"></div>
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/writeups/1728230875066-tallocator-bi0sctf/featured_hu10363351236673924155.png);"></div>
         
       
 
@@ -1939,7 +1947,7 @@ In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0
     
     <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
         
-        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/training/1728392069994-youtube---stack-basics/featured_hu772015ff0023e18308d7b130b3018b76_52594_600x0_resize_box_3.png);"></div>
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/training/1728392069994-youtube---stack-basics/featured_hu9930595331913676961.png);"></div>
         
       
 
@@ -2089,7 +2097,7 @@ In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0
       </script>
       
       
-      <script type="text/javascript" src="/js/page.min.b06a29d42a4ed16787978e2eee1e8c797b7698db2bc14ccee78f5c80ac566fc996190a73ad80a5e987558474b20b96fa38f7d85b405f165ff72b7b163c5ad11b.js" integrity="sha512-sGop1CpO0WeHl44u7h6MeXt2mNsrwUzO549cgKxWb8mWGQpzrYCl6YdVhHSyC5b6OPfYW0BfFl/3K3sWPFrRGw=="></script>
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
       
   
     </section>
@@ -2194,7 +2202,7 @@ In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0
     
     <p class="text-sm text-neutral-500 dark:text-neutral-400">
       &copy;
-      2024
+      2025
       Pranav Krishna
     </p>
     
@@ -2214,7 +2222,7 @@ In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0
   </script>
   
   
-  <script type="text/javascript" src="/js/process.min.62060bb247f4de2b6dde45903668fefb68d792f365587605177b1227c0cf43588701edaca0cb40e2c8e2789bd5ce67c1d2a215b9fb258c3496a7cd25e7cb5fdf.js" integrity="sha512-YgYLskf03itt3kWQNmj&#43;&#43;2jXkvNlWHYFF3sSJ8DPQ1iHAe2soMtA4sjieJvVzmfB0qIVufsljDSWp80l58tf3w=="></script>
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
   
   
 </footer>

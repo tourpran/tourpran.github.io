@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Turbofan on tourpran</title>
+    <link>http://localhost:1313/tags/turbofan/</link>
+    <description>Recent content in Turbofan on tourpran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2025 Pranav Krishna</copyright>
+    <lastBuildDate>Sun, 09 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/turbofan/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>v8 - ArrayShift Race Condition</title>
+      <link>http://localhost:1313/posts/1728447510508-v8---arrayshift-race-condition./</link>
+      <pubDate>Sun, 09 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/1728447510508-v8---arrayshift-race-condition./</guid>
+      <description>&lt;p&gt;In this post, we’ll explore how to exploit a &lt;code&gt;race condition&lt;/code&gt; in the &lt;code&gt;V8&lt;/code&gt; JavaScript engine, between the &lt;code&gt;turbofan thread&lt;/code&gt; and the &lt;code&gt;main thread&lt;/code&gt; that executes &lt;code&gt;ArrayShift&lt;/code&gt; builtin function.&lt;/p&gt;</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/posts/1728447510508-v8---arrayshift-race-condition./featured.png" />
+    </item>
+    
+  </channel>
+</rss>

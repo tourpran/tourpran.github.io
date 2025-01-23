@@ -5,9 +5,10 @@ draft: false
 tags: ["pyjail", "pwn", "ptr-yudai"]
 ---
 
-This was a particularly unique and well-designed PyJail challenge featured in the Asian Cyber Security Challenge. Although I solved it during the contest using an unintended method, I later came across a writeup by ptr-yudai (an incredible pwner, someone I really aspire to be like!). Below are the notes I made while going through his insightful writeup.
-
+This was a particularly unique and well-designed PyJail challenge featured in the Asian Cyber Security Challenge. Although I solved it during the contest using an unintended method.
 <!--more-->
+I later came across a writeup by ptr-yudai (an incredible pwner, someone I really aspire to be like!). Below are the notes I made while going through his insightful writeup.
+
 
 ## Part 1: Getting the Name of the File
 
