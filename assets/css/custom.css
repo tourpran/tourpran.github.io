@@ -37,6 +37,7 @@ strong {
 }
 
 nav {
+  display: flex;
   text-align: right; 
   font-size: 20pt;
   font-style: bold !important;
@@ -58,10 +59,18 @@ html {
 a.text-base{
     font-size: 20pt;
     font-weight: bolder;
-    margin-left: -50px;
+    margin-left: -40px;
 }
 
 #menu-blur{
     padding-top: 73px;
     margin-top: -10px;
+}
+
+p.text-base{
+    padding: 5px;
+}
+
+button.text-base{
+  padding-right: 5px;
 }
