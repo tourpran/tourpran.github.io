@@ -15,7 +15,7 @@
       <pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate>
       
       <guid>http://localhost:1313/writeups/1740990144225-holy-cow---pwnme25/</guid>
-      <description>&lt;h2 class=&#34;relative group&#34;&gt;Introduction: 
+      <description>&lt;h3 class=&#34;relative group&#34;&gt;Introduction: 
     &lt;div id=&#34;introduction&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;
     
     &lt;span
@@ -24,8 +24,8 @@
             style=&#34;text-decoration-line: none !important;&#34; href=&#34;#introduction&#34; aria-label=&#34;Anchor&#34;&gt;#&lt;/a&gt;
     &lt;/span&gt;        
     
-&lt;/h2&gt;
-&lt;p&gt;This is the writeup for the pwnmeCTF 2025 challenge called &lt;code&gt;holy cow revenge²&lt;/code&gt;. Without wasting much time lets get right into it.&lt;/p&gt;</description>
+&lt;/h3&gt;
+&lt;p&gt;This is the writeup for the pwnmeCTF 2025 challenge called &lt;code&gt;holy cow revenge²&lt;/code&gt;. This one is going to be crisp and quick.&lt;/p&gt;</description>
       <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/writeups/1740990144225-holy-cow---pwnme25/featured.png" />
     </item>
     

