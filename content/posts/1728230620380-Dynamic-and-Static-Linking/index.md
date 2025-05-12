@@ -41,9 +41,9 @@ So now we see we go into the function puts. which has an address `0x4118c0`. Now
 
 ## Pros and Cons
 
-| Advantage| disadvantage |
-|: ------:  |:------: |
-| Anybody having the binary can excecute it. There will be no dependency errors| In real Life the applications are pretty huge and need multiple dependency files. Combining all of them into one file will make the size of the binary pretty huge. |
+| Advantage | disadvantage |
+|:------:|:------:|
+| Anybody having the binary can excecute it. There will be no dependency errors | In real Life the applications are pretty huge and need multiple dependency files. Combining all of them into one file will make the size of the binary pretty huge. |
 
 ## Dynamic Linking
 
@@ -90,9 +90,6 @@ so on...
 
 Oops ! did I say that the linker performs all relocations. Well, thats not the case for most situations. This is where lazy linking comes into picture. So if a function is called then the dynamic linker will resolve the address for the function. Hence the name "Lazy" Linking. This awesome work is done by the GOT and PLT. (Next blog)
 
-## END 
-Good now that you understand some parts of Dynamic and Static linkning !! 
-
-## source:
+## Reference:
 Really cool blog which made me understand this concept.
 [intezer](https://www.intezer.com/blog/elf/executable-linkable-format-101-part-4-dynamic-linking/)

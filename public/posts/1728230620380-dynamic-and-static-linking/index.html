@@ -28,8 +28,8 @@
   
   
   
-  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.151aa81f4795afe0db4d899a550cc1cd4e485e6fefaaacfc9bc1e6069bcf8199199e16eccefb674e66694453dc7d38f9055a987a1fb413e1e8443ed775a8df7e.css"
-    integrity="sha512-FRqoH0eVr&#43;DbTYmaVQzBzU5IXm/vqqz8m8HmBpvPgZkZnhbszvtnTmZpRFPcfTj5BVqYeh&#43;0E&#43;HoRD7Xdajffg==" />
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.634133ba9a4ec81e123258ca566a839e8a0142f3800a431466b749de2b4c58fce5059ec44425f13cb0dbfda19697365336e47e9cd91291a665b3d77f6a9a105d.css"
+    integrity="sha512-Y0EzuppOyB4SMljKVmqDnooBQvOACkMUZrdJ3itMWPzlBZ7ERCXxPLDb/aGWlzZTNuR&#43;nNkSkaZls9d/apoQXQ==" />
   
   
   <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
@@ -113,7 +113,7 @@
     "keywords": ["short-blog","dynamic and static linking"],
     
     "mainEntityOfPage": "true",
-    "wordCount": "688"
+    "wordCount": "665"
   }]
   </script>
 
@@ -623,7 +623,7 @@
 <div class="flex flex-row flex-wrap items-center">
   
   
-  <time datetime="2020-09-06T00:00:00&#43;00:00">2020-09-06</time><span class="px-2 text-primary-500">&middot;</span><span>688 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">4 mins</span><span class="px-2 text-primary-500">&middot;</span>
+  <time datetime="2020-09-06T00:00:00&#43;00:00">2020-09-06</time><span class="px-2 text-primary-500">&middot;</span><span>665 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">4 mins</span><span class="px-2 text-primary-500">&middot;</span>
 
 
 <script type="text/javascript" src="/js/zen-mode.min.ccc8b2a0c4505216444ca25530c7328aa0bef94f43dabaf3e598e1b4271de9eec76c1cb35917471a4f7ccb8d84051b3acef42baa30724ac3a667fcf1fec4432a.js" integrity="sha512-zMiyoMRQUhZETKJVMMcyiqC&#43;&#43;U9D2rrz5ZjhtCcd6e7HbByzWRdHGk98y42EBRs6zvQrqjBySsOmZ/zx/sRDKg=="></script>
@@ -894,8 +894,7 @@
         </li>
         <li><a href="#pros-and-cons-1">Pros and Cons</a></li>
         <li><a href="#lazy-linking">Lazy Linking</a></li>
-        <li><a href="#end">END</a></li>
-        <li><a href="#source">source:</a></li>
+        <li><a href="#reference">Reference:</a></li>
       </ul>
     </li>
   </ul>
@@ -925,8 +924,7 @@
         </li>
         <li><a href="#pros-and-cons-1">Pros and Cons</a></li>
         <li><a href="#lazy-linking">Lazy Linking</a></li>
-        <li><a href="#end">END</a></li>
-        <li><a href="#source">source:</a></li>
+        <li><a href="#reference">Reference:</a></li>
       </ul>
     </li>
   </ul>
@@ -1090,9 +1088,20 @@ set a break point at puts and run the program.
     </span>        
     
 </h2>
-<p>| Advantage| disadvantage |
-|: &mdash;&mdash;:  |:&mdash;&mdash;: |
-| Anybody having the binary can excecute it. There will be no dependency errors| In real Life the applications are pretty huge and need multiple dependency files. Combining all of them into one file will make the size of the binary pretty huge. |</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: center">Advantage</th>
+          <th style="text-align: center">disadvantage</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">Anybody having the binary can excecute it. There will be no dependency errors</td>
+          <td style="text-align: center">In real Life the applications are pretty huge and need multiple dependency files. Combining all of them into one file will make the size of the binary pretty huge.</td>
+      </tr>
+  </tbody>
+</table>
 
 
 <h2 class="relative group">Dynamic Linking 
@@ -1203,26 +1212,13 @@ so on&hellip;</li>
 <p>Oops ! did I say that the linker performs all relocations. Well, thats not the case for most situations. This is where lazy linking comes into picture. So if a function is called then the dynamic linker will resolve the address for the function. Hence the name &ldquo;Lazy&rdquo; Linking. This awesome work is done by the GOT and PLT. (Next blog)</p>
 
 
-<h2 class="relative group">END 
-    <div id="end" class="anchor"></div>
+<h2 class="relative group">Reference: 
+    <div id="reference" class="anchor"></div>
     
     <span
         class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
         <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
-            style="text-decoration-line: none !important;" href="#end" aria-label="Anchor">#</a>
-    </span>        
-    
-</h2>
-<p>Good now that you understand some parts of Dynamic and Static linkning !!</p>
-
-
-<h2 class="relative group">source: 
-    <div id="source" class="anchor"></div>
-    
-    <span
-        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
-        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
-            style="text-decoration-line: none !important;" href="#source" aria-label="Anchor">#</a>
+            style="text-decoration-line: none !important;" href="#reference" aria-label="Anchor">#</a>
     </span>        
     
 </h2>

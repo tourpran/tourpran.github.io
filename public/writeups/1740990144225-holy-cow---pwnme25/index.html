@@ -11,8 +11,8 @@
   <title>holy cow - pwnme25 &middot; tourpran</title>
   <meta name="title" content="holy cow - pwnme25 &middot; tourpran" />
   
-  <meta name="description" content="browser exploitation challenge to " />
-  <meta name="keywords" content="example, tag, " />
+  <meta name="description" content="browser exploitation challenge from leaking the hole value" />
+  <meta name="keywords" content="v8, hole, " />
   
   
   <link rel="canonical" href="http://localhost:1313/writeups/1740990144225-holy-cow---pwnme25/" />
@@ -28,8 +28,8 @@
   
   
   
-  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.151aa81f4795afe0db4d899a550cc1cd4e485e6fefaaacfc9bc1e6069bcf8199199e16eccefb674e66694453dc7d38f9055a987a1fb413e1e8443ed775a8df7e.css"
-    integrity="sha512-FRqoH0eVr&#43;DbTYmaVQzBzU5IXm/vqqz8m8HmBpvPgZkZnhbszvtnTmZpRFPcfTj5BVqYeh&#43;0E&#43;HoRD7Xdajffg==" />
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.634133ba9a4ec81e123258ca566a839e8a0142f3800a431466b749de2b4c58fce5059ec44425f13cb0dbfda19697365336e47e9cd91291a665b3d77f6a9a105d.css"
+    integrity="sha512-Y0EzuppOyB4SMljKVmqDnooBQvOACkMUZrdJ3itMWPzlBZ7ERCXxPLDb/aGWlzZTNuR&#43;nNkSkaZls9d/apoQXQ==" />
   
   
   <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
@@ -72,21 +72,21 @@
   <meta property="og:url" content="http://localhost:1313/writeups/1740990144225-holy-cow---pwnme25/">
   <meta property="og:site_name" content="tourpran">
   <meta property="og:title" content="holy cow - pwnme25">
-  <meta property="og:description" content="browser exploitation challenge to">
+  <meta property="og:description" content="browser exploitation challenge from leaking the hole value">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="writeups">
     <meta property="article:published_time" content="2025-03-03T00:00:00+00:00">
     <meta property="article:modified_time" content="2025-03-03T00:00:00+00:00">
-    <meta property="article:tag" content="Example">
-    <meta property="article:tag" content="Tag">
+    <meta property="article:tag" content="V8">
+    <meta property="article:tag" content="Hole">
     <meta property="og:image" content="http://localhost:1313/writeups/1740990144225-holy-cow---pwnme25/featured.png">
 
   
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="http://localhost:1313/writeups/1740990144225-holy-cow---pwnme25/featured.png">
   <meta name="twitter:title" content="holy cow - pwnme25">
-  <meta name="twitter:description" content="browser exploitation challenge to">
+  <meta name="twitter:description" content="browser exploitation challenge from leaking the hole value">
 
   
   <script type="application/ld+json">
@@ -96,7 +96,7 @@
     "articleSection": "Writeups",
     "name": "holy cow - pwnme25",
     "headline": "holy cow - pwnme25",
-    "description": "browser exploitation challenge to ",
+    "description": "browser exploitation challenge from leaking the hole value",
     "abstract": "\u003ch3 class=\u0022relative group\u0022\u003eIntroduction: \n    \u003cdiv id=\u0022introduction\u0022 class=\u0022anchor\u0022\u003e\u003c\/div\u003e\n    \n    \u003cspan\n        class=\u0022absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100\u0022\u003e\n        \u003ca class=\u0022group-hover:text-primary-300 dark:group-hover:text-neutral-700\u0022\n            style=\u0022text-decoration-line: none !important;\u0022 href=\u0022#introduction\u0022 aria-label=\u0022Anchor\u0022\u003e#\u003c\/a\u003e\n    \u003c\/span\u003e        \n    \n\u003c\/h3\u003e\n\u003cp\u003eThis is the writeup for the pwnmeCTF 2025 challenge called \u003ccode\u003eholy cow revenge²\u003c\/code\u003e. This one is going to be crisp and quick.\u003c\/p\u003e",
     "inLanguage": "en",
     "url" : "http:\/\/localhost:1313\/writeups\/1740990144225-holy-cow---pwnme25\/",
@@ -110,7 +110,7 @@
     
     "dateModified": "2025-03-03T00:00:00\u002b00:00",
     
-    "keywords": ["example","tag"],
+    "keywords": ["v8","hole"],
     
     "mainEntityOfPage": "true",
     "wordCount": "975"
@@ -688,18 +688,18 @@
   
   
   
-  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/example/&#34;,'_self');return false;">
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/v8/&#34;,'_self');return false;">
     <span class="flex" style="cursor: pointer;">
   <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
-    Example
+    V8
   </span>
 </span>
   </span>
   
-  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/tag/&#34;,'_self');return false;">
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/hole/&#34;,'_self');return false;">
     <span class="flex" style="cursor: pointer;">
   <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
-    Tag
+    Hole
   </span>
 </span>
   </span>
@@ -963,14 +963,14 @@
     
 </h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">hole</span> <span class="o">=</span> <span class="nx">Set</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">hole</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Map</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Map</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">hole</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">hole</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">hole</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">hole</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">hole</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">hole</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span></span></code></pre></div><p>If you read the other blog you would have a good idea that the <code>map.size</code> now will be equal to <code>-1</code>.</p>
 
 
@@ -1275,155 +1275,6 @@
   
   
 
-  <a href="/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/" class="min-w-full">
-    
-    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
-        
-        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/featured_hu_6344bd60a049573d.png);"></div>
-        
-      
-
-      <div class="px-6 py-4">
-
-        
-        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
-          href="/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/">expm1-35C3 - Bug/ Optimizations Analysis</div>
-        
-
-        <div class="text-sm text-neutral-500 dark:text-neutral-400">
-          
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="flex flex-row flex-wrap items-center">
-  
-  
-  <time datetime="2024-02-19T00:00:00&#43;00:00">2024-02-19</time><span class="px-2 text-primary-500">&middot;</span><span>1734 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">9 mins</span>
-  
-
-  
-  
-</div>
-
-
-<div class="flex flex-row flex-wrap items-center">
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-</div>
-
-
-
-
-<div class="flex flex-row flex-wrap items-center">
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/math.expm1/&#34;,'_self');return false;">
-    <span class="flex" style="cursor: pointer;">
-  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
-    Math.expm1
-  </span>
-</span>
-  </span>
-  
-  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/typer/&#34;,'_self');return false;">
-    <span class="flex" style="cursor: pointer;">
-  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
-    Typer
-  </span>
-</span>
-  </span>
-  
-  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/oob/&#34;,'_self');return false;">
-    <span class="flex" style="cursor: pointer;">
-  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
-    OOB
-  </span>
-</span>
-  </span>
-  
-  
-  
-  
-</div>
-
-
-
-
-        </div>
-
-        
-        <div class="py-1 prose dark:prose-invert">
-          In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process.
-
-        </div>
-        
-      </div>
-      <div class="px-6 pt-4 pb-2">
-
-      </div>
-    </div>
-  </a>
-
-  
-  
-
   <a href="/posts/1728446785503-cve-2024-0517-quick-blog/" class="min-w-full">
     
     <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
@@ -1573,11 +1424,11 @@
   
   
 
-  <a href="/training/1728229152748-format-string-exploitation-train-2/" class="min-w-full">
+  <a href="/posts/1728447510508-v8---arrayshift-race-condition./" class="min-w-full">
     
     <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
         
-        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/training/1728229152748-format-string-exploitation-train-2/featured_hu_4792feac4f6c9516.png);"></div>
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/posts/1728447510508-v8---arrayshift-race-condition./featured_hu_6ae1ce2ec716538e.png);"></div>
         
       
 
@@ -1585,7 +1436,7 @@
 
         
         <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
-          href="/training/1728229152748-format-string-exploitation-train-2/">Format String Exploitation [train 2]</div>
+          href="/posts/1728447510508-v8---arrayshift-race-condition./">v8 - ArrayShift Race Condition</div>
         
 
         <div class="text-sm text-neutral-500 dark:text-neutral-400">
@@ -1601,6 +1452,8 @@
 
 
 
+  
+
 
 
 
@@ -1626,7 +1479,7 @@
 <div class="flex flex-row flex-wrap items-center">
   
   
-  <span>1580 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">8 mins</span>
+  <time datetime="2024-06-09T00:00:00&#43;00:00">2024-06-09</time><span class="px-2 text-primary-500">&middot;</span><span>2123 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">10 mins</span>
   
 
   
@@ -1670,18 +1523,34 @@
   
   
   
-  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/pwn/&#34;,'_self');return false;">
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/browser/&#34;,'_self');return false;">
     <span class="flex" style="cursor: pointer;">
   <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
-    Pwn
+    Browser
   </span>
 </span>
   </span>
   
-  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/training/&#34;,'_self');return false;">
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/v8/&#34;,'_self');return false;">
     <span class="flex" style="cursor: pointer;">
   <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
-    Training
+    V8
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/arrayshift/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Arrayshift
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/turbofan/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Turbofan
   </span>
 </span>
   </span>
@@ -1698,7 +1567,156 @@
 
         
         <div class="py-1 prose dark:prose-invert">
-          This is the 2nd challenge in the in the series. In this training we will go through the format string exploitation technique. We are provided 2 challenges of the same vulnerability. Lets go through them one by one.
+          In this post, we’ll explore how to exploit a race condition in the V8 JavaScript engine, between the turbofan thread and the main thread that executes ArrayShift builtin function.
+
+        </div>
+        
+      </div>
+      <div class="px-6 pt-4 pb-2">
+
+      </div>
+    </div>
+  </a>
+
+  
+  
+
+  <a href="/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/" class="min-w-full">
+    
+    <div class="min-h-full border border-neutral-200 dark:border-neutral-700 border-2 rounded overflow-hidden shadow-2xl relative">
+        
+        <div class="w-full thumbnail_card_related nozoom" style="background-image:url(/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/featured_hu_6344bd60a049573d.png);"></div>
+        
+      
+
+      <div class="px-6 py-4">
+
+        
+        <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral"
+          href="/posts/1728449827421-expm1-35c3---bug/-optimizations-analysis/">expm1-35C3 - Bug/ Optimizations Analysis</div>
+        
+
+        <div class="text-sm text-neutral-500 dark:text-neutral-400">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-02-19T00:00:00&#43;00:00">2024-02-19</time><span class="px-2 text-primary-500">&middot;</span><span>1734 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">9 mins</span>
+  
+
+  
+  
+</div>
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/math.expm1/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Math.expm1
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/typer/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Typer
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/oob/&#34;,'_self');return false;">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    OOB
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+
+        </div>
+
+        
+        <div class="py-1 prose dark:prose-invert">
+          In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process.
 
         </div>
         
