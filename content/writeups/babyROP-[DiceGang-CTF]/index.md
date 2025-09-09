@@ -4,7 +4,6 @@ date: 2021-10-04
 event: DiceGangCTF 2021
 points: 121
 difficulty: easy
-draft: false
 tags: ["csu", "ret2csu", "dicegang"]
 ---
 

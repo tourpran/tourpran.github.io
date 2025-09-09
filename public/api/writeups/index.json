@@ -1,5 +1,22 @@
 [
   {
+    "href": "/writeups/randomjs-asis25.html",
+    "title": "RandomJS",
+    "description": "This past weekend, I participated in the `ASIS CTF` and focused on the `RandomJS` challenge, managing to solve it just before the event ended. In this writeup, ...",
+    "date": "2025-09-09T00:00:00.000Z",
+    "readTime": 11,
+    "tags": [
+      "quickJS",
+      "UAF"
+    ],
+    "gradient": "from-fuchsia-500 to-pink-500",
+    "slug": "randomjs-asis25",
+    "featuredUrl": "/writeups/randomjs-asis25/featured.png",
+    "event": "ASIS Quals 2025",
+    "difficulty": "hard",
+    "points": 334
+  },
+  {
     "href": "/writeups/holy-cow---pwnme25.html",
     "title": "holy cow",
     "description": "browser exploitation challenge from leaking the hole value",
