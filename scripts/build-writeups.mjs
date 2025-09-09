@@ -427,12 +427,12 @@ function buildAll() {
     }
   }
   
-  // Write index.json
-  const indexPath = join(__dirname, '../public/writeups/index.json');
+  // Write index.json (moved to /api/writeups)
+  const indexPath = join(__dirname, '../public/api/writeups/index.json');
   const indexDir = dirname(indexPath);
   mkdirSync(indexDir, { recursive: true });
   writeFileSync(indexPath, JSON.stringify(writeupsMeta, null, 2));
-  console.log(`✓ Generated: writeups/index.json with ${writeupsMeta.length} writeups`);
+  console.log(`✓ Generated: api/writeups/index.json with ${writeupsMeta.length} writeups`);
 }
 
 buildAll(); 

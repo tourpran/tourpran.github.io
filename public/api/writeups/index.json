@@ -1,0 +1,133 @@
+[
+  {
+    "href": "/writeups/holy-cow---pwnme25.html",
+    "title": "holy cow",
+    "description": "browser exploitation challenge from leaking the hole value",
+    "date": "2025-03-03T00:00:00.000Z",
+    "readTime": 5,
+    "tags": [
+      "v8",
+      "hole"
+    ],
+    "gradient": "from-sky-500 to-blue-500",
+    "slug": "holy-cow---pwnme25",
+    "featuredUrl": "/writeups/holy-cow---pwnme25/featured.png",
+    "event": "pwnmeCTF 2025",
+    "difficulty": "Hard"
+  },
+  {
+    "href": "/writeups/tallocator-[bi0sCTF].html",
+    "title": "Tallocator",
+    "description": "I created an Android based pwn challenge that involes exploiting a dynamic memory allocator using the webview interface. The challenge inclues the following sec...",
+    "date": "2024-02-01T00:00:00.000Z",
+    "readTime": 13,
+    "tags": [
+      "bi0sctf",
+      "Android",
+      "Reverse_Shell"
+    ],
+    "gradient": "from-blue-500 to-cyan-500",
+    "slug": "tallocator-[bi0sCTF]",
+    "featuredUrl": "/writeups/tallocator-[bi0sCTF]/featured.png",
+    "event": "bi0sCTF 2024",
+    "difficulty": "hard",
+    "points": 995
+  },
+  {
+    "href": "/writeups/evalbox---pyjail-writeup.html",
+    "title": "evalbox - pyjail writeup",
+    "description": "This was a particularly unique and well-designed PyJail challenge featured in the Asian Cyber Security Challenge. Although I solved it during the contest using ...",
+    "date": "2023-08-19T00:00:00.000Z",
+    "readTime": 5,
+    "tags": [
+      "pyjail",
+      "pwn"
+    ],
+    "gradient": "from-emerald-500 to-teal-500",
+    "slug": "evalbox---pyjail-writeup",
+    "featuredUrl": "/writeups/evalbox---pyjail-writeup/featured.png",
+    "event": "ACSC 2023",
+    "difficulty": "intermediate"
+  },
+  {
+    "href": "/writeups/babyROP-[DiceGang-CTF].html",
+    "title": "babyROP",
+    "description": "This is a basic ROP Challenge that involves a technique called the ret2csu. We use this when there is a lack of gadgets. ## Challenge Description ![](/images/ba...",
+    "date": "2021-10-04T00:00:00.000Z",
+    "readTime": 4,
+    "tags": [
+      "csu",
+      "ret2csu",
+      "dicegang"
+    ],
+    "gradient": "from-purple-500 to-pink-500",
+    "slug": "babyROP-[DiceGang-CTF]",
+    "featuredUrl": "/writeups/babyROP-[DiceGang-CTF]/featured.png",
+    "event": "DiceGangCTF 2021",
+    "difficulty": "easy",
+    "points": 121
+  },
+  {
+    "href": "/writeups/Leaky-Pipes-[inCTFj-Quals].html",
+    "title": "Leaky Pipes",
+    "description": "Played InCTFj Quals this winter vacation. It was a fun filled ctf. Here we will discuss the pwn challenge called ``leaky pipes``. Make sure to give the challeng...",
+    "date": "2021-09-06T00:00:00.000Z",
+    "readTime": 6,
+    "tags": [
+      "pwn",
+      "format string"
+    ],
+    "gradient": "from-teal-500 to-cyan-500",
+    "slug": "Leaky-Pipes-[inCTFj-Quals]",
+    "featuredUrl": "/writeups/Leaky-Pipes-[inCTFj-Quals]/featured.png",
+    "event": "inCTFj Quals",
+    "difficulty": "easy"
+  },
+  {
+    "href": "/writeups/start-[pwnable.tw].html",
+    "title": "start",
+    "description": "Here our main objective is to get a shell. The bug is plain and simple, it is an overflow to control the return address. ![](/images/pwnable1/pwnable1.png) ## S...",
+    "date": "2020-07-17T00:00:00.000Z",
+    "readTime": 3,
+    "tags": [
+      "pwnable.tw"
+    ],
+    "gradient": "from-indigo-500 to-violet-500",
+    "slug": "start-[pwnable.tw]",
+    "featuredUrl": "/writeups/start-[pwnable.tw]/featured.png",
+    "event": "pwnable.tw",
+    "difficulty": "easy"
+  },
+  {
+    "href": "/writeups/ORW-[pwnable.tw].html",
+    "title": "ORW",
+    "description": "This is a pretty awesome challenge! Here we will be writing assembly code in x86 to read the flag file from the server. This is one of the easier challenge in p...",
+    "date": "2020-07-16T00:00:00.000Z",
+    "readTime": 3,
+    "tags": [
+      "pwnable.tw"
+    ],
+    "gradient": "from-sky-500 to-blue-500",
+    "slug": "ORW-[pwnable.tw]",
+    "featuredUrl": "/writeups/ORW-[pwnable.tw]/featured.png",
+    "event": "pwnable.tw",
+    "difficulty": "easy"
+  },
+  {
+    "href": "/writeups/c4n4ry-[zh3r0-CTF].html",
+    "title": "c4n4ry",
+    "description": "I am proud to say that my team zh3r0 hosted its first CTF. This blog covers a challenge called c4n4ry, which might have something to do with the stack canary. #...",
+    "date": "2020-03-06T00:00:00.000Z",
+    "readTime": 3,
+    "tags": [
+      "canary",
+      "zh3r0"
+    ],
+    "gradient": "from-teal-500 to-cyan-500",
+    "slug": "c4n4ry-[zh3r0-CTF]",
+    "featuredUrl": "/writeups/c4n4ry-[zh3r0-CTF]/featured.png",
+    "event": "zh3r0CTF 2020",
+    "difficulty": "easy",
+    "points": 991
+  }
+]

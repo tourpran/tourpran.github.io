@@ -30,7 +30,7 @@ const Writeups = () => {
     let isMounted = true;
     async function load() {
       try {
-        const res = await fetch("/writeups/index.json", { cache: "no-store" });
+        const res = await fetch("/api/writeups/index.json", { cache: "no-store" });
         if (!res.ok) throw new Error(`Failed to load writeups: ${res.status}`);
         const data: WriteupMeta[] = await res.json();
         if (isMounted) setWriteups(data);
