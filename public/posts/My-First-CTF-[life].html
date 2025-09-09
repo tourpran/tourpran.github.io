@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My First CTF [life] | Security Research Blog</title>
+    <meta name="description" content="**There was too much to learn than to compete in the competition.** Spoiler alert, this is my first CTF finals, hope that justifies all the drama. Before jumpin...">
+    <link href="/src/index.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
+        .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .toc-sidebar {
+            position: fixed;
+            top: 2rem;
+            left: 1rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-right: 0;
+            width: 280px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .toc-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .toc-sublist {
+            list-style: none;
+            padding-left: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        .toc-item {
+            margin: 0.25rem 0;
+        }
+        .toc-level-2 {
+            padding-left: 0.25rem;
+        }
+        .toc-level-3 {
+            padding-left: 0.75rem;
+        }
+        .toc-level-4 {
+            padding-left: 1.25rem;
+        }
+        .toc-link {
+            display: block;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            padding: 0.25rem 0;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+        }
+        .toc-link:hover {
+            color: #60a5fa;
+            background: #1f2937;
+            padding-left: 0.5rem;
+        }
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+            }
+        }
+        .prose h1 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .prose h2 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .prose h3 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose h4 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose p {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            color: #d1d5db;
+        }
+        .prose strong {
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose code {
+            background: #1e1e1e;
+            color: #fbbf24;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .prose pre {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        .prose pre code {
+            background: transparent;
+            color: #e5e7eb;
+            padding: 0;
+            border-radius: 0;
+        }
+        .prose blockquote {
+          background:rgb(93, 45, 26);
+          color:rgb(255, 255, 255);
+          border-left: 4px solid #ff8c00;
+          padding: 1rem 1.25rem;
+          margin: 1.25rem 0;
+          border-radius: calc(var(--radius) - 2px);
+        }
+        .prose ul, .prose ol {
+            list-style-color: #ff8c00;
+            list-style-type: disc;
+            list-style-position: outside;
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        .prose li {
+            margin: 0.5rem 0;
+            color: #d1d5db;
+        }
+        .prose li::marker {
+            color: #ff8c00 !important;
+        }
+        .prose ol li {
+            list-style-type: decimal;
+        }
+            margin: 2rem 0;
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .prose th, .prose td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .prose th {
+            background: #2d2d2d;
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose img {
+            border-radius: 8px;
+            margin: 2rem 0;
+            max-width: 100%;
+        }
+        .prose hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #374151, transparent);
+            margin: 3rem 0;
+        }
+        .prose a { color: rgb(3, 203, 146); text-decoration: underline; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-4 py-8 relative">
+        <header class="mb-12">
+            <a href="/blogs" class="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">← Back</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <span class="gradient-text">My First CTF [life]</span>
+            </h1>
+            <div class="mb-8"><img src="/posts/My-First-CTF-[life]/featured.png" alt="My First CTF [life] cover image" class="w-full h-64 md:h-80 object-cover rounded-lg shadow" loading="eager"></div>
+            <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                <span>September 29, 2019</span>
+                <span>•</span>
+                <span>4 min read</span>
+                <span>•</span>
+                <div class="flex gap-2"><span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">experience</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">life</span></div>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row justify-start gap-6">
+            <aside class="hidden lg:block"><nav class="toc-sidebar"><h3 class="toc-title">Table of Contents</h3><ul class="toc-list"><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#before-the-contest" class="toc-link">BEFORE THE CONTEST:</a></li><li class="toc-item toc-level-2"><a href="#after-the-qualifiers" class="toc-link">AFTER THE QUALIFIERS:</a></li><li class="toc-item toc-level-2"><a href="#during-the-workshops" class="toc-link">DURING THE WORKSHOPS:</a></li><li class="toc-item toc-level-2"><a href="#food" class="toc-link">FOOD :</a></li><li class="toc-item toc-level-2"><a href="#study-time" class="toc-link">STUDY TIME:</a></li><li class="toc-item toc-level-2"><a href="#grand-finale" class="toc-link">GRAND FINALE:</a></li><li class="toc-item toc-level-2"><a href="#party-party" class="toc-link">PARTY! PARTY! :</a></li><li class="toc-item toc-level-2"><a href="#things-i-learned" class="toc-link">THINGS I LEARNED:</a></li></ul></ul></nav></aside>
+            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+<p><strong>There was too much to learn than to compete in the competition.</strong> Spoiler alert, this is my first CTF finals, hope that justifies all the drama.<br />
+Before jumping to my story…</p>
+<!--more-->
+<blockquote>
+  <p>Basically, CTF (Capture The Flag) is a kind of information security competition that challenges contestants to solve a variety of tasks ranging from a scavenger hunt on Wikipedia to basic programming exercises to hacking your way into a server to steal data. In layman’s terms, Just a way to learn “hacking”.</p>
+</blockquote>
+<ul>
+<li>A quick gist about the competition: INCTFJ Amrita InCTF Junior is a National level Cybersecurity contest for high school students in India. Their main aim is to induce a new field in the minds of young people.</li>
+</ul>
+<p>Now coming to our story… It all started when I wanted to hack. :P</p>
+<h2 id="before-the-contest">BEFORE THE CONTEST:</h2>
+<p>I am just a high school kid who wanted to be like LiveOverFlow and GeoHotz. I was of course motivated by many to start hacking in which my brother played a key role. Also, I had a good mentor who was already established in the field of cybersecurity from his years at bios, the cybersecurity club at Amrita University.</p>
+<h2 id="after-the-qualifiers">AFTER THE QUALIFIERS:</h2>
+<p>I took part in the annual INCTFJ competition, in which I got selected for the grand finale. The next thing I did was, pack my bag and called someone for accompanying me to the onsite finals. We (my brother and I) took a bus to Kollam (place, where the finals took place). Finally, we reached there early in the morning so we went to sleep. The next day some other participants from the next room who were just like me (energetic and happy) engaged in small talk with me and I got along with them very well. They kept company throughout the competition leading all the way up to today.</p>
+<h2 id="during-the-workshops">DURING THE WORKSHOPS:</h2>
+<p>I along with my new friends went to the registration site to enroll our names for the finals and we got ourselves a badge that was priceless for me. I kept it with myself for the whole time.</p>
+<p><img src="/images/myfirstctf/ctf3.png" alt="" /></p>
+<p>Enjoyed a bit too much with friends and never left the mentors free. The mentors were soo encouraging and enthusiastic. They also loved to help the participants.</p>
+<p><img src="/images/myfirstctf/ctf2.png" alt="" /></p>
+<h2 id="food-">FOOD :</h2>
+<p>We were greeted like guests and were given delicious food — super hot and was mouth-watering.￼ We were given lunch and dinner at the place where the college students were given food.</p>
+<p><img src="/images/myfirstctf/ctf4.png" alt="" /></p>
+<h2 id="study-time">STUDY TIME:</h2>
+<p>They (mentors from Amrita) taught us much stuff that included things like:</p>
+<ul>
+<li>Web exploitation</li>
+<li>Standard Query Language</li>
+<li>reverse engineering</li>
+<li>some cool stuff</li>
+</ul>
+<p><img src="/images/myfirstctf/ctf5.png" alt="" /></p>
+<h2 id="grand-finale">GRAND FINALE:</h2>
+<p>It was finally time. This was the moment we were all waiting for, the “ INCTFJ finals”. To be honost we were both nervous and happy the contest started. I could hardly solve six to seven challenges. It was a bit tough as I expected, still I was happy because my friend said he was in the top 5. After the finals were over, we were sent to our rooms.<br />
+meanwhile,</p>
+<h2 id="party-party-">PARTY! PARTY! :</h2>
+<p>We were sent to the party hall and “surprise surprise” they had a party which was organized by the campus. I could not believe my eyes, it was Stephen Devassy — The lead pianist… He totally rocked it. It was so great. It was the perfect time to blend in with my friends and have fun.<br />
+When we arrived at the campus the view itself blew me away and I was stunned for some seconds … I was disappointed when the results came but were motivated to do more of CTFs and to learn more things. I knew, <em>sometimes falling down today, gives us a chance to rise tomorrow</em>.</p>
+<p><img src="/images/myfirstctf/ctf6.png" alt="" /></p>
+<h2 id="things-i-learned">THINGS I LEARNED:</h2>
+<ul>
+<li>learned to be independent</li>
+<li>knew I had soo much to learn</li>
+<li>understood that there were kids of my age who were greater than me</li>
+<li>Understood the true meaning of friendship and fun…</li>
+<li>Hope you have a time like this…BYE…</li>
+</ul>
+            </article>
+        </div>
+        <!-- Navigation -->
+        <nav class="mt-16 pt-8 border-t border-gray-700">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <a href="/posts/SQL-Injection-[web].html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <div class="text-left">
+                            <div class="text-xs text-gray-400">Previous</div>
+                            <div class="font-medium">SQL Injection [web]</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex-1 text-center">
+                    <a href="/blogs" class="text-emerald-400 hover:text-emerald-300 transition-colors font-medium">All Posts</a>
+                </div>
+                <div class="flex-1 text-right">
+                    <div></div>
+                </div>
+            </div>
+        </nav>
+        </nav>
+    </div>
+<script>window.addEventListener('DOMContentLoaded',()=>{try{document.querySelectorAll('pre code').forEach((el)=>window.hljs&&window.hljs.highlightElement(el));}catch(e){console.warn('hljs init failed',e);}});</script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Offset Table and Procedure Linkage Table | Security Research Blog</title>
+    <meta name="description" content="How do programs know where the libc functions are in the libc, How is the internal implementation of the same ? We will look into GOT and PLT in short in this o...">
+    <link href="/src/index.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
+        .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .toc-sidebar {
+            position: fixed;
+            top: 2rem;
+            left: 1rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-right: 0;
+            width: 280px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .toc-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .toc-sublist {
+            list-style: none;
+            padding-left: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        .toc-item {
+            margin: 0.25rem 0;
+        }
+        .toc-level-2 {
+            padding-left: 0.25rem;
+        }
+        .toc-level-3 {
+            padding-left: 0.75rem;
+        }
+        .toc-level-4 {
+            padding-left: 1.25rem;
+        }
+        .toc-link {
+            display: block;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            padding: 0.25rem 0;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+        }
+        .toc-link:hover {
+            color: #60a5fa;
+            background: #1f2937;
+            padding-left: 0.5rem;
+        }
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+            }
+        }
+        .prose h1 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .prose h2 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .prose h3 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose h4 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose p {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            color: #d1d5db;
+        }
+        .prose strong {
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose code {
+            background: #1e1e1e;
+            color: #fbbf24;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .prose pre {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        .prose pre code {
+            background: transparent;
+            color: #e5e7eb;
+            padding: 0;
+            border-radius: 0;
+        }
+        .prose blockquote {
+          background:rgb(93, 45, 26);
+          color:rgb(255, 255, 255);
+          border-left: 4px solid #ff8c00;
+          padding: 1rem 1.25rem;
+          margin: 1.25rem 0;
+          border-radius: calc(var(--radius) - 2px);
+        }
+        .prose ul, .prose ol {
+            list-style-color: #ff8c00;
+            list-style-type: disc;
+            list-style-position: outside;
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        .prose li {
+            margin: 0.5rem 0;
+            color: #d1d5db;
+        }
+        .prose li::marker {
+            color: #ff8c00 !important;
+        }
+        .prose ol li {
+            list-style-type: decimal;
+        }
+            margin: 2rem 0;
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .prose th, .prose td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .prose th {
+            background: #2d2d2d;
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose img {
+            border-radius: 8px;
+            margin: 2rem 0;
+            max-width: 100%;
+        }
+        .prose hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #374151, transparent);
+            margin: 3rem 0;
+        }
+        .prose a { color: rgb(3, 203, 146); text-decoration: underline; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-4 py-8 relative">
+        <header class="mb-12">
+            <a href="/blogs" class="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">← Back</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <span class="gradient-text">Global Offset Table and Procedure Linkage Table</span>
+            </h1>
+            <div class="mb-8"><img src="/posts/Global-Offset-Table-and-Procedure-Linkage-Table/featured.png" alt="Global Offset Table and Procedure Linkage Table cover image" class="w-full h-64 md:h-80 object-cover rounded-lg shadow" loading="eager"></div>
+            <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                <span>September 6, 2020</span>
+                <span>•</span>
+                <span>3 min read</span>
+                <span>•</span>
+                <div class="flex gap-2"><span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">short-blog</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">pwn</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">GOT</span></div>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row justify-start gap-6">
+            <aside class="hidden lg:block"><nav class="toc-sidebar"><h3 class="toc-title">Table of Contents</h3><ul class="toc-list"><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#where-and-why" class="toc-link">where and why ?</a></li><li class="toc-item toc-level-2"><a href="#sample-code" class="toc-link">Sample Code</a></li><li class="toc-item toc-level-2"><a href="#gdb-code-analysis" class="toc-link">GDB Code Analysis</a></li><li class="toc-item toc-level-2"><a href="#end" class="toc-link">end</a></li></ul></ul></nav></aside>
+            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+<p>How do programs know where the libc functions are in the libc, How is the internal implementation of the same ? We will look into GOT and PLT in short in this one.</p>
+<!--more-->
+<h2 id="where-and-why-">where and why ?</h2>
+<blockquote>
+  <p>So Before diving into the concepts and working of GOT and PLT. Lets understand why we need them and where we need them. </p>
+</blockquote>
+<p>So, In modern days we cant always compile the libraries or dependencies along with the binary. So the alternative option is to use Dynamic Linking. With advantages comes some complexity :P. So we dont know the address of functions that are used in the binary which are indeed defined in the dependency. So each time the binary runs the address needs to be <code>resolved</code>. This cool process is done with the help of GOT and PLT. Also these are not functions. They are just tables as the names suggest.</p>
+<h2 id="sample-code">Sample Code</h2>
+<pre><code class="c language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    printf("Hello World\n");
+    printf("Welcome to my blog\n");
+}
+</code></pre>
+<p>now compile this with no pie and 64 bit for further ease.</p>
+<pre><code>gcc test.c -o test -no-pie
+</code></pre>
+<p>Now this is Dynamically Linked (GCC does Dynamic Linking by default). So lets us run this… Works fine.</p>
+<h2 id="gdb-code-analysis">GDB Code Analysis</h2>
+<p>So let us use GDB (me - GDB-PEDA). Now disassemble the main and check for printf that we implemented. Hmm.. Weird We dont see it. If you read my previous blog you would know why. In short this is for efficiency. Do notice that the puts is actually termed puts@plt. </p>
+<ul>
+<li>Set a breakpoint at puts@plt</li>
+<li>run the program<br />
+We come to puts@plt instead of next step let us single step to see what is there in the puts@plt. <br />
+<img src="/images/got_and_plt_short_blog/got1.png" alt="" /></li>
+</ul>
+<p>Now in the disassembly we can see that its not really puts function, We landed in the plt section of puts. Yes!! Procedure Linkage <strong>Table</strong>. Its basically a table which does a jump to the Global Offset Table for that particular entry, "puts". Also remember this "GOT" is located in the .got section in the binary.</p>
+<p>Now we know that the got will not be filled with the address of puts as this is the first time this LIBC function is being called. So instead of real address of puts the got section of puts will contain the address of next instruction, which is a push followed by another jump. This push of a number <strong>can</strong> be imagined as the index of the string "puts" in the string table. Next the jump is to the function <code>_dl_runtime_resolve</code>. Yes this is the resolver, </p>
+<blockquote>
+  <p>dl runtime resolve </p>
+</blockquote>
+<p>This function will take the string as input and will find the real address of puts in libc and finally will change the GOT entry for puts. So due to this the function puts need not be searched again in the libc but can be directly taken from the got.</p>
+<p>This whole process can be imagined this way.<br />
+<img src="/images/got_and_plt_short_blog/got2.png" alt="" /></p>
+<h2 id="end">end</h2>
+<p>End of story. Great now you know a little bit of how GOT and PLT works.</p>
+<div class="video-embed"><iframe src="https://www.youtube.com/embed/E2-E_fQ13Xs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
+            </article>
+        </div>
+        <!-- Navigation -->
+        <nav class="mt-16 pt-8 border-t border-gray-700">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <a href="/posts/Dynamic-and-Static-Linking.html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <div class="text-left">
+                            <div class="text-xs text-gray-400">Previous</div>
+                            <div class="font-medium">Dynamic and Static Linking</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex-1 text-center">
+                    <a href="/blogs" class="text-emerald-400 hover:text-emerald-300 transition-colors font-medium">All Posts</a>
+                </div>
+                <div class="flex-1 text-right">
+                    <a href="/posts/SQL-Injection-[web].html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <div class="text-right">
+                            <div class="text-xs text-gray-400">Next</div>
+                            <div class="font-medium">SQL Injection [web]</div>
+                        </div>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        </nav>
+    </div>
+<script>window.addEventListener('DOMContentLoaded',()=>{try{document.querySelectorAll('pre code').forEach((el)=>window.hljs&&window.hljs.highlightElement(el));}catch(e){console.warn('hljs init failed',e);}});</script>
+</body>
+</html>

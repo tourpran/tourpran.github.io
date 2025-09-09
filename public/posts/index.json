@@ -1,0 +1,113 @@
+[
+  {
+    "href": "/posts/v8-ArrayShift-Race-Condition.html",
+    "title": "v8 - ArrayShift Race Condition",
+    "description": "In this post, we’ll explore how to exploit a `race condition` in the `V8` JavaScript engine, between the `turbofan thread` and the `main thread` that executes `...",
+    "date": "2024-06-09T00:00:00.000Z",
+    "readTime": 11,
+    "tags": [
+      "browser",
+      "v8",
+      "arrayshift",
+      "turbofan"
+    ],
+    "slug": "v8-ArrayShift-Race-Condition",
+    "featuredUrl": "/posts/v8-ArrayShift-Race-Condition/featured.png"
+  },
+  {
+    "href": "/posts/CVE-2024-0517-Analysis.html",
+    "title": "CVE-2024-0517 Quick Blog",
+    "description": "This post explores a vulnerability found in the Maglev optimizing compiler of V8, specifically within a function responsible for optimizing classes that inherit...",
+    "date": "2024-05-03T00:00:00.000Z",
+    "readTime": 7,
+    "tags": [
+      "browser",
+      "v8",
+      "maglev"
+    ],
+    "slug": "CVE-2024-0517-Analysis",
+    "featuredUrl": "/posts/CVE-2024-0517-Analysis/featured.png"
+  },
+  {
+    "href": "/posts/expm1-35C3-Bug/-Optimizations-Analysis.html",
+    "title": "expm1-35C3 - Bug/ Optimizations Analysis",
+    "description": "In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the opti...",
+    "date": "2024-02-19T00:00:00.000Z",
+    "readTime": 10,
+    "tags": [
+      "math.expm1",
+      "typer",
+      "OOB"
+    ],
+    "slug": "expm1-35C3-Bug/-Optimizations-Analysis",
+    "featuredUrl": "/posts/expm1-35C3-Bug/-Optimizations-Analysis/featured.png"
+  },
+  {
+    "href": "/posts/Executable-and-Linkable-Format-Sections-and-Segments.html",
+    "title": "Executable and Linkable Format - Sections and Segments",
+    "description": "So the ELF or Excecutable and Linkable format are programs or binaries that are used in linux systems. ELFs contain 3 components namely: * ELF Headers * ELF Seg...",
+    "date": "2020-09-10T00:00:00.000Z",
+    "readTime": 4,
+    "tags": [
+      "sections",
+      "segments",
+      "ELF"
+    ],
+    "slug": "Executable-and-Linkable-Format-Sections-and-Segments",
+    "featuredUrl": "/posts/Executable-and-Linkable-Format-Sections-and-Segments/featured.png"
+  },
+  {
+    "href": "/posts/Dynamic-and-Static-Linking.html",
+    "title": "Dynamic and Static Linking",
+    "description": "We will take a quick look into the different types of linking of libraries to the ELF in x86 (linux). ## Linking: Linking - It is the process where something is...",
+    "date": "2020-09-06T00:00:00.000Z",
+    "readTime": 4,
+    "tags": [
+      "short-blog",
+      "dynamic and static linking"
+    ],
+    "slug": "Dynamic-and-Static-Linking",
+    "featuredUrl": "/posts/Dynamic-and-Static-Linking/featured.png"
+  },
+  {
+    "href": "/posts/Global-Offset-Table-and-Procedure-Linkage-Table.html",
+    "title": "Global Offset Table and Procedure Linkage Table",
+    "description": "How do programs know where the libc functions are in the libc, How is the internal implementation of the same ? We will look into GOT and PLT in short in this o...",
+    "date": "2020-09-06T00:00:00.000Z",
+    "readTime": 3,
+    "tags": [
+      "short-blog",
+      "pwn",
+      "GOT"
+    ],
+    "slug": "Global-Offset-Table-and-Procedure-Linkage-Table",
+    "featuredUrl": "/posts/Global-Offset-Table-and-Procedure-Linkage-Table/featured.png"
+  },
+  {
+    "href": "/posts/SQL-Injection-[web].html",
+    "title": "SQL Injection [web]",
+    "description": "## What is a Database: A database can be thought as a collection of data in an organised manner. When companies have huge amounts of data to be stored, using da...",
+    "date": "2020-08-06T00:00:00.000Z",
+    "readTime": 4,
+    "tags": [
+      "sql",
+      "injection",
+      "fun"
+    ],
+    "slug": "SQL-Injection-[web]",
+    "featuredUrl": "/posts/SQL-Injection-[web]/featured.png"
+  },
+  {
+    "href": "/posts/My-First-CTF-[life].html",
+    "title": "My First CTF [life]",
+    "description": "**There was too much to learn than to compete in the competition.** Spoiler alert, this is my first CTF finals, hope that justifies all the drama. Before jumpin...",
+    "date": "2019-09-29T00:00:00.000Z",
+    "readTime": 4,
+    "tags": [
+      "experience",
+      "life"
+    ],
+    "slug": "My-First-CTF-[life]",
+    "featuredUrl": "/posts/My-First-CTF-[life]/featured.png"
+  }
+]

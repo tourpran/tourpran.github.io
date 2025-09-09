@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World | Security Research Blog</title>
+    <meta name="description" content="First markdown post rendered by the site pipeline.">
+    <link href="/src/index.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+        .prose pre code {
+            font-family: 'Courier New', monospace;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg,;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto max-w-4xl px-6 py-12">
+        <!-- Header -->
+        <header class="mb-12">
+            <a href="/" class="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">← Back to Home</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <span class="gradient-text">Hello World</span>
+            </h1>
+            <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                <span>Sun Mar 09 2025 05:30:00 GMT+0530 (India Standard Time)</span>
+                <span>•</span>
+                <span>1 min read</span>
+                <span>•</span>
+                <div class="flex gap-2">
+                    <span class="bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded text-xs">Update</span>
+                
+                    <span class="bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded text-xs">Markdown</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <article class="prose prose-invert max-w-none">
+<h1>Hello, Markdown</h1>
+<p>This post is written in <strong>Markdown</strong> and converted to HTML during build.</p>
+<ul>
+<li>Item one</li>
+<li>Item two</li>
+</ul>
+<pre><code class="language-js">console.log(&#39;code block&#39;);
+</code></pre>
+<blockquote>
+<p>Tip: You can write posts in <code>content/posts/*.md</code>. </p>
+</blockquote>
+
+        </article>
+
+        <!-- Navigation -->
+        <nav class="mt-16 pt-8 border-t border-gray-700">
+            <div class="flex justify-between">
+                <a href="/posts" class="text-emerald-400 hover:text-emerald-300">All Posts →</a>
+                <a href="/" class="text-emerald-400 hover:text-emerald-300">Home</a>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

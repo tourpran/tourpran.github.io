@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Injection [web] | Security Research Blog</title>
+    <meta name="description" content="## What is a Database: A database can be thought as a collection of data in an organised manner. When companies have huge amounts of data to be stored, using da...">
+    <link href="/src/index.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
+        .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .toc-sidebar {
+            position: fixed;
+            top: 2rem;
+            left: 1rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-right: 0;
+            width: 280px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .toc-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .toc-sublist {
+            list-style: none;
+            padding-left: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        .toc-item {
+            margin: 0.25rem 0;
+        }
+        .toc-level-2 {
+            padding-left: 0.25rem;
+        }
+        .toc-level-3 {
+            padding-left: 0.75rem;
+        }
+        .toc-level-4 {
+            padding-left: 1.25rem;
+        }
+        .toc-link {
+            display: block;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            padding: 0.25rem 0;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+        }
+        .toc-link:hover {
+            color: #60a5fa;
+            background: #1f2937;
+            padding-left: 0.5rem;
+        }
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+            }
+        }
+        .prose h1 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .prose h2 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .prose h3 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose h4 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose p {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            color: #d1d5db;
+        }
+        .prose strong {
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose code {
+            background: #1e1e1e;
+            color: #fbbf24;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .prose pre {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        .prose pre code {
+            background: transparent;
+            color: #e5e7eb;
+            padding: 0;
+            border-radius: 0;
+        }
+        .prose blockquote {
+          background:rgb(93, 45, 26);
+          color:rgb(255, 255, 255);
+          border-left: 4px solid #ff8c00;
+          padding: 1rem 1.25rem;
+          margin: 1.25rem 0;
+          border-radius: calc(var(--radius) - 2px);
+        }
+        .prose ul, .prose ol {
+            list-style-color: #ff8c00;
+            list-style-type: disc;
+            list-style-position: outside;
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        .prose li {
+            margin: 0.5rem 0;
+            color: #d1d5db;
+        }
+        .prose li::marker {
+            color: #ff8c00 !important;
+        }
+        .prose ol li {
+            list-style-type: decimal;
+        }
+            margin: 2rem 0;
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .prose th, .prose td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .prose th {
+            background: #2d2d2d;
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose img {
+            border-radius: 8px;
+            margin: 2rem 0;
+            max-width: 100%;
+        }
+        .prose hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #374151, transparent);
+            margin: 3rem 0;
+        }
+        .prose a { color: rgb(3, 203, 146); text-decoration: underline; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-4 py-8 relative">
+        <header class="mb-12">
+            <a href="/blogs" class="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">← Back</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <span class="gradient-text">SQL Injection [web]</span>
+            </h1>
+            <div class="mb-8"><img src="/posts/SQL-Injection-[web]/featured.png" alt="SQL Injection [web] cover image" class="w-full h-64 md:h-80 object-cover rounded-lg shadow" loading="eager"></div>
+            <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                <span>August 6, 2020</span>
+                <span>•</span>
+                <span>4 min read</span>
+                <span>•</span>
+                <div class="flex gap-2"><span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">sql</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">injection</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">fun</span></div>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row justify-start gap-6">
+            <aside class="hidden lg:block"><nav class="toc-sidebar"><h3 class="toc-title">Table of Contents</h3><ul class="toc-list"><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#what-is-a-database" class="toc-link">What is a Database:</a></li><li class="toc-item toc-level-2"><a href="#sql" class="toc-link">SQL:</a></li></ul><li class="toc-item toc-level-1"><a href="#sql-basics" class="toc-link">SQL Basics:</a></li><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#creating-a-database" class="toc-link">Creating a Database:</a></li><li class="toc-item toc-level-2"><a href="#creating-tables" class="toc-link">Creating tables:</a></li><li class="toc-item toc-level-2"><a href="#access-the-data" class="toc-link">Access the data:</a></li><li class="toc-item toc-level-2"><a href="#login-system" class="toc-link">Login system:</a></li></ul><li class="toc-item toc-level-1"><a href="#different-exploitation-techniques" class="toc-link">Different Exploitation Techniques:</a></li><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#simple-login-bypass" class="toc-link">Simple login bypass:</a></li></ul><li class="toc-item toc-level-1"><a href="#--comment-the-rest-of-the-line" class="toc-link">- comment the rest of the line</a></li></ul></nav></aside>
+            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+<h2 id="what-is-a-database">What is a Database:</h2>
+<p>A database can be thought as a collection of data in an organised manner. When companies have huge amounts of data to be stored, using databases is the key for efficient usage of the data. </p>
+<p><img src="/images/sql_injection/databasepic.png" alt="" /></p>
+<h2 id="sql">SQL:</h2>
+<p>SQL or Structured Query Language is just a way to talk to the database and manipulate the data by the program. In most Database management systems SQL language is used. This blog post is divided into <code>basics of sql</code> and <code>exploitation of sql</code>.</p>
+<h1 id="sql-basics">SQL Basics:</h1>
+<h2 id="creating-a-database">Creating a Database:</h2>
+<p>In order to follow this blog post it'll be helpfull to have mysql installed. First we will create and use a Database in mysql called testdb. Now this database can use used to store multiple tables where each table can be used to store different types of datas. For example a login table can be used to store all usernames and passwords and a store website can use another table to store all their products and prices with it. </p>
+<p><img src="/images/sql_injection/databasecreation.png" alt="" /></p>
+<h2 id="creating-tables">Creating tables:</h2>
+<p>For the fun of it lets create a table called person since everyone has their own unique <code>features</code>. By features I mean their name, height and weigth.</p>
+<p><img src="/images/sql_injection/tablesexample.png" alt="" /></p>
+<h2 id="access-the-data">Access the data:</h2>
+<p>Inorder to get the required data we use SELECT statements. when we have lines of select statements and commands to give to the databases we call them queries.</p>
+<p>note: * means everything (all)</p>
+<p><img src="/images/sql_injection/queryexample.png" alt="" /></p>
+<p>Here we are select everything present in the table called person.</p>
+<p>When we have multiple number of objects in our table we can use a element present in each object that is unique. Most of the time our names our unique so we can access our object with the help of out name.</p>
+<p><img src="/images/sql_injection/queryexample1.png" alt="" /></p>
+<h2 id="login-system">Login system:</h2>
+<p>In our login system (which we will use to hack) we have used sql query to check if the user and password given my the user is correct. The pseudo code is given below:</p>
+<pre><code class="php language-php">&lt;?php
+
+$sql = "SELECT id FROM admin WHERE username = '$myusername' and passcode = '$mypassword'";
+$result = mysqli_query($db,$sql); # Send the sql query to DataBase
+$row = mysqli_fetch_array($result,MYSQLI_ASSOC); # Fetchs a result row as a array
+
+if($count != 0) {
+    echo "Success! " # Tell the user the login creds were correct
+}
+else{
+    echo "Invalid " # Tell the user the login creds were incorrect
+}
+?&gt;
+</code></pre>
+<h1 id="different-exploitation-techniques">Different Exploitation Techniques:</h1>
+<h2 id="simple-login-bypass">Simple login bypass:</h2>
+<p>We can see that there are 2 users in the table. Obviously in the real world application there wont be a table showing the credentials, inorder for learning purpose I have made them visible. Now lets check if there is a sql injection possible.</p>
+<p><img src="/images/sql_injection/loginlocalhost.png" alt="" /></p>
+<p><img src="/images/sql_injection/sqllocalhosterror.png" alt="" /></p>
+<p>Now If you are following the blog correctly you would have already know that this error is due to the ' (single quote) I gave. So the query looks like </p>
+<pre><code>SELECT id FROM admin WHERE username = '' ' and passcode = 'a'
+</code></pre>
+<p>The unmatched single quotes make the query break and thereby telling us there are chances for a SQLInjection. Also a point to note is, its not required to get an error every time to prove there is a SQL Injection. Infact in most real world applications you would be left with blind sql injections which doesnt give you any output (covered later in this blog).</p>
+<p>So we will use basic boolean logic for the first attack. We will tell the SQL Query that the username is true and passcode is true. So this will return the entire table and mostly likely we will be logged in as the first user (extreme case, likely never happens). </p>
+<p><img src="/images/sql_injection/sqlsimplelogin1.png" alt="" /><br />
+<img src="/images/sql_injection/simpleloginsql2.png" alt="" /></p>
+<p>Here we can see I gained access as tourpran who is the first user. Also in the query I managed to say that <code>username='' or TRUE</code> which will always be true, same for the password.</p>
+<p>We can also login as admin if we pass the following credentials.</p>
+<pre><code>UserName: admin
+password: ' or 'a'='a
+
+SELECT id FROM admin WHERE username = 'admin' and passcode = '' or 'a'='a'
+
+or 
+
+username: ' or '1'='1
+password: ' or 'a'='a' and username='admin' ; #
+
+SELECT id FROM admin WHERE username = '' or 'a'='a' and passcode = '' or 'a'='a' and username='admin' ; #'
+
+# - comment the rest of the line
+</code></pre>
+            </article>
+        </div>
+        <!-- Navigation -->
+        <nav class="mt-16 pt-8 border-t border-gray-700">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <a href="/posts/Global-Offset-Table-and-Procedure-Linkage-Table.html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <div class="text-left">
+                            <div class="text-xs text-gray-400">Previous</div>
+                            <div class="font-medium">Global Offset Table and Procedure Linkage Table</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex-1 text-center">
+                    <a href="/blogs" class="text-emerald-400 hover:text-emerald-300 transition-colors font-medium">All Posts</a>
+                </div>
+                <div class="flex-1 text-right">
+                    <a href="/posts/My-First-CTF-[life].html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <div class="text-right">
+                            <div class="text-xs text-gray-400">Next</div>
+                            <div class="font-medium">My First CTF [life]</div>
+                        </div>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        </nav>
+    </div>
+<script>window.addEventListener('DOMContentLoaded',()=>{try{document.querySelectorAll('pre code').forEach((el)=>window.hljs&&window.hljs.highlightElement(el));}catch(e){console.warn('hljs init failed',e);}});</script>
+</body>
+</html>

