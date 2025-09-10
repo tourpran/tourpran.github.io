@@ -9,7 +9,6 @@
       "quickJS",
       "UAF"
     ],
-    "gradient": "from-fuchsia-500 to-pink-500",
     "slug": "randomjs-asis25",
     "featuredUrl": "/writeups/randomjs-asis25/featured.png",
     "event": "ASIS Quals 2025",
@@ -26,11 +25,11 @@
       "v8",
       "hole"
     ],
-    "gradient": "from-sky-500 to-blue-500",
     "slug": "holy-cow---pwnme25",
     "featuredUrl": "/writeups/holy-cow---pwnme25/featured.png",
     "event": "pwnmeCTF 2025",
-    "difficulty": "Hard"
+    "difficulty": "Hard",
+    "points": ""
   },
   {
     "href": "/writeups/tallocator-[bi0sCTF].html",
@@ -43,7 +42,6 @@
       "Android",
       "Reverse_Shell"
     ],
-    "gradient": "from-blue-500 to-cyan-500",
     "slug": "tallocator-[bi0sCTF]",
     "featuredUrl": "/writeups/tallocator-[bi0sCTF]/featured.png",
     "event": "bi0sCTF 2024",
@@ -60,11 +58,11 @@
       "pyjail",
       "pwn"
     ],
-    "gradient": "from-emerald-500 to-teal-500",
     "slug": "evalbox---pyjail-writeup",
     "featuredUrl": "/writeups/evalbox---pyjail-writeup/featured.png",
     "event": "ACSC 2023",
-    "difficulty": "intermediate"
+    "difficulty": "intermediate",
+    "points": ""
   },
   {
     "href": "/writeups/babyROP-[DiceGang-CTF].html",
@@ -77,7 +75,6 @@
       "ret2csu",
       "dicegang"
     ],
-    "gradient": "from-purple-500 to-pink-500",
     "slug": "babyROP-[DiceGang-CTF]",
     "featuredUrl": "/writeups/babyROP-[DiceGang-CTF]/featured.png",
     "event": "DiceGangCTF 2021",
@@ -94,11 +91,11 @@
       "pwn",
       "format string"
     ],
-    "gradient": "from-teal-500 to-cyan-500",
     "slug": "Leaky-Pipes-[inCTFj-Quals]",
     "featuredUrl": "/writeups/Leaky-Pipes-[inCTFj-Quals]/featured.png",
     "event": "inCTFj Quals",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "points": ""
   },
   {
     "href": "/writeups/start-[pwnable.tw].html",
@@ -109,11 +106,11 @@
     "tags": [
       "pwnable.tw"
     ],
-    "gradient": "from-indigo-500 to-violet-500",
     "slug": "start-[pwnable.tw]",
     "featuredUrl": "/writeups/start-[pwnable.tw]/featured.png",
     "event": "pwnable.tw",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "points": ""
   },
   {
     "href": "/writeups/ORW-[pwnable.tw].html",
@@ -124,11 +121,11 @@
     "tags": [
       "pwnable.tw"
     ],
-    "gradient": "from-sky-500 to-blue-500",
     "slug": "ORW-[pwnable.tw]",
     "featuredUrl": "/writeups/ORW-[pwnable.tw]/featured.png",
     "event": "pwnable.tw",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "points": ""
   },
   {
     "href": "/writeups/c4n4ry-[zh3r0-CTF].html",
@@ -140,7 +137,6 @@
       "canary",
       "zh3r0"
     ],
-    "gradient": "from-teal-500 to-cyan-500",
     "slug": "c4n4ry-[zh3r0-CTF]",
     "featuredUrl": "/writeups/c4n4ry-[zh3r0-CTF]/featured.png",
     "event": "zh3r0CTF 2020",

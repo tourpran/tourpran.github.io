@@ -30,73 +30,6 @@
         }
         .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
         .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .toc-sidebar {
-            position: fixed;
-            top: 2rem;
-            left: 1rem;
-            max-height: calc(100vh - 4rem);
-            overflow-y: auto;
-            background: #1a1a1a;
-            border: 1px solid #374151;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-right: 0;
-            width: 280px;
-            flex-shrink: 0;
-            z-index: 10;
-        }
-        .toc-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #9ca3af;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #374151;
-            padding-bottom: 0.5rem;
-        }
-        .toc-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .toc-sublist {
-            list-style: none;
-            padding-left: 0.5rem;
-            margin-top: 0.25rem;
-        }
-        .toc-item {
-            margin: 0.25rem 0;
-        }
-        .toc-level-2 {
-            padding-left: 0.25rem;
-        }
-        .toc-level-3 {
-            padding-left: 0.75rem;
-        }
-        .toc-level-4 {
-            padding-left: 1.25rem;
-        }
-        .toc-link {
-            display: block;
-            color: #9ca3af;
-            text-decoration: none;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            padding: 0.25rem 0;
-            border-radius: 0.25rem;
-            transition: all 0.2s;
-        }
-        .toc-link:hover {
-            color: #60a5fa;
-            background: #1f2937;
-            padding-left: 0.5rem;
-        }
-        @media (max-width: 1024px) {
-            .toc-sidebar {
-                display: none;
-            }
-        }
         .prose h1 {
             background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             font-size: 2.5rem;
@@ -183,6 +116,7 @@
         .prose ol li {
             list-style-type: decimal;
         }
+        .prose table {
             margin: 2rem 0;
             background: #1e1e1e;
             border-radius: 8px;
@@ -229,9 +163,7 @@
             </div>
         </header>
 
-        <div class="flex flex-col lg:flex-row justify-start gap-6">
-            <aside class="hidden lg:block"><nav class="toc-sidebar"><h3 class="toc-title">Table of Contents</h3><ul class="toc-list"><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#need" class="toc-link">Need:</a></li></ul><li class="toc-item toc-level-1"><a href="#elf-headers" class="toc-link">ELF Headers</a></li><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#magic" class="toc-link">magic</a></li><li class="toc-item toc-level-2"><a href="#class" class="toc-link">Class</a></li><li class="toc-item toc-level-2"><a href="#data" class="toc-link">Data</a></li><li class="toc-item toc-level-2"><a href="#osabi" class="toc-link">OS/ABI</a></li><li class="toc-item toc-level-2"><a href="#machine" class="toc-link">Machine</a></li><li class="toc-item toc-level-2"><a href="#type" class="toc-link">type</a></li><li class="toc-item toc-level-2"><a href="#rest" class="toc-link">Rest</a></li></ul><li class="toc-item toc-level-1"><a href="#segments-aka-program-headers" class="toc-link">Segments (aka Program Headers)</a></li><ul class="toc-sublist"><li class="toc-item toc-level-2"><a href="#phdr" class="toc-link">PHDR</a></li><li class="toc-item toc-level-2"><a href="#interp" class="toc-link">interp</a></li><li class="toc-item toc-level-2"><a href="#dynamic" class="toc-link">dynamic</a></li><li class="toc-item toc-level-2"><a href="#gnuehframe" class="toc-link">GNU_EH_FRAME</a></li><li class="toc-item toc-level-2"><a href="#gnustack" class="toc-link">GNU_STACK</a></li><li class="toc-item toc-level-2"><a href="#elf-sections" class="toc-link">ELF Sections</a></li><ul class="toc-sublist"><li class="toc-item toc-level-3"><a href="#common-sections" class="toc-link">Common Sections</a></li></ul><li class="toc-item toc-level-2"><a href="#end" class="toc-link">END</a></li><li class="toc-item toc-level-2"><a href="#sources" class="toc-link">sources:</a></li></ul></ul></nav></aside>
-            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+        <article class="prose prose-invert max-w-none">
 <p>So the ELF or Excecutable and Linkable format are programs or binaries that are used in linux systems. ELFs contain 3 components namely:</p>
 <!--more-->
 <ul>
@@ -327,8 +259,8 @@
 <li><a href="https://www.intezer.com/blog/research/executable-linkable-format-101-part1-sections-segments/">intezer</a></li>
 <li><a href="https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/#program-headers">linux-audit</a></li>
 </ul>
-            </article>
-        </div>
+        </article>
+        
         <!-- Navigation -->
         <nav class="mt-16 pt-8 border-t border-gray-700">
             <div class="flex justify-between items-center">
@@ -358,7 +290,6 @@
                     </a>
                 </div>
             </div>
-        </nav>
         </nav>
     </div>
 <script>window.addEventListener('DOMContentLoaded',()=>{try{document.querySelectorAll('pre code').forEach((el)=>window.hljs&&window.hljs.highlightElement(el));}catch(e){console.warn('hljs init failed',e);}});</script>

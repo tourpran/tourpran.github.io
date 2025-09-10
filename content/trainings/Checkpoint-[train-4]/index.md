@@ -2,7 +2,7 @@
 title: "Checkpoint [train 4]"
 draft: false
 tags: ["pwn", "training"]
-date: 2024-01-04
+date:  2024-01-14
 series: ["pwn training"]
 series_order: 4
 level: Intermediate

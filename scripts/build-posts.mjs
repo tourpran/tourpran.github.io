@@ -75,64 +75,18 @@ function createMarkdownConverter() {
   });
 }
 
-function generateTOC(content) {
-  const headingRegex = /^(#{1,4})\s+(.+)$/gm;
-  const headings = [];
-  let match;
-  
-  while ((match = headingRegex.exec(content)) !== null) {
-    const level = match[1].length;
-    const text = match[2].trim();
-    const id = text
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '-');
-    headings.push({ level, text, id });
-  }
-  
-  if (headings.length === 0) return '';
-  
-  let html = '<nav class="toc-sidebar">';
-  html += '<h3 class="toc-title">Table of Contents</h3>';
-  html += '<ul class="toc-list">';
-  
-  let currentLevel = 1;
-  for (const heading of headings) {
-    while (currentLevel < heading.level) {
-      html += '<ul class="toc-sublist">';
-      currentLevel++;
-    }
-    while (currentLevel > heading.level) {
-      html += '</ul>';
-      currentLevel--;
-    }
-    html += `<li class="toc-item toc-level-${heading.level}"><a href="#${heading.id}" class="toc-link">${escapeAttr(heading.text)}</a></li>`;
-  }
-  
-  while (currentLevel > 1) {
-    html += '</ul>';
-    currentLevel--;
-  }
-  
-  html += '</ul></nav>';
-  return html;
-}
-
 function convertYouTubeLinksToEmbeds(html) {
   const shortcodeRegex = /\{\{\s*<\s*youtube\s+([A-Za-z0-9_-]{11})\s*>\s*\}\}/g;
-  const toIframe = (id) => `<div class=\"video-embed\"><iframe src=\"https://www.youtube.com/embed/${id}\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen loading=\"lazy\"></iframe></div>`;
+  const toIframe = (id) => `<div class="video-embed"><iframe src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
   const out = html.replace(shortcodeRegex, (_m, id) => toIframe(id));
-  return out.replace(/<p>\s*(<div class=\"video-embed\">[\s\S]*?<\/div>)\s*<\/p>/g, '$1');
+  return out.replace(/<p>\s*(<div class="video-embed">[\s\S]*?<\/div>)\s*<\/p>/g, '$1');
 }
 
-function renderHtml({ title, description, date, readTime, tags, content, markdownContent, accentGradient, previousPost, nextPost, featuredUrl }) {
+function renderHtml({ title, description, date, readTime, tags, content, accentGradient, previousPost, nextPost, featuredUrl }) {
   const gradient = accentGradient || pickGradientFromSlug(slugifyFilename(title));
   const tagPills = (tags || []).map(tag => 
     `<span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">${escapeAttr(tag)}</span>`
   ).join(' ');
-  
-  const tocHtml = generateTOC(markdownContent);
   
   return `<!DOCTYPE html>
 <html lang="en">
@@ -166,73 +120,6 @@ function renderHtml({ title, description, date, readTime, tags, content, markdow
         }
         .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
         .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .toc-sidebar {
-            position: fixed;
-            top: 2rem;
-            left: 1rem;
-            max-height: calc(100vh - 4rem);
-            overflow-y: auto;
-            background: #1a1a1a;
-            border: 1px solid #374151;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-right: 0;
-            width: 280px;
-            flex-shrink: 0;
-            z-index: 10;
-        }
-        .toc-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #9ca3af;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #374151;
-            padding-bottom: 0.5rem;
-        }
-        .toc-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .toc-sublist {
-            list-style: none;
-            padding-left: 0.5rem;
-            margin-top: 0.25rem;
-        }
-        .toc-item {
-            margin: 0.25rem 0;
-        }
-        .toc-level-2 {
-            padding-left: 0.25rem;
-        }
-        .toc-level-3 {
-            padding-left: 0.75rem;
-        }
-        .toc-level-4 {
-            padding-left: 1.25rem;
-        }
-        .toc-link {
-            display: block;
-            color: #9ca3af;
-            text-decoration: none;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            padding: 0.25rem 0;
-            border-radius: 0.25rem;
-            transition: all 0.2s;
-        }
-        .toc-link:hover {
-            color: #60a5fa;
-            background: #1f2937;
-            padding-left: 0.5rem;
-        }
-        @media (max-width: 1024px) {
-            .toc-sidebar {
-                display: none;
-            }
-        }
         .prose h1 {
             background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             font-size: 2.5rem;
@@ -319,6 +206,7 @@ function renderHtml({ title, description, date, readTime, tags, content, markdow
         .prose ol li {
             list-style-type: decimal;
         }
+        .prose table {
             margin: 2rem 0;
             background: #1e1e1e;
             border-radius: 8px;
@@ -365,12 +253,10 @@ function renderHtml({ title, description, date, readTime, tags, content, markdow
             </div>
         </header>
 
-        <div class="flex flex-col lg:flex-row justify-start gap-6">
-            ${tocHtml ? `<aside class="hidden lg:block">${tocHtml}</aside>` : ''}
-            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+        <article class="prose prose-invert max-w-none">
 ${convertYouTubeLinksToEmbeds(content)}
-            </article>
-        </div>
+        </article>
+        
         <!-- Navigation -->
         <nav class="mt-16 pt-8 border-t border-gray-700">
             <div class="flex justify-between items-center">
@@ -400,7 +286,6 @@ ${convertYouTubeLinksToEmbeds(content)}
                     </a>` : "<div></div>"}
                 </div>
             </div>
-        </nav>
         </nav>
     </div>
 <script>window.addEventListener('DOMContentLoaded',()=>{try{document.querySelectorAll('pre code').forEach((el)=>window.hljs&&window.hljs.highlightElement(el));}catch(e){console.warn('hljs init failed',e);}});</script>
@@ -469,7 +354,6 @@ function convertFile(filePath, previousPost, nextPost) {
     readTime,
     tags,
     content: htmlContent,
-    markdownContent: markdownContent,
     accentGradient,
     previousPost,
     nextPost,

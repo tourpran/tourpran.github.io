@@ -2,7 +2,7 @@
 title: "Return to Shellcode [train 1]"
 draft: false
 tags: ["pwn", "training"]
-date: 2024-01-07
+date:  2024-01-17
 series: ["pwn training"] 
 series_order: 1
 level: Beginner

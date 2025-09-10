@@ -75,88 +75,31 @@ function createMarkdownConverter() {
   });
 }
 
-function generateTOC(content) {
-  const headingRegex = /^(#{1,4})\s+(.+)$/gm;
-  const headings = [];
-  let match;
-  
-  while ((match = headingRegex.exec(content)) !== null) {
-    const level = match[1].length;
-    const text = match[2].trim();
-    const id = text
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '-');
-    headings.push({ level, text, id });
-  }
-  
-  if (headings.length === 0) return '';
-  
-  let html = '<nav class="toc-sidebar">';
-  html += '<h3 class="toc-title">Table of Contents</h3>';
-  html += '<ul class="toc-list">';
-  
-  let currentLevel = 1;
-  for (const heading of headings) {
-    while (currentLevel < heading.level) {
-      html += '<ul class="toc-sublist">';
-      currentLevel++;
-    }
-    while (currentLevel > heading.level) {
-      html += '</ul>';
-      currentLevel--;
-    }
-    html += `<li class="toc-item toc-level-${heading.level}"><a href="#${heading.id}" class="toc-link">${escapeAttr(heading.text)}</a></li>`;
-  }
-  
-  while (currentLevel > 1) {
-    html += '</ul>';
-    currentLevel--;
-  }
-  
-  html += '</ul></nav>';
-  return html;
-}
-
 function orderScore(title) {
   const lower = title.toLowerCase();
-  if (lower.includes('youtube')) return 0;                 // 1) Youtube - Stack Basics
-  if (lower.includes('[train')) return 1;                  // 2) Train series (ordered numerically below)
-  if (lower.includes('basic') && lower.includes('stack')) return 2;      // 3) Basic - Stack Exploitation
-  if (lower.includes('advanced') && lower.includes('heap')) return 3;    // 4) Advanced - Heap Exploitation
-  if (lower.includes('expert') && lower.includes('browser')) return 4;   // 5) Expert - Browser Exploitation
-  return 5;                                                // Fallback
-}
-
-function parseTrainNumber(title) {
-  // Matches: [train 1], [train-1], [train 12], case-insensitive
-  const match = title.toLowerCase().match(/\[train[\s-]?(\d+)\]/i);
-  return match ? parseInt(match[1], 10) : null;
+  if (lower.includes('train-1') || lower.includes('return-to-shellcode')) return 1;
+  if (lower.includes('train-2') || lower.includes('format-string')) return 2;
+  if (lower.includes('train-3') || lower.includes('ret-to-libc')) return 3;
+  if (lower.includes('train-4') || lower.includes('checkpoint')) return 4;
+  if (lower.includes('basic') || lower.includes('stack')) return 5;
+  if (lower.includes('advanced') || lower.includes('heap')) return 6;
+  if (lower.includes('expert') || lower.includes('browser')) return 7;
+  if (lower.includes('youtube')) return 8;
+  return 99;
 }
 
 function convertYouTubeLinksToEmbeds(html) {
-  const urlRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtube\.com\/shorts\/|youtu\.be\/)([\w-]{11})(?:[^"<\s]*)?)/g;
   const shortcodeRegex = /\{\{\s*<\s*youtube\s+([A-Za-z0-9_-]{11})\s*>\s*\}\}/g;
   const toIframe = (id) => `<div class="video-embed"><iframe src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>`;
-  let out = html.replace(urlRegex, (match, _full, videoId) => {
-    const id = videoId || (function () {
-      const m = match.match(/[\?&]v=([\w-]{11})/);
-      return m ? m[1] : null;
-    })();
-    return id ? toIframe(id) : match;
-  });
-  out = out.replace(shortcodeRegex, (_m, id) => toIframe(id));
-  return out.replace(/<p>\s*(<div class=\"video-embed\">[\s\S]*?<\/div>)\s*<\/p>/g, '$1');
+  const out = html.replace(shortcodeRegex, (_m, id) => toIframe(id));
+  return out.replace(/<p>\s*(<div class="video-embed">[\s\S]*?<\/div>)\s*<\/p>/g, '$1');
 }
 
-function renderHtml({ title, description, level, duration, tags, content, markdownContent, accentGradient, featuredUrl, previousTraining, nextTraining }) {
+function renderHtml({ title, description, level, duration, tags, content, accentGradient, featuredUrl, previousTraining, nextTraining }) {
   const gradient = accentGradient || pickGradientFromSlug(slugifyFilename(title));
   const tagPills = (tags || []).map(tag => 
     `<span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-xs">${escapeAttr(tag)}</span>`
   ).join(' ');
-  
-  const tocHtml = generateTOC(markdownContent);
   
   return `<!DOCTYPE html>
 <html lang="en">
@@ -190,73 +133,6 @@ function renderHtml({ title, description, level, duration, tags, content, markdo
         }
         .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; border: 1px solid #374151; background: #0f0f0f; margin: 1.5rem 0; }
         .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .toc-sidebar {
-            position: fixed;
-            top: 2rem;
-            left: 1rem;
-            max-height: calc(100vh - 4rem);
-            overflow-y: auto;
-            background: #1a1a1a;
-            border: 1px solid #374151;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-right: 0;
-            width: 280px;
-            flex-shrink: 0;
-            z-index: 10;
-        }
-        .toc-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #9ca3af;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #374151;
-            padding-bottom: 0.5rem;
-        }
-        .toc-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .toc-sublist {
-            list-style: none;
-            padding-left: 0.5rem;
-            margin-top: 0.25rem;
-        }
-        .toc-item {
-            margin: 0.25rem 0;
-        }
-        .toc-level-2 {
-            padding-left: 0.25rem;
-        }
-        .toc-level-3 {
-            padding-left: 0.75rem;
-        }
-        .toc-level-4 {
-            padding-left: 1.25rem;
-        }
-        .toc-link {
-            display: block;
-            color: #9ca3af;
-            text-decoration: none;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            padding: 0.25rem 0;
-            border-radius: 0.25rem;
-            transition: all 0.2s;
-        }
-        .toc-link:hover {
-            color: #60a5fa;
-            background: #1f2937;
-            padding-left: 0.5rem;
-        }
-        @media (max-width: 1024px) {
-            .toc-sidebar {
-                display: none;
-            }
-        }
         .prose h1 {
             background: linear-gradient(135deg, #f97316, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             font-size: 2.5rem;
@@ -344,6 +220,7 @@ function renderHtml({ title, description, level, duration, tags, content, markdo
         .prose ol li {
             list-style-type: decimal;
         }
+        .prose table {
             margin: 2rem 0;
             background: #1e1e1e;
             border-radius: 8px;
@@ -381,21 +258,20 @@ function renderHtml({ title, description, level, duration, tags, content, markdo
             <h1 class="text-4xl md:text-5xl font-bold mb-4">
                 <span class="gradient-text">${escapeAttr(title)}</span>
             </h1>
+            
             ${featuredUrl ? `<div class="mb-8"><img src="${featuredUrl}" alt="${escapeAttr(title)} cover image" class="w-full h-64 md:h-80 object-cover rounded-lg shadow" loading="eager"></div>` : ''}
+            
             <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
-                ${level ? `<span class="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 px-2.5 py-0.5 rounded-full text-xs font-medium">${escapeAttr(level)}</span>` : ''}
-                ${duration ? `<span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 px-2.5 py-0.5 rounded-full text-xs font-medium">${escapeAttr(duration)}</span>` : ''}
-                ${tags && tags.length > 0 ? '<div class="flex gap-2">' + tagPills + '</div>' : ''}
+                ${level ? `<span class="text-yellow-300">${escapeAttr(level)}</span><span>•</span>` : ''}
+                ${duration ? `<span>${escapeAttr(duration)}</span><span>•</span>` : ''}
+                <div class="flex gap-2">${tagPills}</div>
             </div>
         </header>
 
-        <div class="flex flex-col lg:flex-row justify-start gap-6">
-            ${tocHtml ? `<aside class="hidden lg:block">${tocHtml}</aside>` : ''}
-            <article class="prose prose-invert max-w-none ml-0 lg:max-w-6xl lg:ml-10">
+        <article class="prose prose-invert max-w-none">
 ${convertYouTubeLinksToEmbeds(content)}
-            </article>
-        </div>
-
+        </article>
+        
         <!-- Navigation -->
         <nav class="mt-16 pt-8 border-t border-gray-700">
             <div class="flex justify-between items-center">
@@ -468,11 +344,10 @@ function convertFile(filePath, previousTraining, nextTraining) {
   const duration = data.duration || '';
   const tags = data.tags || [];
   const accentGradient = data.accentGradient || pickGradientFromSlug(slug);
-  const url = data.url || data.externalUrl || '';
   
   const converter = createMarkdownConverter();
   const htmlContent = converter.makeHtml(markdownContent);
-
+  
   // Determine featured image and copy to public directory if present
   const sourceDir = dirname(filePath);
   const featuredSource = join(sourceDir, 'featured.png');
@@ -494,7 +369,6 @@ function convertFile(filePath, previousTraining, nextTraining) {
     duration,
     tags,
     content: htmlContent,
-    markdownContent: markdownContent,
     accentGradient,
     featuredUrl,
     previousTraining,
@@ -507,13 +381,13 @@ function convertFile(filePath, previousTraining, nextTraining) {
   writeFileSync(outputPath, html);
   
   return {
+    href: `/trainings/${slug}.html`,
     title,
     description,
     level,
     duration,
     tags,
     slug,
-    href: url || `/trainings/${slug}.html`,
     featuredUrl
   };
 }
@@ -524,36 +398,29 @@ function buildAll() {
   
   console.log(`Found ${markdownFiles.length} markdown files`);
   
-  let trainingsMeta = [];
+  const trainingsMeta = [];
   
   // First pass: collect basic metadata
   for (const file of markdownFiles) {
     try {
-      const content = readFileSync(file, 'utf8');
+      const content = readFileSync(file, "utf8");
       const { data } = matter(content);
       const slug = data.slug || resolveSlug(file);
-      const title = data.title || 'Untitled';
-      trainingsMeta.push({ slug, title, file });
+      const title = data.title || "Untitled";
+      
+      trainingsMeta.push({
+        slug,
+        title,
+        file,
+        date: data.date || new Date(), order: orderScore(title)
+      });
     } catch (error) {
       console.error(`✗ Error processing ${file}:`, error.message);
     }
   }
   
-  // Sort by existing orderScore, then title
-  trainingsMeta.sort((a, b) => {
-    const scoreA = orderScore(a.title);
-    const scoreB = orderScore(b.title);
-    if (scoreA !== scoreB) return scoreA - scoreB;
-
-    // If both are train items, sort by numeric train index ascending
-    if (scoreA === 1 && scoreB === 1) {
-      const na = parseTrainNumber(a.title) ?? Number.MAX_SAFE_INTEGER;
-      const nb = parseTrainNumber(b.title) ?? Number.MAX_SAFE_INTEGER;
-      if (na !== nb) return na - nb;
-    }
-
-    return a.title.localeCompare(b.title);
-  });
+  // Sort by order (custom ordering for training sequence)
+  trainingsMeta.sort((a, b) => new Date(b.date) - new Date(a.date));
   
   // Second pass: generate HTML with navigation
   for (let i = 0; i < trainingsMeta.length; i++) {

@@ -3,7 +3,7 @@ title: "Ret-to-libc [train 3]"
 draft: false
 tags: ["pwn", "training"]
 series: ["pwn training"]
-date: 2024-01-05
+date:  2024-01-15
 level: Beginner
 series_order: 3
 description: In this blog we will be trying to leak a libc address and try to get a shell by calling system. Here we will look into 2 challenges with similar attacks but slight variations.

@@ -1,5 +1,6 @@
 [
   {
+    "href": "/trainings/Youtube-Stack-Basics.html",
     "title": "Youtube - Stack Basics",
     "description": "These are beginner friendly videos to get you started into the field of Binary Exploitation.",
     "level": "Beginner",
@@ -9,10 +10,10 @@
       "youtube"
     ],
     "slug": "Youtube-Stack-Basics",
-    "href": "/trainings/Youtube-Stack-Basics.html",
     "featuredUrl": "/trainings/Youtube-Stack-Basics/featured.png"
   },
   {
+    "href": "/trainings/Return-to-Shellcode-[train-1].html",
     "title": "Return to Shellcode [train 1]",
     "description": "Welcome to the world of Binary Exploitation!",
     "level": "Beginner",
@@ -22,10 +23,10 @@
       "training"
     ],
     "slug": "Return-to-Shellcode-[train-1]",
-    "href": "/trainings/Return-to-Shellcode-[train-1].html",
     "featuredUrl": "/trainings/Return-to-Shellcode-[train-1]/featured.png"
   },
   {
+    "href": "/trainings/Format-String-Exploitation-[train-2].html",
     "title": "Format String Exploitation [train 2]",
     "description": "This is the 2nd challenge in the in the series. In this training we will go through the format string exploitation technique. We are provided 2 challenges of the same vulnerability. Lets go through them one by one.",
     "level": "Beginner",
@@ -35,10 +36,10 @@
       "training"
     ],
     "slug": "Format-String-Exploitation-[train-2]",
-    "href": "/trainings/Format-String-Exploitation-[train-2].html",
     "featuredUrl": "/trainings/Format-String-Exploitation-[train-2]/featured.png"
   },
   {
+    "href": "/trainings/Ret-to-libc-[train-3].html",
     "title": "Ret-to-libc [train 3]",
     "description": "In this blog we will be trying to leak a libc address and try to get a shell by calling system. Here we will look into 2 challenges with similar attacks but slight variations.",
     "level": "Beginner",
@@ -48,10 +49,10 @@
       "training"
     ],
     "slug": "Ret-to-libc-[train-3]",
-    "href": "/trainings/Ret-to-libc-[train-3].html",
     "featuredUrl": "/trainings/Ret-to-libc-[train-3]/featured.png"
   },
   {
+    "href": "/trainings/Checkpoint-[train-4].html",
     "title": "Checkpoint [train 4]",
     "description": "This level acts as a checkpoint (name suggests). You will be combining the idea of format strings, buffer overflows, canaries from previous blogposts.",
     "level": "Intermediate",
@@ -61,36 +62,10 @@
       "training"
     ],
     "slug": "Checkpoint-[train-4]",
-    "href": "/trainings/Checkpoint-[train-4].html",
     "featuredUrl": "/trainings/Checkpoint-[train-4]/featured.png"
   },
   {
-    "title": "Browser Exploitation",
-    "description": "This is my current area of research. I look mostly into v8, which is chrome browser's Javascript Engine. This contains cves and related topic.",
-    "level": "Expert",
-    "duration": "",
-    "tags": [
-      "training",
-      "pwn"
-    ],
-    "slug": "Expert-Browser-Exploitation",
-    "href": "https://github.com/tourpran/pwn-hub/tree/main/v8-exp",
-    "featuredUrl": "/trainings/Expert-Browser-Exploitation/featured.png"
-  },
-  {
-    "title": "Heap Exploitation",
-    "description": "Collection of Heap challenges in CTFs I found interesting.",
-    "level": "Advanced",
-    "duration": "",
-    "tags": [
-      "pwn",
-      "training"
-    ],
-    "slug": "Advanced-Heap-Exploitation",
-    "href": "https://github.com/tourpran/pwn-hub/tree/main/Heap",
-    "featuredUrl": "/trainings/Advanced-Heap-Exploitation/featured.png"
-  },
-  {
+    "href": "/trainings/Basic-Stack-Exploitation.html",
     "title": "Stack Exploitation",
     "description": "This contains most of the basic stack based exploitation techniques and challenges, I solved. They are mostly x86 64 bit excecutables.",
     "level": "Beginner",
@@ -100,7 +75,32 @@
       "pwn"
     ],
     "slug": "Basic-Stack-Exploitation",
-    "href": "https://github.com/tourpran/pwn-hub/tree/main/basic_attacks",
     "featuredUrl": "/trainings/Basic-Stack-Exploitation/featured.png"
+  },
+  {
+    "href": "/trainings/Advanced-Heap-Exploitation.html",
+    "title": "Heap Exploitation",
+    "description": "Collection of Heap challenges in CTFs I found interesting.",
+    "level": "Advanced",
+    "duration": "",
+    "tags": [
+      "pwn",
+      "training"
+    ],
+    "slug": "Advanced-Heap-Exploitation",
+    "featuredUrl": "/trainings/Advanced-Heap-Exploitation/featured.png"
+  },
+  {
+    "href": "/trainings/Expert-Browser-Exploitation.html",
+    "title": "Browser Exploitation",
+    "description": "This is my current area of research. I look mostly into v8, which is chrome browser's Javascript Engine. This contains cves and related topic.",
+    "level": "Expert",
+    "duration": "",
+    "tags": [
+      "training",
+      "pwn"
+    ],
+    "slug": "Expert-Browser-Exploitation",
+    "featuredUrl": "/trainings/Expert-Browser-Exploitation/featured.png"
   }
 ]
