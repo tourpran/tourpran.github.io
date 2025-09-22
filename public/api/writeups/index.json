@@ -1,5 +1,22 @@
 [
   {
+    "href": "/writeups/crewwherechall.html",
+    "title": "wherechall",
+    "description": "Over the weekend, I participated in `CrewCTF` with `Infobahn` team and ended up getting 6th place. This writeup details my approach to the \"`wherechall`\" proble...",
+    "date": "2025-09-21T00:00:00.000Z",
+    "readTime": 7,
+    "tags": [
+      "v8",
+      "wasm",
+      "arrayfill"
+    ],
+    "slug": "crewwherechall",
+    "featuredUrl": "/writeups/crewwherechall/featured.png",
+    "event": "CrewCTF 2025",
+    "difficulty": "hard",
+    "points": 449
+  },
+  {
     "href": "/writeups/randomjs-asis25.html",
     "title": "RandomJS",
     "description": "This past weekend, I participated in the `ASIS CTF` and focused on the `RandomJS` challenge, managing to solve it just before the event ended. In this writeup, ...",
